@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>精通黑客脚本笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="第三章第二章 常见脚本漏洞演练Google Hack技术大演练12345intitle:管理登录 filetype:php # 搜索存在敏感信息的网站payment site:fr # 法国的相关支付界面inurl:qq.txt # 搜索被盗的qq号site:baidu.com # 搜索子域名 暴库漏洞攻击conn.asp是数据库连接文件，包含了被调用数据库的路径及数据库名 conn.asp暴库原">
+<meta property="og:type" content="article">
+<meta property="og:title" content="精通黑客脚本笔记">
+<meta property="og:url" content="http://example.com/2020/12/23/%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="第三章第二章 常见脚本漏洞演练Google Hack技术大演练12345intitle:管理登录 filetype:php # 搜索存在敏感信息的网站payment site:fr # 法国的相关支付界面inurl:qq.txt # 搜索被盗的qq号site:baidu.com # 搜索子域名 暴库漏洞攻击conn.asp是数据库连接文件，包含了被调用数据库的路径及数据库名 conn.asp暴库原">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-12-23T12:56:36.000Z">
+<meta property="article:modified_time" content="2021-01-18T00:21:01.472Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-精通黑客脚本笔记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/12/23/%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time class="dt-published" datetime="2020-12-23T12:56:36.000Z" itemprop="datePublished">2020-12-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      精通黑客脚本笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h2><h1 id="第二章-常见脚本漏洞演练"><a href="#第二章-常见脚本漏洞演练" class="headerlink" title="第二章 常见脚本漏洞演练"></a>第二章 常见脚本漏洞演练</h1><h2 id="Google-Hack技术大演练"><a href="#Google-Hack技术大演练" class="headerlink" title="Google Hack技术大演练"></a>Google Hack技术大演练</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">intitle:管理登录 filetype:php # 搜索存在敏感信息的网站</span><br><span class="line">payment site:fr # 法国的相关支付界面</span><br><span class="line">inurl:qq.txt # 搜索被盗的qq号</span><br><span class="line">site:baidu.com # 搜索子域名</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="暴库漏洞攻击"><a href="#暴库漏洞攻击" class="headerlink" title="暴库漏洞攻击"></a>暴库漏洞攻击</h2><p>conn.asp是数据库连接文件，包含了被调用数据库的路径及数据库名</p>
+<p>conn.asp暴库原理为，直接访问conn.asp时，相对路径出错</p>
+<p>/改成%5c。%5c在16进制中为\。当IIS遇到\，IIS以为遇到了一个虚拟目录，便停止解析，从而报错</p>
+<h1 id="第三章-HTML语言入门"><a href="#第三章-HTML语言入门" class="headerlink" title="第三章 HTML语言入门"></a>第三章 HTML语言入门</h1><h2 id="自定义头像跨站漏洞"><a href="#自定义头像跨站漏洞" class="headerlink" title="自定义头像跨站漏洞"></a>自定义头像跨站漏洞</h2><p>若写入跨站代码后，返回数据上出现字符，则存在跨站漏洞。只需要将HTML中标签闭合即可。</p>
+<h2 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h2><p>隐藏域页面中不饿建，通常用来收集或发送信息</p>
+<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><frameset>不能放在<body>或<head>标签中
+
+<p>动态框架<iframe>可以实现在网页内部嵌入网页，但是其中的src属性也带来了挂马风险。挂马时，把该标签的高度、宽度、frameborder设置为0</p>
+<h1 id="第四章-Javascript和Vbscript入门"><a href="#第四章-Javascript和Vbscript入门" class="headerlink" title="第四章 Javascript和Vbscript入门"></a>第四章 Javascript和Vbscript入门</h1><p>通过Javascript程序，可以控制web页面的外观，也能够检测用户数据的有效性，而这些操作都不需要和服务器进行交互，这样就减轻了服务器的处理数据负担。</p>
+<p>事件是Javascript让页面活起来的驱动力，所有的Javascript都是对某个事件做出的操作和反应</p>
+<h2 id="Javascript基础"><a href="#Javascript基础" class="headerlink" title="Javascript基础"></a>Javascript基础</h2><p>document.writeln()在添加<pre>标签后，才会有换行作用。</p>
+<p>三种交互方法：alert()，confirm()，prompt()</p>
+<p>变量区分大小写</p>
+<p>BOM，browser object model，浏览器对象模型</p>
+<p>通过Javascript内置对象navigator我么可以知道当前使用的浏览器是那种类型，那种版本，是否支持java，当前浏览器插件信息等</p>
+<p>window对象在使用时，允许省略。如window.alert省略为alert</p>
+<p>DOM，document object model，文档对象模型</p>
+<p>document.cookie可以获取cookie，用于窃取cookie</p>
+<h2 id="VBScript基础"><a href="#VBScript基础" class="headerlink" title="VBScript基础"></a>VBScript基础</h2><p>VBScript只有一种数据类型Variant</p>
+<p>为了不影响程序运行效率和养成良好变成习惯，先声明变量再赋值。使用dim</p>
+<h2 id="使用cookie"><a href="#使用cookie" class="headerlink" title="使用cookie"></a>使用cookie</h2><p>通过document.cookie进行设置并取用</p>
+<p>HTTP Set-Cookie头的格式为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie:name&#x3D;value;[expires&#x3D;date];[path&#x3D;pathname];[domain&#x3D;domainname];[secure];</span><br><span class="line">方括号为可以省略的部分</span><br></pre></td></tr></table></figure>
+<p>设置cookie的格式为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.cookie&#x3D;encodeURI(&quot;name&quot;)+&quot;&#x3D;&quot;+encodeURI(name)+&quot;;&quot;</span><br></pre></td></tr></table></figure>
+<p>escape和encodeURI都可以用来对字符进行编码。escape将非字母字符转换为用字符和数字表示的等价字符串；encodeURI类似。</p>
+<h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><h3 id="正则表达式对象方法"><a href="#正则表达式对象方法" class="headerlink" title="正则表达式对象方法"></a>正则表达式对象方法</h3><h4 id="test"><a href="#test" class="headerlink" title="test()"></a>test()</h4><p>lastIndex属性返回下一次字符串搜索开始的位置。若为全局搜索，返回最后一个匹配的字符串后面一个字符的位置</p>
+<h4 id="exec"><a href="#exec" class="headerlink" title="exec()"></a>exec()</h4><p>lastIndex属性返回前一次匹配字符串的第一个字符的位置</p>
+<h3 id="正则表达式的字符串对象的方法"><a href="#正则表达式的字符串对象的方法" class="headerlink" title="正则表达式的字符串对象的方法"></a>正则表达式的字符串对象的方法</h3><p>match,</p>
+<h2 id="跨站攻击"><a href="#跨站攻击" class="headerlink" title="跨站攻击"></a>跨站攻击</h2><p>UBB，Ultimate Bulletin Board，一种tag语法代码</p>
+<p>① 过滤用户提交变量中的&lt;和&gt;，从而防止用户自行构造html标记</p>
+<p>② 过滤其中的：代码，从而防止javascript和vbscript的执行</p>
+<p>③ 过滤或转换空格字符</p>
+<h1 id="第五章-数据库基础"><a href="#第五章-数据库基础" class="headerlink" title="第五章 数据库基础"></a>第五章 数据库基础</h1><h2 id="利用SQL进行数据查询"><a href="#利用SQL进行数据查询" class="headerlink" title="利用SQL进行数据查询"></a>利用SQL进行数据查询</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE tablename (field type[(size)][NOT NULL]&#123;, field type [(size)][NOT NULL]&#125;[, PRIMARY KEY(field&#123;,field...&#125;)]);</span><br><span class="line">SELECT[ALL|DISTINCT]&#123;expr[[AS]c_alias&#123;,expr[[AS]c_alias]...&#125;&#125; from tableref&#123;,tableref...&#125; [where&lt;search_condition]</span><br><span class="line">SELECT DISTINCT id FROM hack</span><br><span class="line">SELECT id AS 标识, name AS 姓名, city AS 城市, age AS 年龄 FROM hack</span><br><span class="line">SELECT * FROM hack GROUP BY age</span><br><span class="line">SELECT * FROM hack WHERE city&#x3D;(SELECT city FROM hack WHERE id&#x3D;100)</span><br></pre></td></tr></table></figure>
+<p>集合函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">COUNT(column_name) 统计column_name列非空的元组数目</span><br><span class="line">SUM(column_name) 统计column_name列的值的和</span><br><span class="line">AVG(column_name)</span><br><span class="line">MAX(column_name)</span><br><span class="line">MIN(column_name)</span><br></pre></td></tr></table></figure>
+<p>子查询结果是集合时，谓语关键词可以使用IN，ANY/ALL，EXISTS</p>
+<h1 id="第六章-ASP基础"><a href="#第六章-ASP基础" class="headerlink" title="第六章 ASP基础"></a>第六章 ASP基础</h1><h2 id="ASP常用内置对象"><a href="#ASP常用内置对象" class="headerlink" title="ASP常用内置对象"></a>ASP常用内置对象</h2><h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><p>用于得到用户提交的数据</p>
+<p>用querystring获取GET，用form获取POST</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myname&#x3D;request.querystring(&quot;name&quot;) #GET方式</span><br><span class="line">myname&#x3D;request.form(&quot;name&quot;) #POST方式</span><br></pre></td></tr></table></figure>
+<h3 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h3><p>将服务器数据发送到用户的浏览器上</p>
+<p>write方法，将数据输出到客户端</p>
+<p>redirect方法，重定向，需要设置Response对象的Buffer属性为真</p>
+<p>Status属性，HTTP响应的状态码</p>
+<h3 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h3><p>扩展asp功能，可以利用符合COM接口的第三方组件</p>
+<p>CreateObject()方法，利用符合COM接口的第三方组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set myVar &#x3D; Server.CreateObject(&quot;ADODB.connection&quot;)</span><br></pre></td></tr></table></figure>
+<p>HTMLEncode()方法，用于字符串编码，可防止跨站漏洞</p>
+<p>URLEncode()方法，字符串以URL的编码输出</p>
+<h3 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h3><p>存储特定用户会话所需的信息</p>
+<h2 id="ASP组件"><a href="#ASP组件" class="headerlink" title="ASP组件"></a>ASP组件</h2><p>即ActiveX</p>
+<h2 id="ADO"><a href="#ADO" class="headerlink" title="ADO"></a>ADO</h2><p>ActiveX Data Objects，ActiveX数据对象</p>
+<h1 id="第九章-PHP基础"><a href="#第九章-PHP基础" class="headerlink" title="第九章 PHP基础"></a>第九章 PHP基础</h1><h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><p>一个PHP文件由五个部分组成：HTML、PHP标记、PHP语句、空格、注释</p>
+<h3 id="PHP标记风格"><a href="#PHP标记风格" class="headerlink" title="PHP标记风格"></a>PHP标记风格</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php echo &#39;内容&#39;; ?&gt;</span><br><span class="line">#XML风格</span><br><span class="line">&lt;? echo &#39;内容&#39;; ?&gt; </span><br><span class="line">#简短风格，需要在php.ini中启用short_open_tag，且是默认启用</span><br><span class="line">&lt;SCRIPT LANGUAGE&#x3D;&#39;php&#39;&gt;echo &#39;内容&#39;;&lt;&#x2F;SCRIPT&gt; </span><br><span class="line">#SCRIPT风格</span><br><span class="line">&lt;% echo &#39;内容&#39; %&gt; </span><br><span class="line"># ASP风格，需要启用asp_tags，默认不启用</span><br></pre></td></tr></table></figure>
+<h3 id="访问表单变量"><a href="#访问表单变量" class="headerlink" title="访问表单变量"></a>访问表单变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$display # 需要开启register_globals，默认不开启</span><br><span class="line">$_POST[&#39;display&#39;] # 默认</span><br><span class="line">$HTTP_POST_VARS[&#39;display&#39;] # 弃用 </span><br></pre></td></tr></table></figure>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$GLOBALS、$_SERVER、$_GET、$_POST、$_COOKIE、$_FILES、$_ENV、$_REQUEST、$_SESSION</span><br></pre></td></tr></table></figure>
+<h2 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">trim() # 去除空格</span><br><span class="line">addslshes() # 转移字符</span><br><span class="line">stripslashes() # 与addslshes功能相反</span><br><span class="line">php.ini中的magic_quotes_gpc配置指令 # 若为TRUE，则会实现addslshes和stripslashes</span><br></pre></td></tr></table></figure>
+<h2 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$db &#x3D; new mysqli(&#39;主机名&#39;，&#39;MYSQL用户名&#39;, &#39;MYSQL密码&#39;,&#39;需要访问的数据库&#39;)</span><br><span class="line">$db &#x3D; mysqli_connect(&#39;主机名&#39;，&#39;MYSQL用户名&#39;, &#39;MYSQL密码&#39;,&#39;需要访问的数据库&#39;)</span><br><span class="line"></span><br><span class="line">$result &#x3D; mysql_query(&quot;select * from hack&quot;)</span><br><span class="line">$result &#x3D; mysql_db_query(&quot;crack&quot;,&quot;select * from hack&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="高级功能"><a href="#高级功能" class="headerlink" title="高级功能"></a>高级功能</h2><h3 id="与文件系统和服务器交互"><a href="#与文件系统和服务器交互" class="headerlink" title="与文件系统和服务器交互"></a>与文件系统和服务器交互</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#上传</span><br><span class="line">在超级全局数组$_FILES中处理（需要register_global开启）</span><br><span class="line"></span><br><span class="line">#目录文件</span><br><span class="line">opendir()</span><br><span class="line">readdir()</span><br><span class="line">closedir()</span><br><span class="line">mkdir()</span><br><span class="line">basename(),dirname()</span><br><span class="line">rmdir()</span><br><span class="line">copy()</span><br><span class="line">rename()</span><br><span class="line"></span><br><span class="line">#程序执行函数</span><br><span class="line">exec(string command[,array &amp;result[,int &amp;result_value]]) # 只返回命令结果的最后一行，若以result传递变量，将获得返回字符串数组；若result_value传递变量，将获得返回代码</span><br><span class="line">passthru() #将结果直接输出并显示在浏览器</span><br><span class="line">system() #将结果直接输出并显示在浏览器</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="会话控制"><a href="#会话控制" class="headerlink" title="会话控制"></a>会话控制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setcookie()</span><br><span class="line">session_get_cookie_params()</span><br></pre></td></tr></table></figure>
+<h3 id="一句话木马"><a href="#一句话木马" class="headerlink" title="一句话木马"></a>一句话木马</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval()</span><br></pre></td></tr></table></figure>
+<h1 id="第十章-PHP程序常见问题"><a href="#第十章-PHP程序常见问题" class="headerlink" title="第十章 PHP程序常见问题"></a>第十章 PHP程序常见问题</h1><h2 id="PHP注射漏洞"><a href="#PHP注射漏洞" class="headerlink" title="PHP注射漏洞"></a>PHP注射漏洞</h2><p>intval() 将所有数据强制转换为数字</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/12/23/%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/" data-id="ckk1u3o4l0003tsus645bcfkw" data-title="精通黑客脚本笔记" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/12/31/CTF%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CTF答案记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/12/22/hello-my-blog/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">hello my blog</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/01/15/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">SQL注入总结</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/12/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/31/CTF%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/">CTF答案记录</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/23/%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/">精通黑客脚本笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/22/hello-my-blog/">hello my blog</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
