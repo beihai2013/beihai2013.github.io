@@ -14,7 +14,7 @@
 <meta property="og:description" content="warmup地址：https:&#x2F;&#x2F;buuoj.cn&#x2F;challenges#[HCTF%202018]WarmUp 思路： 第一步 进入界面，只有一个滑稽表情。 查看源码，提示访问source.php 第二步 访问source.php 得到源码 123456789101112131415161718192021222324252627282930313233343536373839404142434">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-01-19T08:15:16.000Z">
-<meta property="article:modified_time" content="2021-01-19T13:31:45.177Z">
+<meta property="article:modified_time" content="2021-01-19T15:08:08.354Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -183,6 +183,9 @@
 <p>因此，可以构造序列化字符串，绕过相关过滤</p>
 <p>本题中逃逸的解析</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">未过滤前</span><br><span class="line">_SESSION[flagflag]=<span class="string">&quot;;s:3:&quot;</span>aaa<span class="string">&quot;;s:3:&quot;</span>img<span class="string">&quot;;s:20:&quot;</span>ZDBnM19mMWFnLnBocA==<span class="string">&quot;;&#125;</span></span><br><span class="line"><span class="string">序列化后</span></span><br><span class="line"><span class="string">a:2:&#123;</span></span><br><span class="line"><span class="string">	s:8:&quot;</span>flagflag<span class="string">&quot;;</span></span><br><span class="line"><span class="string">	s:58:&quot;</span></span><br><span class="line">		<span class="string">&quot;;s:3:&quot;</span>aaa<span class="string">&quot;;</span></span><br><span class="line"><span class="string">		s:3:&quot;</span>img<span class="string">&quot;;</span></span><br><span class="line"><span class="string">		s:20:&quot;</span>ZDBnM19mMWFnLnBocA==<span class="string">&quot;;&#125;</span></span><br><span class="line"><span class="string">	&quot;</span>;</span><br><span class="line">	s:<span class="number">3</span>:<span class="string">&quot;img&quot;</span>;</span><br><span class="line">	s:<span class="number">20</span>:<span class="string">&quot;Z3Vlc3RfaW1nLnBuZw==&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line">过滤后</span><br><span class="line">a:<span class="number">2</span>:&#123;</span><br><span class="line">	s:<span class="number">8</span>:<span class="string">&quot;&quot;</span>;</span><br><span class="line">	s:<span class="number">58</span>:<span class="string">&quot;</span></span><br><span class="line"><span class="string">		&quot;</span>;s:<span class="number">3</span>:<span class="string">&quot;aaa&quot;</span>;</span><br><span class="line">		s:<span class="number">3</span>:<span class="string">&quot;img&quot;</span>;</span><br><span class="line">		s:<span class="number">20</span>:<span class="string">&quot;ZDBnM19mMWFnLnBocA==&quot;</span>;&#125;</span><br><span class="line">	<span class="string">&quot;;</span></span><br><span class="line"><span class="string">	s:3:&quot;</span>img<span class="string">&quot;;</span></span><br><span class="line"><span class="string">	s:20:&quot;</span>Z3Vlc3RfaW1nLnBuZw==<span class="string">&quot;;&#125;</span></span><br><span class="line"><span class="string">反序列化填充后，再序列化时</span></span><br><span class="line"><span class="string">a:2:&#123;</span></span><br><span class="line"><span class="string">	s:8:&quot;</span>s:<span class="number">58</span>:<span class="string">&quot;&quot;</span>;<span class="string">&quot;; // 字符串里的东西随便填</span></span><br><span class="line"><span class="string">		s:3:&quot;</span>aaa<span class="string">&quot;;</span></span><br><span class="line"><span class="string">	s:3:&quot;</span>img<span class="string">&quot;;</span></span><br><span class="line"><span class="string">		s:20:&quot;</span>ZDBnM19mMWFnLnBocA==<span class="string">&quot;;&#125;</span></span><br><span class="line"><span class="string">	&quot;</span>;</span><br><span class="line">	s:<span class="number">3</span>:<span class="string">&quot;img&quot;</span>;</span><br><span class="line">	s:<span class="number">20</span>:<span class="string">&quot;Z3Vlc3RfaW1nLnBuZw==&quot;</span>;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Easy-MD5"><a href="#Easy-MD5" class="headerlink" title="Easy MD5"></a>Easy MD5</h1><h2 id="php下的MD5函数"><a href="#php下的MD5函数" class="headerlink" title="php下的MD5函数"></a>php下的MD5函数</h2><p>md5(string,raw)</p>
+<p>string：必须，规定要计算的字符串</p>
+<p>raw：输出格式。TRUE，原始16字符二进制格式；FALSE，默认，32字符十六进制数</p>
 
       
     </div>
@@ -207,7 +210,7 @@
     </a>
   
   
-    <a href="/2021/01/15/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/01/15/CTF-Web-SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">SQL注入总结</div>
     </a>
@@ -229,7 +232,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
     </div>
   </div>
 
@@ -239,7 +242,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a>
+      <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E7%AD%94%E6%A1%88/" style="font-size: 10px;">答案</a>
     </div>
   </div>
 
@@ -261,23 +264,23 @@
       <ul>
         
           <li>
+            <a href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/">SQL注入WAF绕过姿势</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/24/CTF-wp-wechall%E7%AD%94%E6%A1%88/">wechall答案</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/">php伪协议总结</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/20/CTF-Web-SQL%E6%B3%A8%E5%85%A5/">CTF-Web-SQL注入</a>
+          </li>
+        
+          <li>
             <a href="/2021/01/19/%E6%91%98%E6%8A%84-%E3%80%8A%E9%80%9A%E5%BE%80%E5%A5%B4%E5%BD%B9%E4%B9%8B%E8%B7%AF%E3%80%8B/">摘抄-《通往奴役之路》</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/19/CTF-Web-PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">CTF_Web PHP代码审计</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/15/SQL%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93/">SQL注入总结</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/12/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2020/12/31/CTF%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/">CTF答案记录</a>
           </li>
         
       </ul>

