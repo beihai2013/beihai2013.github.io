@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>密码学-方案构造学习 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="学习步骤参考：《公钥密码方案构造及安全证明的知识要点和方法论》 概念泛读复杂性理论掌握概念定义 $O(n)、O(logn)、O(2^n)、\Omega(2^n)、\Theta(2^n)$​    O()是最坏情况下时间复杂度， ​    $\Omega()$是所有情况 ​    $\Theta()$是最好 12345Θ，读音：theta、西塔；既是上界也是下界(tight)，等于的意思。Ο，读音：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="密码学-方案构造学习">
+<meta property="og:url" content="http://example.com/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="学习步骤参考：《公钥密码方案构造及安全证明的知识要点和方法论》 概念泛读复杂性理论掌握概念定义 $O(n)、O(logn)、O(2^n)、\Omega(2^n)、\Theta(2^n)$​    O()是最坏情况下时间复杂度， ​    $\Omega()$是所有情况 ​    $\Theta()$是最好 12345Θ，读音：theta、西塔；既是上界也是下界(tight)，等于的意思。Ο，读音：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A6%82%E5%BF%B5%E6%B3%9B%E8%AF%BB-entropyFunction.jpg">
+<meta property="og:image" content="http://example.com/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A6%82%E5%BF%B5%E6%B3%9B%E8%AF%BB-entropyFunction2.jpg">
+<meta property="og:image" content="http://example.com/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A6%82%E5%BF%B5%E6%B3%9B%E8%AF%BB-%E4%B8%80%E6%AC%A1%E4%B8%80%E5%AF%86.jpg">
+<meta property="og:image" content="http://example.com/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A8%A1%E5%9E%8B-RO.jpg">
+<meta property="article:published_time" content="2021-03-31T03:40:44.000Z">
+<meta property="article:modified_time" content="2021-04-12T14:55:05.621Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="密码学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A6%82%E5%BF%B5%E6%B3%9B%E8%AF%BB-entropyFunction.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-密码学-方案构造学习" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time class="dt-published" datetime="2021-03-31T03:40:44.000Z" itemprop="datePublished">2021-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      密码学-方案构造学习
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>学习步骤参考：《公钥密码方案构造及安全证明的知识要点和方法论》</p>
+<h1 id="概念泛读"><a href="#概念泛读" class="headerlink" title="概念泛读"></a>概念泛读</h1><h2 id="复杂性理论"><a href="#复杂性理论" class="headerlink" title="复杂性理论"></a>复杂性理论</h2><p>掌握概念定义</p>
+<h3 id="O-n-、O-logn-、O-2-n-、-Omega-2-n-、-Theta-2-n"><a href="#O-n-、O-logn-、O-2-n-、-Omega-2-n-、-Theta-2-n" class="headerlink" title="$O(n)、O(logn)、O(2^n)、\Omega(2^n)、\Theta(2^n)$"></a>$O(n)、O(logn)、O(2^n)、\Omega(2^n)、\Theta(2^n)$</h3><p>​    O()是最坏情况下时间复杂度，</p>
+<p>​    $\Omega()$是所有情况</p>
+<p>​    $\Theta()$是最好</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Θ，读音：theta、西塔；既是上界也是下界(tight)，等于的意思。</span><br><span class="line">Ο，读音：big-oh、欧米可荣（大写）；表示上界(tightness unknown)，小于等于的意思。</span><br><span class="line">ο，读音：small-oh、欧米可荣（小写）；表示上界(not tight)，小于的意思。</span><br><span class="line">Ω，读音：big omega、欧米伽（大写）；表示下界(tightness unknown)，大于等于的意思。</span><br><span class="line">ω，读音：small omega、欧米伽（小写）；表示下界(not tight)，大于的意思。</span><br></pre></td></tr></table></figure>
+<h3 id="L-notation"><a href="#L-notation" class="headerlink" title="L-notation"></a>L-notation</h3><p>​    类似于$O()$的渐进符号</p>
+<h3 id="PPT"><a href="#PPT" class="headerlink" title="PPT"></a>PPT</h3><p>​    probabilistic polynomial time，概率多项式时间。</p>
+<p>​    polynomial time(wiki)：$T(n)=O(n^k)$</p>
+<h3 id="sub-exponential-time"><a href="#sub-exponential-time" class="headerlink" title="sub-exponential time"></a>sub-exponential time</h3><p>​    wiki：算法用时高于PPT，少于指数，如$O(2^{n^\varepsilon})$</p>
+<h3 id="exponential-time"><a href="#exponential-time" class="headerlink" title="exponential time"></a>exponential time</h3><p>​    指数时间</p>
+<h3 id="P"><a href="#P" class="headerlink" title="P"></a>P</h3><p>​    所有决定问题的集合，这些问题能被确定性图灵机使用多项式时间解决。</p>
+<h3 id="NP"><a href="#NP" class="headerlink" title="NP"></a>NP</h3><p>​    nondeterministic polynomial problem，非确定多项式问题。</p>
+<p>​    不能确定是否在多项式时间内找到答案，但是能验证答案。</p>
+<h3 id="NPC"><a href="#NPC" class="headerlink" title="NPC"></a>NPC</h3><p>​    NP完全问题。只要该类中一个问题能使用多项式时间算法解决，那么所有问题都可以使用多项式时间算法解决。</p>
+<h3 id="Computational-model"><a href="#Computational-model" class="headerlink" title="Computational model"></a>Computational model</h3><p>​    使用计算机模拟复杂系统的行为。</p>
+<h3 id="Turing-machine"><a href="#Turing-machine" class="headerlink" title="Turing machine"></a>Turing machine</h3><p>​    一种状态机</p>
+<h3 id="Probabilistic-Turing-machine"><a href="#Probabilistic-Turing-machine" class="headerlink" title="Probabilistic Turing machine"></a>Probabilistic Turing machine</h3><p>​    是一种非确定性图灵机，其根据概率分布做出不确定的选择</p>
+<h3 id="PP"><a href="#PP" class="headerlink" title="PP"></a>PP</h3><p>​    能够在多项式时间内被概率图灵机解决的问题，且对于所有的用例，错误概率小于$1/2$ </p>
+<h2 id="攻击"><a href="#攻击" class="headerlink" title="攻击"></a>攻击</h2><p>掌握攻击对象和目标，并举例</p>
+<p>Birthday attack</p>
+<p>Man-in-the-middle attack</p>
+<p>Brute-force attack</p>
+<p>Eavesdropping attack</p>
+<p>Meet-in-the-middle attack</p>
+<p>Collusion attack</p>
+<p>side-channel attack</p>
+<p>Statistical attack</p>
+<p>Replay attack</p>
+<p>Rainbow attack</p>
+<h2 id="基本工具"><a href="#基本工具" class="headerlink" title="基本工具"></a>基本工具</h2><p>掌握每个工具的输入、输出、输入输出间的关系，应用场景</p>
+<p>One-Way function</p>
+<p>Trapdoor one-way function</p>
+<p>Pseudo-random function</p>
+<p>Hash function</p>
+<h3 id="Hard-core-predicate"><a href="#Hard-core-predicate" class="headerlink" title="Hard-core predicate"></a>Hard-core predicate</h3><p>​    predicate：是一种只输出1位的函数</p>
+<p>​    hard-core predicate = one way function + predicate</p>
+<p>​    用于表现函数f 的不可逆性。</p>
+<h3 id="Entropy-function"><a href="#Entropy-function" class="headerlink" title="Entropy function"></a>Entropy function</h3><p>​    熵函数，用于描述信息源含有信息量的多少，以输出消息集上的概率分布函数形式给出。</p>
+<p>​    $H(S)=\sum^{n}_{i=1}Pr[a_i]log_2(\frac{1}{Pr[a_i]})$</p>
+<p>​    S为信息源，$Pr[a_i]$满足$\sum^{n}_{i=1}Pr[a_i]=1$</p>
+<p>​    香农定理</p>
+<p>​    <img src="pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A6%82%E5%BF%B5%E6%B3%9B%E8%AF%BB-entropyFunction.jpg" alt="密码学-方案构造学习-概念泛读-entropyFunction"></p>
+<p><img src="pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A6%82%E5%BF%B5%E6%B3%9B%E8%AF%BB-entropyFunction2.jpg" alt="密码学-方案构造学习-概念泛读-entropyFunction2"></p>
+<h2 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h2><p>掌握每一种认证机制的区别</p>
+<h3 id="Identification"><a href="#Identification" class="headerlink" title="Identification"></a>Identification</h3><p>​    声明身份，如提供用户名username</p>
+<h3 id="Authetication"><a href="#Authetication" class="headerlink" title="Authetication"></a>Authetication</h3><p>​    证明身份，如提供密码password</p>
+<p>​    authorization：接入控制</p>
+<h3 id="Message-authentication-codes-MAC"><a href="#Message-authentication-codes-MAC" class="headerlink" title="Message authentication codes(MAC)"></a>Message authentication codes(MAC)</h3><p>​    消息鉴别码，由$(Gen,Mac,Vrfy)$构成</p>
+<p>​    敌手只要输出一个通过Vrfy的MAC，即破坏MAC安全性</p>
+<p>​    无法抵御重放攻击</p>
+<h3 id="certificate"><a href="#certificate" class="headerlink" title="certificate"></a>certificate</h3><p>​    证书，用于证明身份。</p>
+<h3 id="Digital-signature"><a href="#Digital-signature" class="headerlink" title="Digital signature"></a>Digital signature</h3><p>​    数字签名</p>
+<p>​    与MAC区别：数字签名可以保证消息的不可抵赖性，MAC不可以；</p>
+<h3 id="Signcryption"><a href="#Signcryption" class="headerlink" title="Signcryption"></a>Signcryption</h3><p>​    数字签密，对消息先签名后加密</p>
+<h2 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h2><p>掌握每一种加密概念的输入及加密的特点</p>
+<h3 id="One-time-pad"><a href="#One-time-pad" class="headerlink" title="One-time pad"></a>One-time pad</h3><p>​    一次一密。</p>
+<p>​    $(Gen,Enc,Dec)$</p>
+<p><img src="pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A6%82%E5%BF%B5%E6%B3%9B%E8%AF%BB-%E4%B8%80%E6%AC%A1%E4%B8%80%E5%AF%86.jpg" alt="密码学-方案构造学习-概念泛读-一次一密"></p>
+<p>​    输入：$Gen(1^l)$，$Enc(k,m)$，$Dec(k,c)$</p>
+<p>​    特点：密钥长度和明文一样；完善保密加密（perfectly-secret encryption）</p>
+<p>​    缺点：密钥过长难以存储；密钥只能使用一次，否则不安全。</p>
+<h3 id="Block-cipher-DES-AES"><a href="#Block-cipher-DES-AES" class="headerlink" title="Block cipher(DES, AES)"></a>Block cipher(DES, AES)</h3><h4 id="DES"><a href="#DES" class="headerlink" title="DES"></a>DES</h4><p>​    Data Encryption Standard，数据加密标准</p>
+<p>​    输入：64位明文或密文消息，56位密钥</p>
+<p>​    输出：64位密文或明文消息</p>
+<p>​    特点：使用Feistel结构；使用了S盒，这个S盒不可逆的</p>
+<p>​    缺点：密钥长度过短，安全性不足</p>
+<p>​    攻击方法：穷举密钥</p>
+<h4 id="AES"><a href="#AES" class="headerlink" title="AES"></a>AES</h4><p>​    advanced encryption standard，高级加密标准</p>
+<p>​    攻击方法：穷举密钥</p>
+<p>​    输入：密钥128位</p>
+<p>​    特点：密钥可选择128、192、256三种长度，为各种应用提供不同安全强度。</p>
+<p>​    优点：“DES”：运算速度快，资源消耗较少；“AES”：运算速度快，安全性高，资源消耗少缺点：“DES”：安全性低</p>
+<h3 id="Stream-cipher-RC4-A5"><a href="#Stream-cipher-RC4-A5" class="headerlink" title="Stream cipher(RC4, A5)"></a>Stream cipher(RC4, A5)</h3><p>​    流密码也被成为状态加密，是一种对称加密算法，加解密使用相同伪随机加密数据流作为密钥，明文每次与密钥数据顺次对应加密获得密文。</p>
+<p>​    伪随机密钥流由一个随机种子通过伪随机生成器得到。要求该伪随机生成器不可预测。</p>
+<h4 id="RC4"><a href="#RC4" class="headerlink" title="RC4"></a>RC4</h4><p>​    revest cipher</p>
+<p>​    输入：密钥长度可变</p>
+<p>​    安全性：已被破解</p>
+<h4 id="A5"><a href="#A5" class="headerlink" title="A5"></a>A5</h4><p>​    也是一种流密码，已被破解</p>
+<h3 id="Probabilistic-encryption"><a href="#Probabilistic-encryption" class="headerlink" title="Probabilistic encryption"></a>Probabilistic encryption</h3><p>​    概率加密，对于同一明文输出不同密文。若要满足语义安全（隐藏明文部分信息），则要求加密算法是概率性的。</p>
+<h3 id="Deterministic-encryption"><a href="#Deterministic-encryption" class="headerlink" title="Deterministic encryption"></a>Deterministic encryption</h3><p>​    与上一条相对。</p>
+<p>Public-key encryption</p>
+<h3 id="Hybrid-encryption"><a href="#Hybrid-encryption" class="headerlink" title="Hybrid encryption"></a>Hybrid encryption</h3><p>​    对称加密和非对称加密的混合，即非对称加密用于交换数据，对称加密用于加密通信。</p>
+<h3 id="Identity-based-encryption-IBE"><a href="#Identity-based-encryption-IBE" class="headerlink" title="Identity-based encryption(IBE)"></a>Identity-based encryption(IBE)</h3><p>​    使用如接受者的名字或email等能代表接受者的信息作为密钥进行加密</p>
+<p>​    优点：不需要第三方密钥分发机构；</p>
+<h3 id="Broadcast-encryption-BE"><a href="#Broadcast-encryption-BE" class="headerlink" title="Broadcast encryption(BE)"></a>Broadcast encryption(BE)</h3><p>​    将密文广播，只有订阅用户能解密密文。</p>
+<h3 id="Attribute-based-encrytion-ABE"><a href="#Attribute-based-encrytion-ABE" class="headerlink" title="Attribute-based encrytion(ABE)"></a>Attribute-based encrytion(ABE)</h3><p>​    一种非对称加密。加密用到了一些属性，只有密钥的属性和密文的属性完全一致，才能解密。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>掌握每一类概念的应用场景。</p>
+<h3 id="Random-oracle-model"><a href="#Random-oracle-model" class="headerlink" title="Random oracle model"></a>Random oracle model</h3><p>​    随机预言机。</p>
+<p>​    概念：一种理想模型。对任何输入，输出一个真正均匀随机的输出，但对相同输入总是输出同一输出。</p>
+<p>​    用途：用于设计和证明密码学方案。步骤1，一个方案，在随机预言机模型中被证明是安全的。步骤2，当在现实世界中实现该方案时，使用密码学散列函数代替随机预言机。</p>
+<p><img src="pic%5C%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0-%E6%A8%A1%E5%9E%8B-RO.jpg" alt="密码学-方案构造学习-模型-RO"></p>
+<p>​    缺点：没有具体的散列函数能表现得像一个真正的随机预言机。</p>
+<p>​    随机预言机下的安全性证明比没有任何证明好得多。</p>
+<h3 id="standard-model"><a href="#standard-model" class="headerlink" title="standard model"></a>standard model</h3><p>​    标准模型</p>
+<p>​    概念：在对手使用有限的时间和运算力前提下的计算模型。由于证明困难，常用理论化版本的随机预言机模型或通用群模型代替。</p>
+<p>​    用法：尽在复杂性假设下可证明安全的方案。</p>
+<h3 id="common-reference-string-model"><a href="#common-reference-string-model" class="headerlink" title="common reference string model"></a>common reference string model</h3><p>​    公共参考穿</p>
+<p>​    概念：即在进行非交互式证明前由可信第三方生成一个可信的随机串，用于替代交互式证明过程中的随机挑战数</p>
+<p>security model</p>
+<h3 id="generic-group-model"><a href="#generic-group-model" class="headerlink" title="generic group model"></a>generic group model</h3><p>​    通用群模型，标准模型的理论化版本。</p>
+<p>​    概念：敌手只能使用群编码，而不是使用有效的加密函数。？</p>
+<h2 id="第三方实体"><a href="#第三方实体" class="headerlink" title="第三方实体"></a>第三方实体</h2><p>掌握每一个第三方实体功能及应用场景。</p>
+<h3 id="Key-distribution-center-KDC"><a href="#Key-distribution-center-KDC" class="headerlink" title="Key distribution center(KDC)"></a>Key distribution center(KDC)</h3><p>​    功能：是一个控制接入系统的组件，用于认证用户后分发准入凭证</p>
+<p>​    场景：Kerberos中，首先 Client询问KDC，我想访问某个Server，然后KDC会将会话密钥Sclient-Server用Client master key加密后传送给Client；与此同时，KDC也会将会话密钥Sclient-Server连同Client的基本信息打包用Server master key加密也发给Client，并经Client转发给Server，至此Client与KDC的交互完成。</p>
+<p>​    Server可能给多个client提供服务，KDC负责帮server维护一个client和会话对应的列表。</p>
+<h3 id="Key-generation-center-KGC"><a href="#Key-generation-center-KGC" class="headerlink" title="Key generation center(KGC)"></a>Key generation center(KGC)</h3><p>​    功能：KGC被完全信任，用于生成公私钥对</p>
+<p>​    场景：非对称加密</p>
+<h3 id="Private-key-generator-PKG"><a href="#Private-key-generator-PKG" class="headerlink" title="Private-key generator(PKG)"></a>Private-key generator(PKG)</h3><p>​    功能：生成公私钥对的密码协议</p>
+<h3 id="Certificate-authority-CA"><a href="#Certificate-authority-CA" class="headerlink" title="Certificate authority(CA)"></a>Certificate authority(CA)</h3><p>​    证书颁发机构</p>
+<p>​    功能：负责产生、分配、管理所有参与网上交易的个体需要的数字证书。是公钥基础设施的核心。</p>
+<p>​    场景：用户若欲获取证书，应先向CA提出申请，CA判明申请者的身份后，为之分配一个公钥，并将该公钥与其身份信息绑定，为该整体签名，签名后的整体即为<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%AD%89%E6%9B%B8">证书</a>，发还给申请者。如果一个用户想鉴别另一个证书的真伪，他就用CA的公钥对那个证书上的签字进行验证，一旦验证通过，该证书就被认为是有效的。</p>
+<h3 id="Trust-third-party-TTP"><a href="#Trust-third-party-TTP" class="headerlink" title="Trust third party(TTP)"></a>Trust third party(TTP)</h3><p>​    可信赖的第三方，有时也用于指证书中心</p>
+<p>​    功能：方便两个实体进行交互，两个实体互相之间不信任，但信任TTP</p>
+<p>​    场景：CA是一种TTP</p>
+<h3 id="Public-Key-Infrastructure-PKI"><a href="#Public-Key-Infrastructure-PKI" class="headerlink" title="Public Key Infrastructure(PKI)"></a>Public Key Infrastructure(PKI)</h3><p>​    公钥基础设施</p>
+<p>​    功能：目的在于创造、管理、分配、使用、存储以及撤销<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%95%B8%E4%BD%8D%E6%86%91%E8%AD%89">数字证书</a></p>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>掌握每种协议的应用场景以及能解决的问题以 key exchange protocol 为例, 假设 Alice、 Bob双方需要进行通信, 运行该协议后, 双方可以协商出一个共同的密钥用于通信. 除了参与协议的双方外, 其他用户不能计算该密钥  </p>
+<h3 id="Key-exchange"><a href="#Key-exchange" class="headerlink" title="Key exchange"></a>Key exchange</h3><p>​    应用场景：Alice和Bob交换密钥以允许使用某种加密算法。通常用公钥加密来随机创建临时的对称密钥，再通过对称加密传输大量数据。</p>
+<p>​    解决问题：安全通信。</p>
+<h3 id="Fair-exchange"><a href="#Fair-exchange" class="headerlink" title="Fair exchange"></a>Fair exchange</h3><p>​    公平交换</p>
+<p>​    解决问题：Alice和Bob进行交易，Fair exchange用于避免Alice发送货物后Bob不发送货物。在Fair exchange中，Alice和Bob要么同时得到货物，要么同时得不到。</p>
+<h3 id="Secret-sharing"><a href="#Secret-sharing" class="headerlink" title="Secret sharing"></a>Secret sharing</h3><p>​    秘密分割</p>
+<p>​    将秘密分割成n份给n个参与者，使得只有多余特定t个参与者合作才可以计算出或会付出秘密 sharmir(n, t)</p>
+<h3 id="Oblivious-transfer-OT"><a href="#Oblivious-transfer-OT" class="headerlink" title="Oblivious transfer(OT)"></a>Oblivious transfer(OT)</h3><p>​    不经意传输</p>
+<p>​    发送方Alice将许多潜在信息中的一个发送给接收方Bob，但是Alice不知道Bob是否接收到消息。</p>
+<p>​    用于安全多方计算，隐私保护</p>
+<h3 id="Commitment"><a href="#Commitment" class="headerlink" title="Commitment"></a>Commitment</h3><p>​    承诺</p>
+<p>​    允许Alice选定一个承诺值，并对其他人保密这个承诺值，并在之后公开这个承诺值。一个commitment theme要求Alice不能更改承诺值。</p>
+<p>​    用于安全翻转硬币，零知识证明，安全计算</p>
+<h3 id="Multi-party-computation"><a href="#Multi-party-computation" class="headerlink" title="Multi-party computation"></a>Multi-party computation</h3><p>​    一般写作 secure multi-party computation或secure computation，安全多方计算</p>
+<p>​    让多个实体（如Alice，Bob）参与计算，同时保持Alice和Bob的输入对彼此保密</p>
+<h3 id="Zero-knowledge-proof"><a href="#Zero-knowledge-proof" class="headerlink" title="Zero-knowledge proof"></a>Zero-knowledge proof</h3><p>​    概念：一种协议，用于验证声明的正确性，且不泄露信息。</p>
+<p>​    应用场景：Hash函数</p>
+<h2 id="技术方法"><a href="#技术方法" class="headerlink" title="技术方法"></a>技术方法</h2><p>掌握此类概念的基本原理以及应用场景.  </p>
+<h3 id="Accumulator"><a href="#Accumulator" class="headerlink" title="Accumulator"></a>Accumulator</h3><p>​    累加器</p>
+<p>​    概念：用于提供存在证明和不存在证明。将一个集合映射到一个元素，该元素既可以是乘法循环群的一个数，也可以是椭圆曲线的一个点。</p>
+<p>​    $h=f(g,x)$，g为生成怨，x为需要累加的元素，h为输出值</p>
+<p>​    应用场景：有一个集合$X={5,7}$ , 知情者prover如何向不知情者verifier证明：5在集合中，11不在集合中</p>
+<h3 id="Bloom-filter"><a href="#Bloom-filter" class="headerlink" title="Bloom filter"></a>Bloom filter</h3><p>​    布隆过滤器</p>
+<p>​    概念：一种概率型数据结构，优点是插入和查询效率高，缺点是返回结果是概率性的。将一个大集合映射到一个小集合。</p>
+<h3 id="Hash-chain"><a href="#Hash-chain" class="headerlink" title="Hash chain"></a>Hash chain</h3><p>​    概念：用于从一个密钥key中生成许多一次性口令，即不停地hash</p>
+<p>​    应用场景：一次性口令，微支付</p>
+<h3 id="Hash-tree-Merkle-Hash-tree-Binary-Hash-tree"><a href="#Hash-tree-Merkle-Hash-tree-Binary-Hash-tree" class="headerlink" title="Hash tree(Merkle Hash tree, Binary Hash tree)"></a>Hash tree(Merkle Hash tree, Binary Hash tree)</h3><p>​    Merkle Hash Tree：blockchain中block存储hash 的方式</p>
+<p>​    Binary Hash tree：二叉哈希树</p>
+<h3 id="Chameleon-Hash-function"><a href="#Chameleon-Hash-function" class="headerlink" title="Chameleon Hash function"></a>Chameleon Hash function</h3><p>​    变色龙哈希函数</p>
+<p>​    概念：人为设下弱点的哈希函数。具体来说，对知道秘密sk的使用者Alice，对于任意的明文m，可以轻易的找到明文m’，满足ChameleonHash(m’) = ChameleonHash(m)。</p>
+<p>​    non-tranferability，Alice具有伪造能力，无法取得第三者Carol的信任。Alice和Bob两者之间达成的信任不能转到第三方。</p>
+<p>​    non-repulication，Bob不具有伪造能力。</p>
+<h1 id="数学基础"><a href="#数学基础" class="headerlink" title="数学基础"></a>数学基础</h1><p>群密码数学基础</p>
+<p>参考：《introduction to security reduction》</p>
+<h2 id="模运算"><a href="#模运算" class="headerlink" title="模运算"></a>模运算</h2><h3 id="模运算的定义及其特点"><a href="#模运算的定义及其特点" class="headerlink" title="模运算的定义及其特点"></a>模运算的定义及其特点</h3><p>​    同余</p>
+<p>​    相关定理：中国剩余定理，二次剩余</p>
+<h2 id="域"><a href="#域" class="headerlink" title="域"></a>域</h2><h3 id="域的定义"><a href="#域的定义" class="headerlink" title="域的定义"></a>域的定义</h3><p>​    指finite field，有限域</p>
+<p>​    需要满足的三个算数属性</p>
+<pre><code>1. $(F,+)$是一个阿尔法群
+ 2. $(F\&#123;0\&#125;,·)$是一个阿尔法群
+ 3. 满足分配率</code></pre>
+<p>​    满足两种操作的阿尔法群：加法，乘法，整数开平方，</p>
+<p>​    有限域的阶：元素个数</p>
+<p>​    域的特征：对于任意的x，满足mx=0的m。对于一个域，m不是0就是素数</p>
+<p>​    </p>
+<h3 id="素域的构造方式"><a href="#素域的构造方式" class="headerlink" title="素域的构造方式"></a>素域的构造方式</h3><p>​    $F_p$</p>
+<p>​    栗子：$F_{29}={0,1,2,…,28}$</p>
+<p>​    定义：域的特征m为1</p>
+<p>​    特征：满足加法、乘法</p>
+<h3 id="二元域的构造方式"><a href="#二元域的构造方式" class="headerlink" title="二元域的构造方式"></a>二元域的构造方式</h3><p>​    概念：二元域是一种特殊的扩展域</p>
+<p>​    构造：$F_{2^m}={a_{m-1}z^{m-1}+a_{m-2}z^{m-2}+…+a_{1}z^{}+a_0:a_i\in{0,1}}$</p>
+<p>三元域的构造方式</p>
+<h3 id="扩展域的构造方式"><a href="#扩展域的构造方式" class="headerlink" title="扩展域的构造方式"></a>扩展域的构造方式</h3><p>​    定义：域的特征m大于等于2</p>
+<p>​    构造：$F_p[z]$，定义方式和而二元域相同</p>
+<h3 id="同构域"><a href="#同构域" class="headerlink" title="同构域"></a>同构域</h3><p>​    isomorphic field</p>
+<h2 id="循环群"><a href="#循环群" class="headerlink" title="循环群"></a>循环群</h2><h3 id="群的定义"><a href="#群的定义" class="headerlink" title="群的定义"></a>群的定义</h3><p>​    定义：一种集合以及二元运算所组成的代数结构。满足封闭性，结合律，单位元，逆元素。</p>
+<p>​    阿贝尔群：满足交换律的群</p>
+<h3 id="群的阶（order）和群元素的长度（bit-length）"><a href="#群的阶（order）和群元素的长度（bit-length）" class="headerlink" title="群的阶（order）和群元素的长度（bit length）"></a>群的阶（order）和群元素的长度（bit length）</h3><p>​    群的阶：元素个数</p>
+<p>​    群内一个元素a的阶：满足$a^m=e$的最小正整数$m$</p>
+<h3 id="循环群与素数阶群的关系"><a href="#循环群与素数阶群的关系" class="headerlink" title="循环群与素数阶群的关系"></a>循环群与素数阶群的关系</h3><p>​    循环群，单个元素生成的群。每个循环群都是阿贝尔群。</p>
+<p>​    素数阶群，顾名思义。每个素数阶群都是阿贝尔群。</p>
+<p>​    关系：每个素数阶群都是循环群。</p>
+<h3 id="素数阶群的优势"><a href="#素数阶群的优势" class="headerlink" title="素数阶群的优势"></a>素数阶群的优势</h3><p>​    1.避免了小子群攻击（smallest subgroup confinement attack）</p>
+<p>​    2.每个元素都有乘法逆元</p>
+<p>​    3.除了1，每个元素都是集合的生成元</p>
+<p>​    上面三个性质便于构造公钥加密系统</p>
+<h3 id="模乘群的构造方式"><a href="#模乘群的构造方式" class="headerlink" title="模乘群的构造方式"></a>模乘群的构造方式</h3><p>​    概念：模n的互质同余类构成的乘法群</p>
+<p>​    $$(F^<em>_q,</em>)$$</p>
+<p>​    模乘群的生成元：最小的x，使得等式$h^x\mod q=1$成立的h</p>
+<p>​    模乘群的阶：q-1</p>
+<p>​    </p>
+<h3 id="椭圆曲线群的构造方式"><a href="#椭圆曲线群的构造方式" class="headerlink" title="椭圆曲线群的构造方式"></a>椭圆曲线群的构造方式</h3><p>​    椭圆曲线：$y^2=x^3+ax+b$</p>
+<p>​    $$E(F_{q^n})$$</p>
+<p>​    椭圆曲线群的阶：$q^n+1-t$，t是椭圆曲线在域上F范数的迹</p>
+<h3 id="80比特安全的模乘群的阶和群元素的大小至少是多少"><a href="#80比特安全的模乘群的阶和群元素的大小至少是多少" class="headerlink" title="80比特安全的模乘群的阶和群元素的大小至少是多少"></a>80比特安全的模乘群的阶和群元素的大小至少是多少</h3><p>​    80比特指的是密钥位数</p>
+<p>80比特安全的椭圆曲线的阶和群元素的大小至少是多少</p>
+<h3 id="椭圆曲线群相对于模乘群的优劣势"><a href="#椭圆曲线群相对于模乘群的优劣势" class="headerlink" title="椭圆曲线群相对于模乘群的优劣势"></a>椭圆曲线群相对于模乘群的优劣势</h3><h2 id="双线性对"><a href="#双线性对" class="headerlink" title="双线性对"></a><del>双线性对</del></h2><p><del>什么是双线性对？密码学最初为什么使用它</del></p>
+<p><del>双线性对的构造可以分为几类？每一类的特点是什么？</del></p>
+<p><del>双线性对中每个群元的大小由哪些参数决定？</del></p>
+<p><del>双线性对中，为了保证80比特安全，每个群的群元素的大小至少是多少？</del></p>
+<p><del>双线性对中，每一个群下的指数计算和双线性对计算的效率比较</del></p>
+<h2 id="哈希函数"><a href="#哈希函数" class="headerlink" title="哈希函数"></a><del>哈希函数</del></h2><p><del>常见的哈希函数的输入和输出是什么</del></p>
+<p><del>哈希函数的输出空间有哪几类</del></p>
+<p><del>哈希函数的输出空间如果是$G$，那么$G$可以是哪几类</del></p>
+<h1 id="简单问题学习"><a href="#简单问题学习" class="headerlink" title="简单问题学习"></a>简单问题学习</h1><p>简单问题的例子参考：《introduction to security reduction》</p>
+<h1 id="困难问题学习"><a href="#困难问题学习" class="headerlink" title="困难问题学习"></a>困难问题学习</h1><p>困难问题的分类参考：《introduction to security reduction》</p>
+<p>128个困难问题</p>
+<h1 id="算法定义学习"><a href="#算法定义学习" class="headerlink" title="算法定义学习"></a>算法定义学习</h1><h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><h2 id="公钥加密"><a href="#公钥加密" class="headerlink" title="公钥加密"></a>公钥加密</h2><h1 id="安全模型定义学习"><a href="#安全模型定义学习" class="headerlink" title="安全模型定义学习"></a>安全模型定义学习</h1><h2 id="数字签名-1"><a href="#数字签名-1" class="headerlink" title="数字签名"></a>数字签名</h2><h2 id="公钥加密-1"><a href="#公钥加密-1" class="headerlink" title="公钥加密"></a>公钥加密</h2><h1 id="安全归约证明"><a href="#安全归约证明" class="headerlink" title="安全归约证明"></a>安全归约证明</h1><p>4 第三章</p>
+<p>5 附录C</p>
+<p>6 2-3章</p>
+<p>7，8 </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/" data-id="cknuf2q1500074wus3fxy1jkf" data-title="密码学-方案构造学习" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          密码学-安全证明学习
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/03/30/%E6%91%98%E6%8A%84-%E6%97%A5%E8%AF%AD%E8%AF%AD%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">摘抄-日语语法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dev/" rel="tag">dev</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wp/" rel="tag">wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" rel="tag">基础课</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%80%83%E8%AF%81/" rel="tag">考证</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" rel="tag">论文学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 12.5px;">基础课</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 15px;">密码学</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 17.5px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">论文学习</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%9E%84%E9%80%A0%E5%8F%AF%E8%AF%81%E6%98%8E%E5%AE%89%E5%85%A8%E5%AF%86%E7%A0%81%E6%96%B9%E6%A1%88/">密码学-构造可证明安全密码方案</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0/">密码学-安全证明学习</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/">密码学-方案构造学习</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/30/%E6%91%98%E6%8A%84-%E6%97%A5%E8%AF%AD%E8%AF%AD%E6%B3%95/">摘抄-日语语法</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/">摘抄-Foundations of Cryptography</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

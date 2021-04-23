@@ -6,15 +6,26 @@
   
   <title>摘抄-Foundations of Cryptography | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="article">
+  <meta name="description" content="1 Introduction1.1 Cryptography: Main Topics1.1.2 Psudorandom Generatorspseudorandom generator is a deterministic algorithm that expands short random seeds into much longer bit sequences that appear to">
+<meta property="og:type" content="article">
 <meta property="og:title" content="摘抄-Foundations of Cryptography">
 <meta property="og:url" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1 Introduction1.1 Cryptography: Main Topics1.1.2 Psudorandom Generatorspseudorandom generator is a deterministic algorithm that expands short random seeds into much longer bit sequences that appear to">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.1Fig1.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.1Fig2.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig1.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig2.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/%5Cpic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig3.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/%5Cpic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig4.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig5.jpg">
 <meta property="article:published_time" content="2021-03-30T08:23:16.000Z">
-<meta property="article:modified_time" content="2021-03-30T08:23:16.660Z">
+<meta property="article:modified_time" content="2021-03-31T02:58:54.167Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="摘抄">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.1Fig1.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -93,7 +104,30 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h1><h2 id="1-1-Cryptography-Main-Topics"><a href="#1-1-Cryptography-Main-Topics" class="headerlink" title="1.1 Cryptography: Main Topics"></a>1.1 Cryptography: Main Topics</h2><h3 id="1-1-2-Psudorandom-Generators"><a href="#1-1-2-Psudorandom-Generators" class="headerlink" title="1.1.2 Psudorandom Generators"></a>1.1.2 Psudorandom Generators</h3><p>pseudorandom generator is a deterministic algorithm that expands short random seeds into much longer bit sequences that appear to be “random”<br>(although they are not)  </p>
+<p>伪随机生成器是一个确定算法，它将短的随机种子扩展为更多位数的字符串</p>
+<h3 id="1-1-4-Fault-Tolerant-Protocols-and-Zero-Knowledge-Proofs"><a href="#1-1-4-Fault-Tolerant-Protocols-and-Zero-Knowledge-Proofs" class="headerlink" title="1.1.4 Fault-Tolerant Protocols and Zero-Knowledge Proofs"></a>1.1.4 Fault-Tolerant Protocols and Zero-Knowledge Proofs</h3><p>To illustrate the role of zero-knowledge proofs, consider a setting in which a party, called Alice, upon receiving an encrypted message from Bob, is to send Carol the least significant bit of the message. Clearly, if Alice sends only the (least significant) bit (of the message), then there is no way for Carol to know Alice did not cheat. Alice could prove that she did not cheat by revealing to Carol the entire message as well as its decryption key, but that would yield information far beyond what had been  required. A much better idea is to let Alice augment the bit she sends Carol with a zero-knowledge proof that this bit is indeed the least significant bit of the message  </p>
+<p>举例说明零知识证明。假设一个参与方Alice，收到Bob的加密信息，并将信息的签名发送给Carol。如果Alice只发送签名的最后一位给Carol，Carol是无法知道Alice是否作弊的。Alice可以通过发送给Carol全部信息和解密密钥以证明自己没有作弊，但是这会导致信息泄露。一个更好的方案是，Alice使用零知识证明自己发送的确实是签名的最后一位。</p>
+<h2 id="1-2-Some-Background-from-Probability-Theory"><a href="#1-2-Some-Background-from-Probability-Theory" class="headerlink" title="1.2 Some Background from Probability Theory"></a>1.2 Some Background from Probability Theory</h2><h3 id="1-2-1-National-Conventions"><a href="#1-2-1-National-Conventions" class="headerlink" title="1.2.1 National Conventions"></a>1.2.1 National Conventions</h3><p>概率定义</p>
+<p><img src="pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.1Fig1.jpg" alt="摘抄-FoundationsOfCryptography1.2.1Fig1"></p>
+<p><img src="pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.1Fig2.jpg" alt="摘抄-FoundationsOfCryptography1.2.1Fig2"></p>
+<h3 id="1-2-2-Three-Inequalities"><a href="#1-2-2-Three-Inequalities" class="headerlink" title="1.2.2 Three Inequalities"></a>1.2.2 Three Inequalities</h3><p>马尔科夫不等式，用于不确定变量分布</p>
+<p><img src="pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig1.jpg" alt="摘抄-FoundationsOfCryptography1.2.2Fig1"></p>
+<p>契比雪夫不等式，用于通过重复样本估计错误概率</p>
+<p><img src="pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig2.jpg" alt="摘抄-FoundationsOfCryptography1.2.2Fig2"></p>
+<p>贝努利不等式，近似值的错误率随着样本数的增多，线性下降</p>
+<p><img src="%5Cpic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig3.jpg" alt="摘抄-FoundationsOfCryptography1.2.2Fig3"></p>
+<p>切诺夫界</p>
+<p><img src="%5Cpic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig4.jpg" alt="摘抄-FoundationsOfCryptography1.2.2Fig4"></p>
+<p>霍夫丁不等式</p>
+<p><img src="pic%5C%E6%91%98%E6%8A%84-FoundationsOfCryptography1.2.2Fig5.jpg" alt="摘抄-FoundationsOfCryptography1.2.2Fig5"></p>
+<h2 id="1-3-The-computational-Model"><a href="#1-3-The-computational-Model" class="headerlink" title="1.3 The computational Model"></a>1.3 The computational Model</h2><h3 id="1-3-5-Oracle-Machines"><a href="#1-3-5-Oracle-Machines" class="headerlink" title="1.3.5 Oracle Machines"></a>1.3.5 Oracle Machines</h3><p>an oracle machine is a machine that is augmented so that it can<br>ask questions to the outside </p>
+<p>一个预言机就是一个能向外提问的机器</p>
+<h1 id="2-Computational-Difficulty"><a href="#2-Computational-Difficulty" class="headerlink" title="2 Computational Difficulty"></a>2 Computational Difficulty</h1><h2 id="2-1-one-way-functions-motivation"><a href="#2-1-one-way-functions-motivation" class="headerlink" title="2.1 one-way functions: motivation"></a>2.1 one-way functions: motivation</h2><p>a necessary condition for the existence of secure encryption schemes is that N P not be contained in BPP  </p>
+<p>安全加密方案存在的条件时NP问题不被包括在BPP问题中，即NP不等于P</p>
+<p>it is easy to solve these instances given the auxiliary input, but it is hard, on the average, to solve these instances when not given the auxiliary input.<br>The foregoing requirement is reflected in the definition of one-way functions (  </p>
+<p>单向函数的定义是，在有辅助输入的情况下很容易解决实例的函数。简单来说，单向函数是已与计算而难于求逆的函数。</p>
+
       
     </div>
     <footer class="article-footer">
@@ -101,11 +135,22 @@
       
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
+  
+    <a href="/2021/03/30/%E6%91%98%E6%8A%84-%E6%97%A5%E8%AF%AD%E8%AF%AD%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          摘抄-日语语法
+        
+      </div>
+    </a>
   
   
     <a href="/2021/03/30/%E6%91%98%E6%8A%84-%E8%BD%AC%E5%9E%8B%E4%B8%AD%E7%9A%84%E5%9C%B0%E6%96%B9%E6%94%BF%E5%BA%9C/" id="article-nav-older" class="article-nav-link-wrap">
@@ -130,7 +175,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dev/" rel="tag">dev</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wp/" rel="tag">wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" rel="tag">基础课</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%80%83%E8%AF%81/" rel="tag">考证</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%84%E5%88%92/" rel="tag">规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" rel="tag">论文学习</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dev/" rel="tag">dev</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wp/" rel="tag">wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" rel="tag">基础课</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%80%83%E8%AF%81/" rel="tag">考证</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" rel="tag">论文学习</a></li></ul>
     </div>
   </div>
 
@@ -140,7 +185,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 17.5px;">基础课</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 12.5px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%A7%84%E5%88%92/" style="font-size: 12.5px;">规划</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 17.5px;">论文学习</a>
+      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 12.5px;">基础课</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 15px;">密码学</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 17.5px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">论文学习</a>
     </div>
   </div>
 
@@ -162,23 +207,23 @@
       <ul>
         
           <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%9E%84%E9%80%A0%E5%8F%AF%E8%AF%81%E6%98%8E%E5%AE%89%E5%85%A8%E5%AF%86%E7%A0%81%E6%96%B9%E6%A1%88/">密码学-构造可证明安全密码方案</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0/">密码学-安全证明学习</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/">密码学-方案构造学习</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/30/%E6%91%98%E6%8A%84-%E6%97%A5%E8%AF%AD%E8%AF%AD%E6%B3%95/">摘抄-日语语法</a>
+          </li>
+        
+          <li>
             <a href="/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/">摘抄-Foundations of Cryptography</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/30/%E6%91%98%E6%8A%84-%E8%BD%AC%E5%9E%8B%E4%B8%AD%E7%9A%84%E5%9C%B0%E6%96%B9%E6%94%BF%E5%BA%9C/">摘抄-转型中的地方政府</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/26/%E8%A7%84%E5%88%92-21%E5%B9%B4/">规划-21年</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/26/%E8%A7%84%E5%88%92-21-26%E5%B9%B4/">规划-21-26年</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/24/%E5%9F%BA%E7%A1%80%E8%AF%BE-%E6%B8%85%E5%8D%8EOS/">基础课-清华OS</a>
           </li>
         
       </ul>
