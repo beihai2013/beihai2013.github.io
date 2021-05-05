@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>密码学-算法定义 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="算法定义需要考虑的问题。 • 该密码概念涉及到哪几方 (entities)？  • 该密码概念需要几个算法来定义？ • 每一个算法的名字, 即实现的功能是什么？ • 每一个算法由哪一方 (entity) 来运行？ • 每一个算法的输入和输出分别是什么？ 签名Alice是singer，Bob是verifier Digital Signature[10]$SysGen(1^\lambda)\right">
+<meta property="og:type" content="article">
+<meta property="og:title" content="密码学-算法定义">
+<meta property="og:url" content="http://example.com/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="算法定义需要考虑的问题。 • 该密码概念涉及到哪几方 (entities)？  • 该密码概念需要几个算法来定义？ • 每一个算法的名字, 即实现的功能是什么？ • 每一个算法由哪一方 (entity) 来运行？ • 每一个算法的输入和输出分别是什么？ 签名Alice是singer，Bob是verifier Digital Signature[10]$SysGen(1^\lambda)\right">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-05-05T09:02:41.000Z">
+<meta property="article:modified_time" content="2021-05-05T09:02:54.549Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="密码学">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-密码学-算法定义" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/" class="article-date">
+  <time class="dt-published" datetime="2021-05-05T09:02:41.000Z" itemprop="datePublished">2021-05-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      密码学-算法定义
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>算法定义需要考虑的问题。</p>
+<p>• 该密码概念涉及到哪几方 (entities)？ </p>
+<p>• 该密码概念需要几个算法来定义？</p>
+<p>• 每一个算法的名字, 即实现的功能是什么？</p>
+<p>• 每一个算法由哪一方 (entity) 来运行？</p>
+<p>• 每一个算法的输入和输出分别是什么？</p>
+<h3 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h3><p>Alice是singer，Bob是verifier</p>
+<h3 id="Digital-Signature-10"><a href="#Digital-Signature-10" class="headerlink" title="Digital Signature[10]"></a>Digital Signature[10]</h3><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow (pk,sk)$</p>
+<p>$Sign(SP,sk,M)\rightarrow\sigma_m$</p>
+<p>$Verify(SP,pk,M,\sigma_M)\rightarrow 1/0$</p>
+<h3 id="Online-Offline-Signature-13"><a href="#Online-Offline-Signature-13" class="headerlink" title="Online/Offline Signature[13]"></a>Online/Offline Signature[13]</h3><p>将sign切割成两个函数</p>
+<p>$sign^{off}(SP,sk)\rightarrow\sigma^{off}$</p>
+<p>$sign^{on}(SP,\sigma^{off},m)\rightarrow m$</p>
+<p>要求online阶段签名的开销尽可能的小</p>
+<h3 id="Undeniable-Signature-14"><a href="#Undeniable-Signature-14" class="headerlink" title="Undeniable Signature[14]"></a>Undeniable Signature[14]</h3><p>只允许合法用户验签的一种签名。</p>
+<p>典型应用场景：防止用户复制软件。用户为signer，软件生厂商为verifier</p>
+<h4 id="猜测"><a href="#猜测" class="headerlink" title="猜测"></a>猜测</h4><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow (pk,sk)$</p>
+<p>$Sign(SP,sk,M)\rightarrow\sigma_m$</p>
+<p>$RandGen(SP)\rightarrow k$</p>
+<p>$Verify1(SP,pk,\sigma_m,M,k)\rightarrow c$</p>
+<p>$Verify2(SP,sk,c)\rightarrow d$</p>
+<p>$Verify3(d,k)\rightarrow 1/0$</p>
+<h4 id="正确版本"><a href="#正确版本" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KeyGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,M)\rightarrow\sigma_m$</p>
+<p>$Confirm(m,\sigma_m,pk,sk)$ 是一个多项式时间交互协议，证明$\sigma_m$是一个合法签名</p>
+<p>$Disavowal(m,\sigma_m,pk)$ 是一个多项式时间交互协议，证明$\sigma_m$不是一个合法签名</p>
+<h3 id="Designated-Verifier-Signature-15"><a href="#Designated-Verifier-Signature-15" class="headerlink" title="Designated Verifier Signature[15]"></a>Designated Verifier Signature[15]</h3><p>用于保证Bob不将签名发送给第三方Carol。Bob能仿造Alice的签名。Alice能向Carol证明Bob的签名是伪造的，但是不能否认Alice自己的签名。这在Alice和Bob的签名是计算上不可区分的前提下。</p>
+<h3 id="Digital-Signature-with-Signer-aided-Verifification-16"><a href="#Digital-Signature-with-Signer-aided-Verifification-16" class="headerlink" title="Digital Signature with Signer-aided Verifification[16]"></a>Digital Signature with Signer-aided Verifification[16]</h3><p>$Sign(sk_S,pk_v,m)\rightarrow\sigma$</p>
+<p>$Simul(pk_s,sk_v,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk_s,pk_v,m,\sigma)\rightarrow{accept,reject}$</p>
+<h3 id="Proxy-Signature-17"><a href="#Proxy-Signature-17" class="headerlink" title="Proxy Signature[17]"></a>Proxy Signature[17]</h3><p>分为三种：完全代表，部分代表，授权代表。只讨论授权代表</p>
+<h4 id="版本1"><a href="#版本1" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk_S,w)\rightarrow d$</p>
+<p>$ProxySign(sk_P,d,m)\rightarrow\sigma$</p>
+<p>$Vrfy(d,pk_P,\sigma)$</p>
+<h4 id="正确版本-1"><a href="#正确版本-1" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$StandSign(sk_S,M)\rightarrow \sigma_S$</p>
+<p>$DelegationGen(sk_S,W)\rightarrow\sigma_W$，其中W是warrant</p>
+<p>$ProxySign(sk_P,W,\sigma_W,M)\rightarrow\sigma_M$</p>
+<p>$Vrfy(pk_S,pk_P,W,M,\sigma_M)$</p>
+<h3 id="Certificateless-Signature-18"><a href="#Certificateless-Signature-18" class="headerlink" title="Certificateless Signature[18]"></a>Certificateless Signature[18]</h3><h3 id="Aggregate-Signature-19"><a href="#Aggregate-Signature-19" class="headerlink" title="Aggregate Signature[19]"></a>Aggregate Signature[19]</h3><h4 id="版本1-1"><a href="#版本1-1" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m)\rightarrow\sigma$</p>
+<p>$Condense(\sigma_1,\ldots,\sigma_n)\rightarrow\sigma_0$</p>
+<p>$Vrfy((pk_1,m_1),\ldots,(pk_n,m_n),\sigma_0)\rightarrow{1,0}$</p>
+<h4 id="正确版本-2"><a href="#正确版本-2" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m)\rightarrow\sigma$</p>
+<p>$Agg((pk_1,\sigma_1,m_1),\ldots,(pk_n,\sigma_n,m_n))\rightarrow\sigma$</p>
+<p>$Vrfy((pk_1,m_1),\ldots,(pk_n,m_n),\sigma_0)\rightarrow{1,0}$</p>
+<p>不需要Condense函数，直接将所有$\sigma$连接起来。</p>
+<h3 id="Digital-Signature-with-Batch-Verification-20"><a href="#Digital-Signature-with-Batch-Verification-20" class="headerlink" title="Digital Signature with Batch Verification[20]"></a>Digital Signature with Batch Verification[20]</h3><h3 id="Threshold-Signature-21"><a href="#Threshold-Signature-21" class="headerlink" title="Threshold Signature[21]"></a>Threshold Signature[21]</h3><h4 id="版本1-2"><a href="#版本1-2" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m)\rightarrow\sigma$</p>
+<p>$Vrfy((pk_1,m_1),\ldots,(pk_n,m_n),\sigma_0)\rightarrow{1,0}$</p>
+<h4 id="正确版本-3"><a href="#正确版本-3" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KGen(1^\lambda)\rightarrow (pk,(sk_1,\ldots,sk_n))$</p>
+<p>$Sign(sk_i,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk,m,\sigma)\rightarrow{1,0}$</p>
+<h3 id="Blind-Signature-22"><a href="#Blind-Signature-22" class="headerlink" title="Blind Signature[22]"></a>Blind Signature[22]</h3><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$&lt;S(sk),U(pk,m)&gt;\rightarrow\sigma$ ，其中$S$是签名者，$U$是用户</p>
+<p>$Vrfy(pk,m,\sigma )\rightarrow{1,0}$</p>
+<h4 id="完备性"><a href="#完备性" class="headerlink" title="完备性"></a>完备性</h4><h3 id="Ring-Signature-23"><a href="#Ring-Signature-23" class="headerlink" title="Ring Signature[23]"></a>Ring Signature[23]</h3><p>签名后，只知道是群中某个人签名，但不知道具体是谁签的名</p>
+<p>与群签名对比：可以隐藏签名者的信息；不需要群组织者</p>
+<p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m,R)\rightarrow\sigma$，其中$R=(pk_1,\ldots,pk_n)$，且对于任意的$s\in [1,n]$有$(pk_s,sk)$合法</p>
+<p>$Vrfy(M,\sigma,R)\rightarrow{1,0}$</p>
+<h3 id="Group-Signature-24"><a href="#Group-Signature-24" class="headerlink" title="Group Signature[24]"></a>Group Signature[24]</h3><h4 id="版本1-3"><a href="#版本1-3" class="headerlink" title="版本1"></a>版本1</h4><p>$GKeyGen(1^\lambda)\rightarrow(pk_g,sk_g)$ 生成群公钥和群私钥</p>
+<p>$UKeyGen(1^\lambda,pk_g)\rightarrow sk_i$</p>
+<p>$Sign(sk_i,m)\rightarrow\sigma_i$</p>
+<p>$Extr(\sigma_i,sk_g)\rightarrow id$</p>
+<h4 id="正解"><a href="#正解" class="headerlink" title="正解"></a>正解</h4><p>$KGen(1^\lambda)\rightarrow(gpk,gmsk,gsk)$，其中$gpk$是群公钥，gmsk是群管理者的私钥，gsk是一个n维向量，每一维代表一个用户的私钥$gsk[i]$</p>
+<p>$Sign(gsk[i],m)\rightarrow\sigma$</p>
+<p>$Vrfy(gpk,m,\sigma)\rightarrow{1,0}$</p>
+<p>$Open(gmsk,m,\sigma)\rightarrow{id,\bot}$</p>
+<h3 id="Identity-based-Signature-25"><a href="#Identity-based-Signature-25" class="headerlink" title="Identity-based Signature[25]"></a>Identity-based Signature[25]</h3><h4 id="版本1-4"><a href="#版本1-4" class="headerlink" title="版本1"></a>版本1</h4><p>参与方：master，user，verifier</p>
+<p>$MKeyGen(1^\lambda)\rightarrow(msk,mpk)$</p>
+<p>$UKeyGen(id,msk,mpk)\rightarrow sk_{id}$</p>
+<p>$Sign(sk_{id},m)\rightarrow\sigma$</p>
+<p>$Vrfy(mpk,m,\sigma,id)\rightarrow{1,0}$</p>
+<p>和定义无明显出入</p>
+<h3 id="Attribute-based-Signature-26"><a href="#Attribute-based-Signature-26" class="headerlink" title="Attribute-based Signature[26]"></a>Attribute-based Signature[26]</h3><p>一种更为普适的identity-based signature，定义无太大差别不赘述</p>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><h3 id="Public-Key-Encryption-12"><a href="#Public-Key-Encryption-12" class="headerlink" title="Public-Key Encryption[12]"></a>Public-Key Encryption[12]</h3><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow(pk,sk)$</p>
+<p>$Enc(SP,pk,M)\rightarrow CT$</p>
+<p>$Dec(SP,sk,CT)\rightarrow M$</p>
+<h3 id="Broadcast-Encryption-27"><a href="#Broadcast-Encryption-27" class="headerlink" title="Broadcast Encryption[27]"></a>Broadcast Encryption[27]</h3><p>某个子集$S$中的所有用户都可以对密文进行解密</p>
+<h4 id="版本1-5"><a href="#版本1-5" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow(pk,SK)$，其中$SK={sk_1,\ldots,sk_n}$</p>
+<p>$Enc(S,pk,M)\rightarrow CT$</p>
+<p>$Dec(sk_i,CT)\rightarrow M$</p>
+<h4 id="正确版本-4"><a href="#正确版本-4" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KGen(1^\lambda)\rightarrow(pk,SK)$，其中$SK={sk_1,\ldots,sk_n}$</p>
+<p>$Enc(S,pk)\rightarrow (h,K)$，h是广播报文头部，K是对称加密秘钥</p>
+<p>$Enc2(K,M)\rightarrow CT$，是一个对称加密算法</p>
+<p>$Dec(S,i,sk_i,h,pk)\rightarrow K$</p>
+<p>$Dec2(K,CT)\rightarrow M$</p>
+<h3 id="Identity-based-Encryption-28"><a href="#Identity-based-Encryption-28" class="headerlink" title="Identity-based Encryption[28]"></a>Identity-based Encryption[28]</h3><h4 id="正确版本-5"><a href="#正确版本-5" class="headerlink" title="正确版本"></a>正确版本</h4><p>$Setup(k)\rightarrow(params,msk)$</p>
+<p>$Extract(params,msk,ID)\rightarrow sk_{ID}$</p>
+<p>$Enc(params,ID,M)\rightarrow CT$</p>
+<p>$Dec(params,ID,CT,sk_{ID})\rightarrow M$</p>
+<h3 id="Identity-based-Encryption-with-Traitor-Tracing-29"><a href="#Identity-based-Encryption-with-Traitor-Tracing-29" class="headerlink" title="Identity-based Encryption with Traitor Tracing[29]"></a>Identity-based Encryption with Traitor Tracing[29]</h3><h4 id="正确版本-6"><a href="#正确版本-6" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KeyGen(1^\lambda)\rightarrow(mpk,msk)$</p>
+<p>$Extr(msk,ID,i)\rightarrow sk_i$</p>
+<p>$Enc(mpk,ID,M)\rightarrow CT$</p>
+<p>$Dec(sk_i,ID,CT)\rightarrow M$</p>
+<p>$Trace(msk,ID)\rightarrow T$，其中$T={id_i}$为叛徒的集合</p>
+<h3 id="Identity-based-Broadcast-Encryption-30"><a href="#Identity-based-Broadcast-Encryption-30" class="headerlink" title="Identity-based Broadcast Encryption[30]"></a>Identity-based Broadcast Encryption[30]</h3><p>PKG、Alice、Bob</p>
+<p>$KGen(1^\lambda)\rightarrow(msk,mpk)$</p>
+<p>$Extr(msk,ID)\rightarrow sk_{i}$</p>
+<p>$Enc(S,pk)\rightarrow (h,K)$，h是广播报文头部，K是对称加密秘钥</p>
+<p>$Enc2(K,M)\rightarrow CT$，是一个对称加密算法</p>
+<p>$Dec(S,i,sk_i,h,pk)\rightarrow K$</p>
+<p>$Dec2(K,CT)\rightarrow M$</p>
+<h3 id="Inner-Product-Encryption-31"><a href="#Inner-Product-Encryption-31" class="headerlink" title="Inner Product Encryption[31]"></a>Inner Product Encryption[31]</h3><p>$Setup(1^\lambda)\rightarrow(pk,sk)$</p>
+<p>$KeyGen(\vec{v},pk,sk)\rightarrow sk_{\vec{v}}$</p>
+<p>$Enc(M,\vec{x},pk)\rightarrow CT_{\vec{x}}$</p>
+<p>$Dec(CT_{\vec{x}},sk_{\vec{v}},pk)$</p>
+<h3 id="Attribute-based-Encryption-32-33"><a href="#Attribute-based-Encryption-32-33" class="headerlink" title="Attribute-based Encryption[32, 33]"></a>Attribute-based Encryption[32, 33]</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/" data-id="ckob8gj4c0000hsus8rxacojn" data-title="密码学-算法定义" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">密码学-安全模型定义</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dev/" rel="tag">dev</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wp/" rel="tag">wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" rel="tag">基础课</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%80%83%E8%AF%81/" rel="tag">考证</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" rel="tag">论文学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 12.5px;">基础课</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 17.5px;">密码学</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 17.5px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">论文学习</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/">密码学-算法定义</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/">密码学-安全模型定义</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/26/%E6%91%98%E6%8A%84-%E4%BD%9B%E7%A5%96%E9%83%BD%E8%AF%B4%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88/">摘抄-佛祖都说了些什么</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%9E%84%E9%80%A0%E5%8F%AF%E8%AF%81%E6%98%8E%E5%AE%89%E5%85%A8%E5%AF%86%E7%A0%81%E6%96%B9%E6%A1%88/">密码学-构造可证明安全密码方案</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0/">密码学-安全证明学习</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

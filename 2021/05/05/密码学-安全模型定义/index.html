@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>密码学-安全模型定义 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="步骤  定义安全特性 描述game  安全模型一般是通过一个游戏 (game) 来定义, 游戏涉及到挑战者 (challenger) 和敌手 (adversary) 两方的交互. 简单地说, 就是挑战者运行一个相应的方案让敌手进行攻击. 安全模型抽象地定义了敌手可 询问的内容, 并形式化定义了挑战者的安全目标. 一个完整的安全模型可以分为以下四个部分进行理解.  • 初始化 (setup): 挑战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="密码学-安全模型定义">
+<meta property="og:url" content="http://example.com/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="步骤  定义安全特性 描述game  安全模型一般是通过一个游戏 (game) 来定义, 游戏涉及到挑战者 (challenger) 和敌手 (adversary) 两方的交互. 简单地说, 就是挑战者运行一个相应的方案让敌手进行攻击. 安全模型抽象地定义了敌手可 询问的内容, 并形式化定义了挑战者的安全目标. 一个完整的安全模型可以分为以下四个部分进行理解.  • 初始化 (setup): 挑战">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义proxySignature1.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义proxySignature2.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义proxySignature3.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义aggregateSignature.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义thresholdSignature.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义blindSignature3.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义blindSignature1.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义blindSignature2.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义ringSignature1.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义groupSignature.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义groupSignature2.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义groupSignature3.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义groupSignature4.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义idSignature.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义attrSignature2.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义Enc1.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义Enc2.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义broadcastEnc2.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义broadcastEnc1.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义idEnc1.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义idEnc2.jpg">
+<meta property="og:image" content="http://example.com/%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89idEnc1.jpg">
+<meta property="og:image" content="d:/temp/cryptographic/pic/安全模型定义idEnc3.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义idEncTraitor1.jpg">
+<meta property="og:image" content="e:/技术栈/cryptographic/pic/安全模型定义idEncTraitor2.jpg">
+<meta property="article:published_time" content="2021-05-05T09:01:26.000Z">
+<meta property="article:modified_time" content="2021-05-05T09:01:42.239Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="密码学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="e:/技术栈/cryptographic/pic/安全模型定义proxySignature1.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-密码学-安全模型定义" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/" class="article-date">
+  <time class="dt-published" datetime="2021-05-05T09:01:26.000Z" itemprop="datePublished">2021-05-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      密码学-安全模型定义
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>步骤</p>
+<ol>
+<li>定义安全特性</li>
+<li>描述game</li>
+</ol>
+<p>安全模型一般是通过一个游戏 (game) 来定义, 游戏涉及到挑战者 (challenger) 和敌手 (adversary)</p>
+<p>两方的交互. 简单地说, 就是挑战者运行一个相应的方案让敌手进行攻击. 安全模型抽象地定义了敌手可</p>
+<p>询问的内容, 并形式化定义了挑战者的安全目标. 一个完整的安全模型可以分为以下四个部分进行理解. </p>
+<p>• 初始化 (setup): 挑战者初始化整个系统, 保存系统用于应答 (response) 的秘密参数 (比如: 私钥),</p>
+<p>并将公开参数 (比如: 公钥) 返回给敌手. </p>
+<p>• 询问 (query): 安全模型通过敌手询问和挑战者应答的方式来抽象现实世界中敌手的攻击. 考虑现</p>
+<p>实世界中敌手通过攻击可能得到的结果, 安全模型的定义跳过攻击过程, 直接允许敌手向挑战者发</p>
+<p>出相应的攻击结果询问, 挑战者需要正确回答敌手的询问. 例如, 对于公钥加密, 如果假设敌手在</p>
+<p>现实世界中能够获得任意密文对应的明文, 则在对应的安全模型定义中允许敌手询问密文对应的</p>
+<p>明文, 挑战者必须返回正确的解密结果. 敌手询问的内容以及时间的不同代表着敌手能力大小的不</p>
+<p>同. 越强的安全模型应该允许敌手做更多更自由的询问. 有些文章在安全模型定义中把敌手的询</p>
+<p>问对象 (即挑战者) 描述为谕言机 (oracle). 这种定义描述上稍有差别, 但本质不变. </p>
+<p>• 攻击 (attack): 敌手向挑战者发起攻击挑战. 挑战的对象就是挑战者的安全目标. 敌手成功攻破安</p>
+<p>全目标即定义为敌手赢得游戏. 安全目标可以分为两大类: 不可计算性的安全目标和不可区分性</p>
+<p>的安全目标. 详细的安全目标的定义和安全需求息息相关. 例如, 数字签名安全模型的安全目标是</p>
+<p>签名的不可伪造性, 公钥加密安全模型的安全目标是密文的不可区分性. </p>
+<p>• 优势 (advantage): 安全模型的最后一步是对优势 <em>ϵ</em> 的定义. 这里涉及到一个非常重要的概念区</p>
+<p>分, 即优势和概率. 在安全模型的定义中, 敌手有一个赢得游戏的理想化概率. 例如, 在数字签名的</p>
+<p>EU-CMA 安全模型中, 敌手伪造一个签名的理想化概率是 0, 在公钥加密的 IND 模型中, 敌手猜</p>
+<p>对挑战密文所对应明文的理想化概率是 1</p>
+<p>2 . 优势是对一个攻击算法或一个求解算法, 相较于理想化</p>
+<p>概率有多少更多的可能性, 成功攻破一个方案或成功解决一个问题的度量. 而概率是对一个事件发</p>
+<p>生的可能性的度量. 有了优势这个概念, 我们就可以用可忽略和不可忽略来区分一个方案安全与</p>
+<p>否</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="security-model"><a href="#security-model" class="headerlink" title="security model"></a>security model</h3><p>​    针对加密系统的多种攻击方式的抽象。通常被视为challenger和adversary之间的游戏</p>
+<h3 id="challenger"><a href="#challenger" class="headerlink" title="challenger"></a>challenger</h3><p>​    一个虚拟的实体，用于与攻击者adversary交互</p>
+<h3 id="adversary"><a href="#adversary" class="headerlink" title="adversary"></a>adversary</h3><p>​    攻击者，通常为PPT攻击者</p>
+<h3 id="query"><a href="#query" class="headerlink" title="query"></a>query</h3><p>​    攻击者询问信息</p>
+<h3 id="response"><a href="#response" class="headerlink" title="response"></a>response</h3><p>​    挑战者回应信息</p>
+<h3 id="win"><a href="#win" class="headerlink" title="win"></a>win</h3><p>​    攻击者攻破方案，获得胜利，说明方案是不安全的</p>
+<h3 id="adaptive-attack"><a href="#adaptive-attack" class="headerlink" title="adaptive attack"></a>adaptive attack</h3><h3 id="trivial-attack"><a href="#trivial-attack" class="headerlink" title="trivial attack"></a>trivial attack</h3><h3 id="advantage"><a href="#advantage" class="headerlink" title="advantage"></a>advantage</h3><p>​    攻击者攻破方案的概率</p>
+<h3 id="strong-security-model"><a href="#strong-security-model" class="headerlink" title="strong security model"></a>strong security model</h3><p>​    除了能引起trivial attack的询问，攻击者询问的信息不受限制</p>
+<h3 id="weak-security-model"><a href="#weak-security-model" class="headerlink" title="weak security model"></a>weak security model</h3><p>​    攻击者被限定只能询问指定的信息</p>
+<h3 id="standard-security-model"><a href="#standard-security-model" class="headerlink" title="standard security model"></a>standard security model</h3><p>​    被广泛接受的安全模型</p>
+<h2 id="攻击能力"><a href="#攻击能力" class="headerlink" title="攻击能力"></a>攻击能力</h2><p>假设攻击者为A(lice)，签名者为Bob</p>
+<p>Key-only attack </p>
+<p>​    Alice只知道Bob的公钥$pk_B$</p>
+<p>Message attack</p>
+<p>​    Alice在实施攻击前，能够询问一些明文的签名</p>
+<p>known-message attack</p>
+<p>​    Alice可以知道一个明文集合$M={m_1,\ldots,m_n}$的签名，但是$M$不是Alice选择的</p>
+<p>generic chosen-message attack</p>
+<p>​    Alice可以知道一个明文集合$M={m_1,\ldots,m_n}$的签名，$M$是Alice选择的，但$M$与Bob的公钥无关</p>
+<p>Directed chosen-message attack</p>
+<p>​    Alice可以知道一个明文集合$M={m_1,\ldots,m_n}$的签名，$M$是Alice选择的，$M$可以在Alice知道Bob的公钥后生成</p>
+<p>Adaptive chosen-mesage attack</p>
+<p>​    Alice可以将Bob作为预言机使用，这意味着$M$不仅可以给予Bob的公钥，也可以给予之前已经询问过的明文</p>
+<h2 id="破坏方案"><a href="#破坏方案" class="headerlink" title="破坏方案"></a>破坏方案</h2><p>a total break</p>
+<p>​    计算出A的私钥</p>
+<p>universal forgery</p>
+<p>​    找到一个有效函数f，等价于Bob的签名算法</p>
+<p>selective forgery</p>
+<p>​    针对特定消息，伪造一个签名</p>
+<p>existential forgery</p>
+<p>​    至少能对一个消息M，伪造合法签名</p>
+<h3 id="Digital-Signature-10"><a href="#Digital-Signature-10" class="headerlink" title="Digital Signature[10]"></a>Digital Signature[10]</h3><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow (pk,sk)$</p>
+<p>$Sign(SP,sk,M)\rightarrow\sigma_m$</p>
+<p>$Verify(SP,pk,M,\sigma_M)\rightarrow 1/0$</p>
+<h4 id="EU-CMA"><a href="#EU-CMA" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p>如果一个数字签名是EU-CMA安全的，当且仅当对于任意的PPT攻击者$A$和挑战者$C$，在以下游戏中获胜的概率可以忽略</p>
+<p>$Setup$. $C$执行$KeyGen(SP)$得到公私钥$(pk,sk)$，并将公私钥发送给攻击者A，保留$sk$用于应对A的询问</p>
+<p>$Query$.A自由查询签名，对于任意消息$m_i$，挑战者$C$将签名$\sigma_i\leftarrow Sign(sk,M)$发送给A</p>
+<p>$Forgery$.攻击者输出消息-签名对$(m^*,\sigma_{m^*})$，若等式<br>$$<br>Verify(SP,pk,m^*,\sigma_{m^*}):<br>m\notin{m_1,\ldots,m_n}<br>$$<br>成立，则攻击者获胜</p>
+<h4 id="SU-EMA"><a href="#SU-EMA" class="headerlink" title="SU-EMA"></a>SU-EMA</h4><p>$$<br>Verify(SP,pk,m^*,\sigma_{m^*}):<br>(m^*.\sigma_{m^*})\notin{(m_1,\sigma_1),\ldots,(m_n,\sigma_n)}<br>$$</p>
+<h4 id="EU-RMA"><a href="#EU-RMA" class="headerlink" title="EU-RMA"></a>EU-RMA</h4><p>​    random-message attack</p>
+<p>如果一个数字签名是EU-RMA安全的，当且仅当对于任意的PPT攻击者$A$和挑战者$C$，在以下游戏中获胜的概率可以忽略</p>
+<p>$Setup$. $C$执行$KeyGen(SP)$得到公私钥$(pk,sk)$，并将公私钥发送给攻击者A，保留$sk$用于应对A的询问</p>
+<p>$Query$.A自由查询签名，对于任意消息$m_i$，挑战者$C$将签名$\sigma_i\leftarrow Sign(sk,M)$发送给A</p>
+<p>$Forgery$.攻击者输出消息-签名对$(m^*,\sigma_{m^*})$，若等式<br>$$<br>Verify(SP,pk,m^*,\sigma_{m^*}):<br>m\notin{m_1,\ldots,m_n}<br>$$<br>成立，则攻击者获胜</p>
+<h4 id="EU-KMA"><a href="#EU-KMA" class="headerlink" title="EU-KMA"></a>EU-KMA</h4><h3 id="Online-Offline-Signature-13"><a href="#Online-Offline-Signature-13" class="headerlink" title="Online/Offline Signature[13]"></a>Online/Offline Signature[13]</h3><p>将sign切割成两个函数</p>
+<p>$sign^{off}(SP,sk)\rightarrow\sigma^{off}$</p>
+<p>$sign^{on}(SP,\sigma^{off},m)\rightarrow\sigma$</p>
+<p>要求online阶段签名的开销尽可能的小</p>
+<h4 id="EU-CMA-1"><a href="#EU-CMA-1" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p>与一般的digital signature无明显区别</p>
+<h5 id="版本1"><a href="#版本1" class="headerlink" title="版本1"></a>版本1</h5><p>如果一个在线/离线数字签名是EU-CMA安全的，当且仅当对于任意的PPT攻击者$A$和挑战者$C$，在以下游戏中获胜的概率可以忽略</p>
+<p>$Setup$. $C$执行$KeyGen(SP)$得到公私钥$(pk,sk)$，并将公私钥发送给攻击者A，保留$sk$用于应对A的询问</p>
+<p>$Query$.A自由查询签名，对于任意消息$m_i$，挑战者$C$将签名$\sigma_i\leftarrow Sign(sk,M)$发送给A</p>
+<p>$Forgery$.攻击者输出消息-签名对$(m^*,\sigma_{m^*})$，若等式<br>$$<br>Verify(SP,pk,m^*,\sigma_{m^*}):<br>m\notin{m_1,\ldots,m_n}<br>$$<br>成立，则攻击者获胜</p>
+<h3 id="Undeniable-Signature-14"><a href="#Undeniable-Signature-14" class="headerlink" title="Undeniable Signature[14]"></a>Undeniable Signature[14]</h3><p>只允许合法用户验签的一种签名。</p>
+<p>典型应用场景：防止用户复制软件。用户为signer，软件生厂商为verifier</p>
+<h4 id="算法定义"><a href="#算法定义" class="headerlink" title="算法定义"></a>算法定义</h4><p>$KeyGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,M)\rightarrow\sigma_m$</p>
+<p>$Confirm(m,\sigma_m,pk,sk)$ 是一个多项式时间交互协议，证明$\sigma_m$是一个合法签名</p>
+<p>$Disavowal(m,\sigma_m,pk)$ 是一个多项式时间交互协议，证明$\sigma_m$不是一个合法签名</p>
+<h4 id="EU-CMA-2"><a href="#EU-CMA-2" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p>与原始的数字签名类似，但攻击者A还拥有询问Confirm和Disavowal预言机的能力</p>
+<h3 id="Designated-Verifier-Signature-15"><a href="#Designated-Verifier-Signature-15" class="headerlink" title="Designated Verifier Signature[15]"></a>Designated Verifier Signature[15]</h3><p>用于保证Bob不将签名发送给第三方Carol。Bob能仿造Alice的签名。Alice能向Carol证明Bob的签名是伪造的，但是不能否认Alice自己的签名。这在Alice和Bob的签名是计算上不可区分的前提下。</p>
+<p>$Sign(sk_S,pk_v,m)\rightarrow\sigma$</p>
+<p>$Simul(pk_s,sk_v,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk_s,pk_v,m,\sigma)\rightarrow{accept,reject}$</p>
+<h4 id="Non-transferable"><a href="#Non-transferable" class="headerlink" title="Non-transferable"></a>Non-transferable</h4><p>$(\tau,q_h,q_s,\xi)-forge$是指在$\tau$时间内，运行$q_h$次哈希询问，$q_s$次签名和模拟函数</p>
+<h3 id="Digital-Signature-with-Signer-aided-Verifification-16"><a href="#Digital-Signature-with-Signer-aided-Verifification-16" class="headerlink" title="Digital Signature with Signer-aided Verifification[16]"></a><u>Digital Signature with Signer-aided Verifification[16]</u></h3><p>$Sign(sk_S,pk_v,m)\rightarrow\sigma$</p>
+<p>$Simul(pk_s,sk_v,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk_s,pk_v,m,\sigma)\rightarrow{accept,reject}$</p>
+<h4 id="unconditionaly-secure"><a href="#unconditionaly-secure" class="headerlink" title="unconditionaly secure"></a>unconditionaly secure</h4><p>$Pr[invalid\leftarrow Verify[m,\sigma_m,pk]\leftarrow SAV[m,\sigma_m,pk]]$，敌手拥有无限计算能力</p>
+<p>[4] Girault, M. and Lefranc, D. (2005) Server-Aided Verifification:</p>
+<p>Theory and Practice. <em>Proc. ASIACRYPT 05</em>, Chennai, India,</p>
+<p>December 4–8, pp. 605–623. Springer, Berlin.</p>
+<p>[5] Wu, W., Mu, Y., Susilo, W. and Huang, X. (2008) Server-Aided</p>
+<p>Verifification Signatures: Defifinitions and New Constructions.</p>
+<p><em>Proc. ProvSec 08</em>, Shanghai, China, October 30–November 1,</p>
+<p>pp. 141–155. Springer, Berlin.</p>
+<p>[6] Chow, S.S.M., Au, M.H. and Susilo, W. (2011) Server-Aided</p>
+<p>Signatures Verifification Secure Against Collusion Attack. <em>Proc.</em></p>
+<p><em>ASIACCS 11</em>, Hong Kong, China, March 22–24, pp. 401–405.</p>
+<p>ACM, USA.</p>
+<h3 id="Proxy-Signature-17"><a href="#Proxy-Signature-17" class="headerlink" title="Proxy Signature[17]"></a>Proxy Signature[17]</h3><p>分为三种：完全代表，部分代表，授权代表。只讨论授权代表</p>
+<h4 id="算法定义-1"><a href="#算法定义-1" class="headerlink" title="算法定义"></a>算法定义</h4><p>涉及三方：原始签名者Alice，代理签名者Bob，验证者</p>
+<p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$StandSign(sk_A,M)\rightarrow \sigma_A$</p>
+<p>$DelegationGen(sk_A,W)\rightarrow\sigma_W$，其中W是warrant</p>
+<p>$ProxySign(sk_B,W,\sigma_W,M)\rightarrow\sigma_B$</p>
+<p>$Vrfy(pk_A,pk_B,W,M,\sigma_B)$</p>
+<h4 id="EU-CMA-3"><a href="#EU-CMA-3" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p>$A_{I}:pk_A,pk_B$</p>
+<p>$A_{II}:pk_A,pk_B,sk_B$</p>
+<p>$A_{III}:pk_A,pk_B,sk_A$</p>
+<p>existential unforgeability against adaptive $A_{II}$ Adversary</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义proxySignature1.jpg" alt="安全模型定义proxySignature1"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义proxySignature2.jpg" alt="安全模型定义proxySignature2"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义proxySignature3.jpg" alt="安全模型定义proxySignature3"></p>
+<h3 id="Certificateless-Signature-18"><a href="#Certificateless-Signature-18" class="headerlink" title="Certificateless Signature[18]"></a>Certificateless Signature[18]</h3><h3 id="Aggregate-Signature-19"><a href="#Aggregate-Signature-19" class="headerlink" title="Aggregate Signature[19]"></a>Aggregate Signature[19]</h3><h4 id="版本1-1"><a href="#版本1-1" class="headerlink" title="版本1"></a>版本1</h4><p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m)\rightarrow\sigma$</p>
+<p>$Agg(\sigma_1,\ldots,\sigma_n)\rightarrow\sigma_0$</p>
+<p>$Vrfy((pk_1,m_1),\ldots,(pk_n,m_n),\sigma_0)\rightarrow{1,0}$</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义aggregateSignature.jpg" alt="安全模型定义aggregateSignature"></p>
+<h3 id="Digital-Signature-with-Batch-Verifification-20"><a href="#Digital-Signature-with-Batch-Verifification-20" class="headerlink" title="Digital Signature with Batch Verifification[20]"></a>Digital Signature with Batch Verifification[20]</h3><h3 id="Threshold-Signature-21"><a href="#Threshold-Signature-21" class="headerlink" title="Threshold Signature[21]"></a>Threshold Signature[21]</h3><h4 id="算法定义-2"><a href="#算法定义-2" class="headerlink" title="算法定义"></a>算法定义</h4><p>$KGen(1^\lambda)\rightarrow (pk,(sk_1,\ldots,sk_n))$</p>
+<p>$Sign(sk_i,m)\rightarrow\sigma$</p>
+<p>$Vrfy(pk,m,\sigma,\rightarrow{1,0}$</p>
+<h4 id="鲁棒性"><a href="#鲁棒性" class="headerlink" title="鲁棒性"></a>鲁棒性</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义thresholdSignature.jpg" alt="安全模型定义thresholdSignature"></p>
+<h3 id="Blind-Signature-22"><a href="#Blind-Signature-22" class="headerlink" title="Blind Signature[22]"></a>Blind Signature[22]</h3><p>blindness</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义blindSignature3.jpg" alt="安全模型定义blindSignature3"></p>
+<p>complete完备性</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义blindSignature1.jpg" alt="安全模型定义blindSignature1"></p>
+<p>不可伪造unforgeability</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义blindSignature2.jpg" alt="安全模型定义blindSignature2"></p>
+<h3 id="Ring-Signature-23"><a href="#Ring-Signature-23" class="headerlink" title="Ring Signature[23]"></a>Ring Signature[23]</h3><p>签名后，只知道是群中某个人签名，但不知道具体是谁签的名</p>
+<p>与群签名对比：可以隐藏签名者的信息；不需要群组织者</p>
+<p>$KGen(1^\lambda)\rightarrow (pk,sk)$</p>
+<p>$Sign(sk,m,R[i])\rightarrow\sigma$，其中$R=(pk_1,\ldots,pk_n)$，且对于任意的$s\in [1,n]$有$(pk_s,sk)$合法；$(sk,R[I])$是一个合法的公私钥对</p>
+<p>$Vrfy(M,\sigma,R)\rightarrow{1,0}$</p>
+<h4 id="匿名性anonymity"><a href="#匿名性anonymity" class="headerlink" title="匿名性anonymity"></a>匿名性anonymity</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义ringSignature1.jpg" alt="安全模型定义ringSignature1"></p>
+<h3 id="Group-Signature-24"><a href="#Group-Signature-24" class="headerlink" title="Group Signature[24]"></a>Group Signature[24]</h3><p>$KGen(1^\lambda)\rightarrow(gpk,gmsk,gsk)$，其中$gpk$是群公钥，gmsk是群管理者的私钥，gsk是一个n维向量，每一维代表一个用户的私钥$gsk[i]$</p>
+<p>$Sign(gsk[i],m)\rightarrow\sigma$</p>
+<p>$Vrfy(gpk,m,\sigma)\rightarrow{1,0}$</p>
+<p>$Open(gmsk,m,\sigma)\rightarrow{id,\bot}$</p>
+<h4 id="完全匿名性-full-anonymity"><a href="#完全匿名性-full-anonymity" class="headerlink" title="完全匿名性 full-anonymity"></a>完全匿名性 full-anonymity</h4><p>攻击者拥有访问Open预言机的能力</p>
+<p>攻击者攻击目标为针对特定签名，区分是A还是B生成的签名</p>
+<p>基于IND-CPA游戏</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义groupSignature.jpg" alt="安全模型定义groupSignature"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义groupSignature2.jpg" alt="安全模型定义groupSignature2"></p>
+<h4 id="完全可追溯性-full-traceable"><a href="#完全可追溯性-full-traceable" class="headerlink" title="完全可追溯性 full-traceable"></a>完全可追溯性 full-traceable</h4><p>攻击目标为生成一个合法签名</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义groupSignature3.jpg" alt="安全模型定义groupSignature3"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义groupSignature4.jpg" alt="安全模型定义groupSignature4"></p>
+<h4 id="其他的安全属性"><a href="#其他的安全属性" class="headerlink" title="其他的安全属性"></a>其他的安全属性</h4><p>不可伪造性unforgeability</p>
+<p>​    所有数字签名都需要满足</p>
+<p>可切除性exculpability</p>
+<p>​    任何一个群中的成员（包括管理员）都不能代表其他成员生成签名</p>
+<p>无连接性 unlinkability</p>
+<p>​    一个实体，看到签名集合后，不能把两个签名与同一个签名者联系起来</p>
+<h3 id="Identity-based-Signature-25"><a href="#Identity-based-Signature-25" class="headerlink" title="Identity-based Signature[25]"></a>Identity-based Signature[25]</h3><h4 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h4><p>参与方：master，user，verifier</p>
+<p>$MKeyGen(1^\lambda)\rightarrow(msk,mpk)$</p>
+<p>$UKeyGen(id,msk,mpk)\rightarrow sk_{id}$</p>
+<p>$Sign(sk_{id},m)\rightarrow\sigma$</p>
+<p>$Vrfy(mpk,m,\sigma,id)\rightarrow{1,0}$</p>
+<p>和定义无明显出入</p>
+<h4 id="EU-CMA-4"><a href="#EU-CMA-4" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义idSignature.jpg" alt="安全模型定义idSignature"></p>
+<h3 id="Attribute-based-Signature-26"><a href="#Attribute-based-Signature-26" class="headerlink" title="Attribute-based Signature[26]"></a>Attribute-based Signature[26]</h3><p>一种更为普适的identity-based signature，定义无太大差别不赘述</p>
+<h4 id="EU-CMA-5"><a href="#EU-CMA-5" class="headerlink" title="EU-CMA"></a>EU-CMA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义attrSignature2.jpg" alt="安全模型定义attrSignature"></p>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><h3 id="Public-Key-Encryption-12"><a href="#Public-Key-Encryption-12" class="headerlink" title="Public-Key Encryption[12]"></a>Public-Key Encryption[12]</h3><p>$SysGen(1^\lambda)\rightarrow SP$</p>
+<p>$KeyGen(SP)\rightarrow(pk,sk)$</p>
+<p>$Enc(SP,pk,M)\rightarrow CT$</p>
+<p>$Dec(SP,sk,CT)\rightarrow M$</p>
+<h4 id="IND-CCA"><a href="#IND-CCA" class="headerlink" title="IND-CCA"></a>IND-CCA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义Enc1.jpg" alt="安全模型定义Enc1"></p>
+<h4 id="IND-CPA"><a href="#IND-CPA" class="headerlink" title="IND-CPA"></a>IND-CPA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义Enc2.jpg" alt="安全模型定义Enc2"></p>
+<h3 id="Broadcast-Encryption-27"><a href="#Broadcast-Encryption-27" class="headerlink" title="Broadcast Encryption[27]"></a>Broadcast Encryption[27]</h3><p>某个子集$S$中的所有用户都可以对密文进行解密</p>
+<h4 id="算法定义-3"><a href="#算法定义-3" class="headerlink" title="算法定义"></a>算法定义</h4><p>$KGen(1^\lambda)\rightarrow(pk,SK)$，其中$SK={sk_1,\ldots,sk_n}$</p>
+<p>$Enc(S,pk)\rightarrow (h,K)$，h是广播报文头部，K是对称加密秘钥</p>
+<p>$Enc2(K,M)\rightarrow CT$，是一个对称加密算法</p>
+<p>$Dec(S,i,sk_i,h,pk)\rightarrow K$</p>
+<p>$Dec2(K,CT)\rightarrow M$</p>
+<h4 id="CCA"><a href="#CCA" class="headerlink" title="CCA"></a>CCA</h4><p>只对Enc和Dec进行询问</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义broadcastEnc2.jpg" alt="安全模型定义broadcastEnc2"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义broadcastEnc1.jpg" alt="安全模型定义broadcastEnc1"></p>
+<h3 id="Identity-based-Encryption-28"><a href="#Identity-based-Encryption-28" class="headerlink" title="Identity-based Encryption[28]"></a>Identity-based Encryption[28]</h3><h4 id="算法定义-4"><a href="#算法定义-4" class="headerlink" title="算法定义"></a>算法定义</h4><p>$Setup(k)\rightarrow(params,msk)$</p>
+<p>$Extract(params,msk,ID)\rightarrow sk_{ID}$</p>
+<p>$Enc(params,ID,M)\rightarrow CT$</p>
+<p>$Dec(params,ID,CT,sk_{ID})\rightarrow M$</p>
+<h4 id="IND-ID-CCA-IND-IDs-CCA-IND-ID-CPA"><a href="#IND-ID-CCA-IND-IDs-CCA-IND-ID-CPA" class="headerlink" title="IND-ID-CCA IND-IDs-CCA IND-ID-CPA"></a>IND-ID-CCA IND-IDs-CCA IND-ID-CPA</h4><p><img src="E:/技术栈/cryptographic/pic/安全模型定义idEnc1.jpg" alt="安全模型定义idEnc1"></p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义idEnc2.jpg" alt="安全模型定义idEnc2"><img src="/%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89idEnc1.jpg" alt="安全模型定义idEnc1"></p>
+<p><img src="D:\temp\cryptographic\pic\安全模型定义idEnc3.jpg" alt="安全模型定义idEnc3"></p>
+<h3 id="Identity-based-Encryption-with-Traitor-Tracing-29"><a href="#Identity-based-Encryption-with-Traitor-Tracing-29" class="headerlink" title="Identity-based Encryption with Traitor Tracing[29]"></a>Identity-based Encryption with Traitor Tracing[29]</h3><h4 id="算法定义-5"><a href="#算法定义-5" class="headerlink" title="算法定义"></a>算法定义</h4><p>$KeyGen(1^\lambda)\rightarrow(mpk,msk)$</p>
+<p>$Extr(msk,ID,i)\rightarrow sk_i$</p>
+<p>$Enc(mpk,ID,M)\rightarrow CT$</p>
+<p>$Dec(sk_i,ID,CT)\rightarrow M$</p>
+<p>$Trace(msk,ID)\rightarrow T$，其中$T={id_i}$为叛徒的集合</p>
+<h4 id="IND-ID-CCA"><a href="#IND-ID-CCA" class="headerlink" title="IND-ID-CCA"></a>IND-ID-CCA</h4><p>针对Dec部分，与identity-based encryption没有区别</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义idEncTraitor1.jpg" alt="安全模型定义idEncTraitor1"></p>
+<h4 id="IND-ID-CPA"><a href="#IND-ID-CPA" class="headerlink" title="IND-ID-CPA"></a>IND-ID-CPA</h4><p>针对Trace部分，与数字签名类似</p>
+<p><img src="E:/技术栈/cryptographic/pic/安全模型定义idEncTraitor2.jpg" alt="安全模型定义idEncTraitor2"></p>
+<h3 id="Identity-based-Broadcast-Encryption-30"><a href="#Identity-based-Broadcast-Encryption-30" class="headerlink" title="Identity-based Broadcast Encryption[30]"></a>Identity-based Broadcast Encryption[30]</h3><h4 id="算法定义-6"><a href="#算法定义-6" class="headerlink" title="算法定义"></a>算法定义</h4><p>PKG、Alice、Bob</p>
+<p>$KGen(1^\lambda)\rightarrow(msk,mpk)$</p>
+<p>$Extr(msk,ID)\rightarrow sk_{i}$</p>
+<p>$Enc(S,pk)\rightarrow (h,K)$，h是广播报文头部，K是对称加密秘钥</p>
+<p>$Enc2(K,M)\rightarrow CT$，是一个对称加密算法</p>
+<p>$Dec(S,i,sk_i,h,pk)\rightarrow K$</p>
+<p>$Dec2(K,CT)\rightarrow M$</p>
+<h4 id="IND-ID-CCA-1"><a href="#IND-ID-CCA-1" class="headerlink" title="IND-ID-CCA"></a>IND-ID-CCA</h4><p>identity-based encryption和Broadcast encryption简单结合以下就可以</p>
+<h3 id="Inner-Product-Encryption-31"><a href="#Inner-Product-Encryption-31" class="headerlink" title="Inner Product Encryption[31]"></a>Inner Product Encryption[31]</h3><p>$Setup(1^\lambda)\rightarrow(pk,sk)$</p>
+<p>$KeyGen(\vec{v},pk,sk)\rightarrow sk_{\vec{v}}$</p>
+<p>$Enc(M,\vec{x},pk)\rightarrow CT_{\vec{x}}$</p>
+<p>$Dec(CT_{\vec{x}},sk_{\vec{v}},pk)$</p>
+<h3 id="Attribute-based-Encryption-32-33"><a href="#Attribute-based-Encryption-32-33" class="headerlink" title="Attribute-based Encryption[32, 33]"></a>Attribute-based Encryption[32, 33]</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/" data-id="ckob8gj4g0001hsus0c3j5mg7" data-title="密码学-安全模型定义" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          密码学-算法定义
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/04/26/%E6%91%98%E6%8A%84-%E4%BD%9B%E7%A5%96%E9%83%BD%E8%AF%B4%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">摘抄-佛祖都说了些什么</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ctf/" rel="tag">ctf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dev/" rel="tag">dev</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wp/" rel="tag">wp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" rel="tag">基础课</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag">密码学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%80%83%E8%AF%81/" rel="tag">考证</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" rel="tag">论文学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/ctf/" style="font-size: 20px;">ctf</a> <a href="/tags/dev/" style="font-size: 15px;">dev</a> <a href="/tags/wp/" style="font-size: 10px;">wp</a> <a href="/tags/%E5%9F%BA%E7%A1%80%E8%AF%BE/" style="font-size: 12.5px;">基础课</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 17.5px;">密码学</a> <a href="/tags/%E6%91%98%E6%8A%84/" style="font-size: 17.5px;">摘抄</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 10px;">文学</a> <a href="/tags/%E8%80%83%E8%AF%81/" style="font-size: 10px;">考证</a> <a href="/tags/%E8%AE%BA%E6%96%87%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">论文学习</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">May 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E7%AE%97%E6%B3%95%E5%AE%9A%E4%B9%89/">密码学-算法定义</a>
+          </li>
+        
+          <li>
+            <a href="/2021/05/05/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/">密码学-安全模型定义</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/26/%E6%91%98%E6%8A%84-%E4%BD%9B%E7%A5%96%E9%83%BD%E8%AF%B4%E4%BA%86%E4%BA%9B%E4%BB%80%E4%B9%88/">摘抄-佛祖都说了些什么</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E6%9E%84%E9%80%A0%E5%8F%AF%E8%AF%81%E6%98%8E%E5%AE%89%E5%85%A8%E5%AF%86%E7%A0%81%E6%96%B9%E6%A1%88/">密码学-构造可证明安全密码方案</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/31/%E5%AF%86%E7%A0%81%E5%AD%A6-%E5%AE%89%E5%85%A8%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0/">密码学-安全证明学习</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
